@@ -11,7 +11,6 @@ using std::to_string;
 #include "TChain.h"
 #include "TFile.h"
 #include "TH1.h"
-#include "TROOT.h"
 #include "TTree.h"
 
 #include "detectors.hpp"
@@ -20,10 +19,13 @@ using std::to_string;
 
 int main(int argc, char* argv[]){
 
-    ROOT::EnableImplicitMT(2);
+    if(argc < 3){
+    	cout << "Usage: histograms INPUT_FILE_NAME_1 INPUT_FILE_NAME_2 ... OUTPUT_FILE_NAME" << endl;
+	abort();
+    }
 
     TChain *tree = new TChain("clover_array");
-    for(int i = 1; i < argc; ++i){
+    for(int i = 1; i < argc-1; ++i){
         tree->Add(argv[i]);
     }
 
@@ -74,7 +76,7 @@ int main(int argc, char* argv[]){
         }
     }
 
-    TFile output_file("output.root", "RECREATE");
+    TFile output_file(argv[argc-1], "RECREATE");
 
     for(auto hist: channel_histograms){
         hist.Write();
