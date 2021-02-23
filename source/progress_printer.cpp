@@ -20,7 +20,7 @@ using std::endl;
 
 ProgressPrinter::ProgressPrinter(const long ne, const double ui):
 start_time(time(nullptr)), n_entries(ne), inverse_n_entries(1./ (double) ne), update_increment(ui), current_percentage(ui){
-    cout << get_time_string() << " : Opened tree with " << n_entries << " entries." << endl;
+    cout << get_time_string() << " : Starting to process " << n_entries << " entries." << endl;
 }
 
 void ProgressPrinter::operator()(const long index){
