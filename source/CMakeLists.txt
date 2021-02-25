@@ -7,3 +7,6 @@ add_library(progress_printer progress_printer.cpp)
 
 add_executable(histograms histograms.cpp)
 target_link_libraries(histograms command_line_parser progress_printer ${ROOT_LIBRARIES})
+
+add_executable(multithread_screen multithread_screen.cpp)
+target_link_libraries(multithread_screen command_line_parser ${ROOT_LIBRARIES})
