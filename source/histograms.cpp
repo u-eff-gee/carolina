@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
         }
     }
 
-    TFile output_file(argv[argc-1], "RECREATE");
+    TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
 
     for(auto hist: channel_histograms){
         hist.Write();
