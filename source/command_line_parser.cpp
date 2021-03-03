@@ -29,6 +29,7 @@ void CommandLineParser::operator()(int argc, char* argv[]){
 
     if(vm.count("help")){
         cout << desc << endl;
+        abort();
     }
 
     if(!vm.count("input_file")){
