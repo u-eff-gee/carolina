@@ -1,32 +1,45 @@
+#include <utility>
+
+using std::pair;
+
 #include "detector.hpp"
 
-double amplitude_clover_90[16];
-double time_clover_90[16];
-double amplitude_clover_135[16];
-double time_clover_135[16];
+vector<pair<string, double*>> branches{
+	{"amplitude_clover_90", new double[16]},
+	{"amplitude_clover_135", new double[16]},
+	{"integration_long", new double[16]},
+	{"time_clover_90", new double[16]},
+	{"time_clover_135", new double[16]},
+	{"channel_time", new double[16]},
+};
+
+const unsigned int n_bins_energy_clover = 65536;
+const double max_energy_clover = 65536.;
+const unsigned int n_bins_energy_cebr = 4096;
+const double max_energy_cebr = 4096.;
 
 vector<Detector> detectors{
     {"clover_1",
         {
             {
                 "E1",
-                amplitude_clover_90[0], [](const double amplitude){ return 1.900275e-01+1.917388e-01*amplitude; },
-                time_clover_90[0], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[0], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[0], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_90[1], [](const double amplitude){ return 1.545498e+00+2.211394e-01*amplitude; },
-                time_clover_90[1], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[1], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[1], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_90[2], [](const double amplitude){ return 1.035867e+00+2.248673e-01*amplitude; },
-                time_clover_90[2], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[2], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[2], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_90[3], [](const double amplitude){ return 5.149064e-01+2.435422e-01*amplitude; },
-                time_clover_90[3], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[3], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[3], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -34,23 +47,23 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_90[4], [](const double amplitude){ return 2.536829e-01+2.099880e-01*amplitude; },
-                time_clover_90[4], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[4], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[4], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_90[5], [](const double amplitude){ return 1.008303e+00+2.259096e-01*amplitude; },
-                time_clover_90[5], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[5], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[5], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_90[6], [](const double amplitude){ return 1.307505e+00+2.322131e-01*amplitude; },
-                time_clover_90[6], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[6], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[6], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_90[7], [](const double amplitude){ return 3.072265e+00, 2.112261e-01*amplitude; },
-                time_clover_90[7], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[7], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[7], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -58,23 +71,23 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_90[8], [](const double amplitude){ return 2.581180e+00+2.261114e-01*amplitude; },
-                time_clover_90[8], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[8], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[8], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_90[9], [](const double amplitude){ return 3.664919e+00+2.295588e-01*amplitude; },
-                time_clover_90[9], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[9], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[9], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_90[10], [](const double amplitude){ return 6.638253e-01+2.218850e-01*amplitude; },
-                time_clover_90[10], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[10], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[10], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_90[11], [](const double amplitude){ return 2.108145e+00+2.200050e-01*amplitude; },
-                time_clover_90[11], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[11], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[11], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -82,23 +95,23 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_90[12], [](const double amplitude){ return 6.210141e-01+2.280010e-01*amplitude; },
-                time_clover_90[12], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[12], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[12], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_90[13], [](const double amplitude){ return 2.019043e+00+2.248544e-01*amplitude; },
-                time_clover_90[13], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[13], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[13], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_90[14], [](const double amplitude){ return 7.522685e-01+2.336105e-01*amplitude; },
-                time_clover_90[14], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[14], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[14], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_90[15], [](const double amplitude){ return 2.149718e+00+2.288512e-01*amplitude; },
-                time_clover_90[15], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[0].second[15], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[3].second[15], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -106,23 +119,23 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_135[0], [](const double amplitude){ return 2.202665e+00+1.648858e-01*amplitude; },
-                time_clover_135[0], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[0], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[0], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_135[1], [](const double amplitude){ return 1.632657e+00+1.624665e-01*amplitude; },
-                time_clover_135[1], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[1], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[1], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_135[2], [](const double amplitude){ return 4.079384e+00+2.019305e-01*amplitude; },
-                time_clover_135[2], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[2], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[2], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_135[3], [](const double amplitude){ return 2.574769e+00, 1.998568e-01*amplitude; },
-                time_clover_135[3], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[3], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[3], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -130,23 +143,23 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_135[4], [](const double amplitude){ return 1.904587e+00+2.258024e-01*amplitude; },
-                time_clover_135[4], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[4], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[4], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_135[5], [](const double amplitude){ return -1.698854e+00+1.070244e+00*amplitude; },
-                time_clover_135[5], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[5], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[5], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_135[6], [](const double amplitude){ return 3.246940e+00+2.327411e-01*amplitude; },
-                time_clover_135[6], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[6], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[6], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_135[7], [](const double amplitude){ return 2.700682e+00+2.240005e-01*amplitude; },
-                time_clover_135[7], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[7], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[7], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -154,23 +167,23 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_135[8], [](const double amplitude){ return 1.252735e+00+2.275357e-01*amplitude; },
-                time_clover_135[8], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[8], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[8], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_135[9], [](const double amplitude){ return 1.199525e+00+2.297999e-01*amplitude; },
-                time_clover_135[9], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[9], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[9], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_135[10], [](const double amplitude){ return 2.205312e+00+2.228535e-01*amplitude; },
-                time_clover_135[10], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[10], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[10], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_135[11], [](const double amplitude){ return 3.060200e+00+2.270398e-01*amplitude; },
-                time_clover_135[11], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[11], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[11], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },
@@ -178,23 +191,131 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                amplitude_clover_135[12], [](const double amplitude){ return 2.877948e+00+2.218650e-01*amplitude; },
-                time_clover_135[12], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[12], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[12], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E2",
-                amplitude_clover_135[13], [](const double amplitude){ return 1.711854e+00+2.252766e-01*amplitude; },
-                time_clover_135[13], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[13], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[13], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E3",
-                amplitude_clover_135[14], [](const double amplitude){ return 1.119861e+00, 2.239316e-01*amplitude; },
-                time_clover_135[14], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[14], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[14], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
             {
                 "E4",
-                amplitude_clover_135[15], [](const double amplitude){ return 3.652745e+00, 2.303696e-01*amplitude; },
-                time_clover_135[15], [](const double uncalibrated_time){ return uncalibrated_time; }
+                branches[1].second[15], {n_bins_energy_clover, 0., max_energy_clover}, [](const double amplitude){ return amplitude; },
+                branches[4].second[15], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_B",
+        {
+            {
+                "E",
+                branches[2].second[0], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[0], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_C",
+        {
+            {
+                "E",
+                branches[2].second[1], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[1], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_E",
+        {
+            {
+                "E",
+                branches[2].second[2], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[2], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_F",
+        {
+            {
+                "E",
+                branches[2].second[3], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[3], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_I",
+        {
+            {
+                "E",
+                branches[2].second[4], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[4], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_M",
+        {
+            {
+                "E",
+                branches[2].second[5], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[5], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_BB",
+        {
+            {
+                "E",
+                branches[2].second[8], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[8], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_BC",
+        {
+            {
+                "E",
+                branches[2].second[9], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[9], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_BD",
+        {
+            {
+                "E",
+                branches[2].second[10], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[10], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_BK",
+        {
+            {
+                "E",
+                branches[2].second[11], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[11], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_BL",
+        {
+            {
+                "E",
+                branches[2].second[12], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[12], [](const double uncalibrated_time){ return uncalibrated_time; }
+            },
+        },
+    },
+    {"cebr_BM",
+        {
+            {
+                "E",
+                branches[2].second[13], {n_bins_energy_cebr, 0., max_energy_cebr}, [](const double amplitude){ return amplitude; },
+                branches[5].second[13], [](const double uncalibrated_time){ return uncalibrated_time; }
             },
         },
     },

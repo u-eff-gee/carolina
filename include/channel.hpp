@@ -12,10 +12,17 @@ using std::function;
 
 using std::string;
 
+struct HistogramProperties{
+	const unsigned int n_bins;
+	const double minimum;
+	const double maximum;
+};
+
 struct Channel{
     const string name;
 
     double &energy_branch;
+    const HistogramProperties energy_histogram_properties;
     const function<double(const double)> energy_calibration;
     double calibrate(){
         

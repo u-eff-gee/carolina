@@ -34,8 +34,9 @@ int main(int argc, char* argv[]){
     const int last = vm["last"].as<int>() == 0 ? tree->GetEntries() : vm["last"].as<int>();
     ProgressPrinter progress_printer(last-first+1, 0.001);
 
-    tree->SetBranchAddress("amplitude_clover_90", amplitude_clover_90);
-    tree->SetBranchAddress("amplitude_clover_135", amplitude_clover_135);
+    for(auto branch: branches){
+	tree->SetBranchAddress(branch.first.c_str(), branch.second);
+    }
 
     vector<TH1D> channel_histograms;
     vector<TH1D> addback_histograms;
@@ -45,12 +46,12 @@ int main(int argc, char* argv[]){
         for(auto channel: detector.channels){
             histogram_name = detector.name + "_" + channel.name;
             channel_histograms.push_back(
-                TH1D(histogram_name.c_str(), histogram_name.c_str(), 10000, 0.5, 10000.5)
+                TH1D(histogram_name.c_str(), histogram_name.c_str(), channel.energy_histogram_properties.n_bins, channel.energy_histogram_properties.minimum, channel.energy_histogram_properties.maximum)
             );
-            histogram_name = "addback_" + detector.name + "_" + channel.name;
         }
+       	histogram_name = "addback_" + detector.name;
         addback_histograms.push_back(
-            TH1D(histogram_name.c_str(), histogram_name.c_str(), 10000, 0.5, 10000.5)
+            TH1D(histogram_name.c_str(), histogram_name.c_str(), detector.channels[0].energy_histogram_properties.n_bins, detector.channels[0].energy_histogram_properties.minimum, detector.channels[0].energy_histogram_properties.maximum)
         );
     }
 
