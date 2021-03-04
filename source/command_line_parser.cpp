@@ -39,8 +39,4 @@ void CommandLineParser::operator()(int argc, char* argv[]){
 
     const int first = vm["first"].as<int>();
     const int last = vm["last"].as<int>();
-
-    if(first > last){
-        cout << "Error: first entry (" << first << ") is larger or equal to last entry (" << last << "). Aborting ..." << endl;
-    }
 }

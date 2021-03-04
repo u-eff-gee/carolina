@@ -32,6 +32,12 @@ int main(int argc, char* argv[]){
 
     const int first = vm["first"].as<int>();
     const int last = vm["last"].as<int>() == 0 ? tree->GetEntries() : vm["last"].as<int>();
+
+    if(first > last){
+        cout << "Error: first entry (" << first << ") is larger or equal to last entry (" << last << "). Aborting ..." << endl;
+	abort();
+    }
+
     ProgressPrinter progress_printer(last-first+1, 0.001);
 
     for(auto branch: branches){
