@@ -24,7 +24,7 @@ struct Channel{
     double &energy_branch;
     const HistogramProperties energy_histogram_properties;
     const function<double(const double)> energy_calibration;
-    double calibrate(){
+    double calibrate() const {
         
         if(!isnan(energy_branch)){
             return energy_calibration(energy_branch);

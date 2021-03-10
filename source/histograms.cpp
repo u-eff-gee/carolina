@@ -3,6 +3,11 @@
 using std::cout;
 using std::endl;
 
+#include <memory>
+
+using std::make_shared;
+using std::shared_ptr;
+
 #include <string>
 
 using std::string;
@@ -41,8 +46,28 @@ int main(int argc, char* argv[]){
     ProgressPrinter progress_printer(last-first+1, 0.001);
 
     for(auto branch: branches){
-	tree->SetBranchAddress(branch.first.c_str(), branch.second);
+	    tree->SetBranchAddress(branch.first.c_str(), branch.second);
     }
+
+    vector<vector<shared_ptr<Detector>>> groups;
+    for(size_t i = 0; i < detector_groups.size(); ++i){
+        groups.push_back(vector<shared_ptr<Detector>>());
+        for(auto detector: detectors){
+            if(detector.group.name == detector_groups[i].name){
+                groups[i].push_back(make_shared<Detector>(detector));
+            }
+        }
+    }
+
+    for(size_t i = 0; i < groups.size(); ++i){
+        if(groups[i].size()){
+            cout << "Detector Group: " << groups[i][0]->group.name << endl;
+            for(auto detector: groups[i]){
+                cout << "\t" << detector->name << endl;
+            }
+        }
+    }
+    cout << endl;
 
     vector<TH1D> channel_histograms;
     vector<TH1D> addback_histograms;
@@ -55,32 +80,42 @@ int main(int argc, char* argv[]){
                 TH1D(histogram_name.c_str(), histogram_name.c_str(), channel.energy_histogram_properties.n_bins, channel.energy_histogram_properties.minimum, channel.energy_histogram_properties.maximum)
             );
         }
-       	histogram_name = "addback_" + detector.name;
-        addback_histograms.push_back(
-            TH1D(histogram_name.c_str(), histogram_name.c_str(), detector.channels[0].energy_histogram_properties.n_bins, detector.channels[0].energy_histogram_properties.minimum, detector.channels[0].energy_histogram_properties.maximum)
-        );
+        if(detector.channels.size() > 1){
+            histogram_name = "addback_" + detector.name;
+            addback_histograms.push_back(
+                TH1D(histogram_name.c_str(), histogram_name.c_str(), detector.channels[0].energy_histogram_properties.n_bins, detector.channels[0].energy_histogram_properties.minimum, detector.channels[0].energy_histogram_properties.maximum)
+            );
+        }
     }
 
     double energy;
     double energy_addback;
-    int channel_index, detector_index;
+    int addback_index, channel_index, detector_index;
 
     for(int i = first; i <= last; ++i){
         progress_printer(i - first);
         tree->GetEntry(i);
 
+        addback_index = 0;
         channel_index = 0;
         detector_index = 0;
 
         for(auto detector: detectors){
-            energy_addback = 0.;
-            for(auto channel: detector.channels){
-                energy = channel.calibrate();
-                energy_addback += energy;
+            if(detector.channels.size() > 1){
+                energy_addback = 0.;
+                for(auto channel: detector.channels){
+                    energy = channel.calibrate();
+                    energy_addback += energy;
+                    channel_histograms[channel_index].Fill(energy);
+                    ++channel_index;
+                }
+                addback_histograms[detector_index].Fill(energy_addback);
+                ++addback_index;
+            } else {
+                energy = detector.channels[0].calibrate();
                 channel_histograms[channel_index].Fill(energy);
                 ++channel_index;
             }
-            addback_histograms[detector_index].Fill(energy_addback);
             ++detector_index;
         }
     }
@@ -95,4 +130,5 @@ int main(int argc, char* argv[]){
     }
 
     output_file.Close();
+    cout << "Created output file '" << vm["output_file"].as<string>() << "'." << endl;
 }

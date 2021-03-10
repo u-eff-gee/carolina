@@ -4,6 +4,12 @@ using std::pair;
 
 #include "detector.hpp"
 
+
+DetectorGroup clover{"clover"};
+DetectorGroup cebr{"cebr"};
+
+vector<DetectorGroup> detector_groups {clover, cebr};
+
 vector<pair<string, double*>> branches{
 	{"amplitude_clover_90", new double[16]},
 	{"amplitude_clover_135", new double[16]},
@@ -46,6 +52,7 @@ vector<Detector> detectors{
                 branches[3].second[3], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_3",
         {
@@ -70,6 +77,7 @@ vector<Detector> detectors{
                 branches[3].second[7], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_5",
         {
@@ -94,6 +102,7 @@ vector<Detector> detectors{
                 branches[3].second[11], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_7",
         {
@@ -118,6 +127,7 @@ vector<Detector> detectors{
                 branches[3].second[15], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_B1",
         {
@@ -142,6 +152,7 @@ vector<Detector> detectors{
                 branches[4].second[3], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_B4",
         {
@@ -166,6 +177,7 @@ vector<Detector> detectors{
                 branches[4].second[7], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_B5",
         {
@@ -190,6 +202,7 @@ vector<Detector> detectors{
                 branches[4].second[11], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"clover_B6",
         {
@@ -214,6 +227,7 @@ vector<Detector> detectors{
                 branches[4].second[15], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        clover
     },
     {"cebr_B",
         {
@@ -223,6 +237,7 @@ vector<Detector> detectors{
                 branches[5].second[0], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_C",
         {
@@ -232,6 +247,7 @@ vector<Detector> detectors{
                 branches[5].second[1], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_E",
         {
@@ -241,6 +257,7 @@ vector<Detector> detectors{
                 branches[5].second[2], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_F",
         {
@@ -250,6 +267,7 @@ vector<Detector> detectors{
                 branches[5].second[3], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_I",
         {
@@ -259,6 +277,7 @@ vector<Detector> detectors{
                 branches[5].second[4], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_M",
         {
@@ -268,6 +287,7 @@ vector<Detector> detectors{
                 branches[5].second[5], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_BB",
         {
@@ -277,6 +297,7 @@ vector<Detector> detectors{
                 branches[5].second[8], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_BC",
         {
@@ -286,6 +307,7 @@ vector<Detector> detectors{
                 branches[5].second[9], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_BD",
         {
@@ -295,6 +317,7 @@ vector<Detector> detectors{
                 branches[5].second[10], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_BK",
         {
@@ -304,6 +327,7 @@ vector<Detector> detectors{
                 branches[5].second[11], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_BL",
         {
@@ -313,6 +337,7 @@ vector<Detector> detectors{
                 branches[5].second[12], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
     {"cebr_BM",
         {
@@ -322,5 +347,6 @@ vector<Detector> detectors{
                 branches[5].second[13], [](const double uncalibrated_time){ return tdc_resolution*uncalibrated_time; }
             },
         },
+        cebr
     },
 };
