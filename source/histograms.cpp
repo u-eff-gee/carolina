@@ -40,7 +40,7 @@ int main(int argc, char* argv[]){
 
     if(first > last){
         cout << "Error: first entry (" << first << ") is larger or equal to last entry (" << last << "). Aborting ..." << endl;
-	abort();
+	    abort();
     }
 
     ProgressPrinter progress_printer(last-first+1, 0.001);
@@ -48,26 +48,6 @@ int main(int argc, char* argv[]){
     for(auto branch: branches){
 	    tree->SetBranchAddress(branch.first.c_str(), branch.second);
     }
-
-    vector<vector<shared_ptr<Detector>>> groups;
-    for(size_t i = 0; i < detector_groups.size(); ++i){
-        groups.push_back(vector<shared_ptr<Detector>>());
-        for(auto detector: detectors){
-            if(detector.group.name == detector_groups[i].name){
-                groups[i].push_back(make_shared<Detector>(detector));
-            }
-        }
-    }
-
-    for(size_t i = 0; i < groups.size(); ++i){
-        if(groups[i].size()){
-            cout << "Detector Group: " << groups[i][0]->group.name << endl;
-            for(auto detector: groups[i]){
-                cout << "\t" << detector->name << endl;
-            }
-        }
-    }
-    cout << endl;
 
     vector<TH1D> channel_histograms;
     vector<TH1D> addback_histograms;
