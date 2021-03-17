@@ -21,18 +21,12 @@ struct HistogramProperties{
 struct Channel{
     const string name;
 
-    double &energy_branch;
+    const string energy_branch_name;
+    const unsigned int energy_branch_index;
     const HistogramProperties energy_histogram_properties;
-    const function<double(const double)> energy_calibration;
-    double calibrate() const {
-        
-        if(!isnan(energy_branch)){
-            return energy_calibration(energy_branch);
-        }
+    const vector<double> energy_calibration_parameters;
 
-        return 0.;
-    }
-
-    double &time_branch;
-    const function<double(const double)> time_calibration;
+    const string time_branch_name;
+    const unsigned int time_branch_index;
+    const vector<double> time_calibration_parameters;
 };
