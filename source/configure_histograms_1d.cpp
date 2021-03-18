@@ -38,16 +38,16 @@ int main(){
                 if(detector.channels.size() > 1){
                     ofile << "\tdouble " << detector.name << "_energies[" << detector.channels.size() << "];\n";
                     histogram_name = detector.name + "_addback";
-                    ofile << "\tTH1F* " << histogram_name << " = new TH1F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << detector.channels[0].energy_histogram_properties.n_bins << ", " << detector.channels[0].energy_histogram_properties.minimum << ", " << detector.channels[0].energy_histogram_properties.maximum << ");\n";
+                    ofile << "\tTH1F* " << histogram_name << " = new TH1F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << detector.energy_histogram_properties.n_bins << ", " << detector.energy_histogram_properties.minimum << ", " << detector.energy_histogram_properties.maximum << ");\n";
                     histogram_names.push_back(histogram_name);
                 }
                 for(auto channel: detector.channels){
                     histogram_name = detector.name + "_" + channel.name;
-                    ofile << "\tTH1F* " << histogram_name << " = new TH1F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << channel.energy_histogram_properties.n_bins << ", " << channel.energy_histogram_properties.minimum << ", " << channel.energy_histogram_properties.maximum << ");\n";
+                    ofile << "\tTH1F* " << histogram_name << " = new TH1F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << detector.energy_histogram_properties.n_bins << ", " << detector.energy_histogram_properties.minimum << ", " << detector.energy_histogram_properties.maximum << ");\n";
                     histogram_names.push_back(histogram_name);
 
                     histogram_name = detector.name + "_" + channel.name + "_raw";
-                    ofile << "\tTH1F* " << histogram_name << " = new TH1F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << channel.energy_histogram_properties.n_bins << ", " << channel.energy_histogram_properties.minimum << ", " << channel.energy_histogram_properties.maximum << ");\n";
+                    ofile << "\tTH1F* " << histogram_name << " = new TH1F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << channel.energy_raw_histogram_properties.n_bins << ", " << channel.energy_raw_histogram_properties.minimum << ", " << channel.energy_raw_histogram_properties.maximum << ");\n";
                     histogram_names.push_back(histogram_name);
                 }
             }

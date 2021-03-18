@@ -18,4 +18,6 @@ struct Detector{
     const string name;
     const vector<Channel> channels;
     const DetectorGroup group;
+
+    const HistogramProperties energy_histogram_properties;
 };
