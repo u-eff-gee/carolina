@@ -58,14 +58,6 @@ int main(){
                     histogram_names.push_back(histogram_name);
                 }
             }
-        } else if(line.find("@TREE_LOOP_PREVIOUS@") != std::string::npos){
-            for(auto branch: branches){
-                if(branch.keep_previous){
-                    ofile << "\tfor(unsigned int i = 0; i < " << branch.n_leaves << "; ++i){\n";
-                    ofile << "\t\tprevious_" << branch.name << "[i] = " << branch.name << "[i];\n";
-                    ofile << "\t}\n";
-                }
-            }
         } else if(line.find("@TREE_LOOP@") != std::string::npos){
             for(auto detector: detectors){
                 size_t n_channel = 0;
@@ -86,6 +78,7 @@ int main(){
 
                         histogram_name = "timestamp_" + detector.name + "_" + channel.name;
                         ofile << "\t\t" << histogram_name << "->Fill(" << channel.timestamp_calibration_parameters[1] << " * (" << channel.timestamp_branch_name << "[0] - previous_" << channel.timestamp_branch_name << "[0]));\n";
+                        ofile << "\t\tprevious_" << channel.timestamp_branch_name << "[0] = " << channel.timestamp_branch_name << "[0];\n";
 
                         ofile << "\t}\n\telse{ " << energy_variable_name << " = 0.; };\n";
 
@@ -107,7 +100,8 @@ int main(){
 
                         histogram_name = "timestamp_" + detector.name + "_" + channel.name;
                         ofile << "\t\t" << histogram_name << "->Fill(" << channel.timestamp_calibration_parameters[1] << " * (" << channel.timestamp_branch_name << "[0] - previous_" << channel.timestamp_branch_name << "[0]));\n";
-                        
+                        ofile << "\t\tprevious_" << channel.timestamp_branch_name << "[0] = " << channel.timestamp_branch_name << "[0];\n";
+
                         ofile << "\t}\n";
                     }
                 }
