@@ -104,6 +104,10 @@ int main(){
 
                         histogram_name = detector.name + "_" + channel.name + "_raw";
                         ofile << "\t\t" << histogram_name << "->Fill(" << channel.energy_branch_name << "[" << channel.energy_branch_index << "]);\n";
+
+                        histogram_name = "timestamp_" + detector.name + "_" + channel.name;
+                        ofile << "\t\t" << histogram_name << "->Fill(" << channel.timestamp_calibration_parameters[1] << " * (" << channel.timestamp_branch_name << "[0] - previous_" << channel.timestamp_branch_name << "[0]));\n";
+                        
                         ofile << "\t}\n";
                     }
                 }
