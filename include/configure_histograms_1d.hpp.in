@@ -1,1 +1,8 @@
-#include "@DETECTOR_SETUP@.hpp"
+#include <string>
+
+using std::string;
+
+#include "@DETECTOR_SETUP@"
+
+const string code_generation_dir = "@CMAKE_SOURCE_DIR@/code_generation/";
+const string code_generation_output_dir = "@CMAKE_BINARY_DIR@/code_generation/";

@@ -8,17 +8,14 @@ using std::ofstream;
 using std::cout;
 using std::endl;
 
-#include <string>
-
-using std::string;
 using std::to_string;
 
 #include "configure_histograms_1d.hpp"
 
 int main(){
 
-    ifstream ifile("../source/tree.cpp.in");
-    ofstream ofile("code_generation/histograms_1d.cpp");
+    ifstream ifile(code_generation_dir + "/histograms_1d.cpp.in");
+    ofstream ofile(code_generation_output_dir + "histograms_1d.cpp");
 
     unsigned int n_channels = 0;
     for(auto detector: detectors){
@@ -103,10 +100,5 @@ int main(){
 
     ifile.close();
     ofile.close();
-
-    ofstream cmakelists("code_generation/CMakeLists.txt", std::ios::app);
-    cmakelists << "add_executable(tree tree.cpp)\n";
-    cmakelists << "target_link_libraries(tree ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES})\n\n";
-    cmakelists.close();
 
 }
