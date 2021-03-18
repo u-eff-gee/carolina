@@ -28,8 +28,8 @@ int main(int argc, char* argv[]){
         ("help", "Produce help message.")
         ("input_file", po::value<vector<string>>(), "Input file name.")
         ("n_threads", po::value<unsigned int>()->default_value(1), "Number of threads (default: 1).")
-        ("script", po::value<string>()->default_value("histograms"), "Name of the script to be run in multithreaded mode (default: 'histograms').")
-        ("output_file", po::value<string>()->default_value("histograms_multithread_screen.sh"), "Output file name (default: 'histograms_multithread_screen.sh')")
+        ("script", po::value<string>()->default_value("histograms_1d"), "Name of the script to be run in multithreaded mode (default: 'histograms_1d').")
+        ("output_file", po::value<string>()->default_value("histograms_1d_multithread_screen.sh"), "Output file name (default: 'histograms_1d_multithread_screen.sh')")
         ;
     po::positional_options_description p;
     p.add("input_file", -1);
