@@ -9,10 +9,7 @@ using std::string;
 using std::vector;
 
 #include "channel.hpp"
-
-struct DetectorGroup{
-    const string name;
-};
+#include "detector_group.hpp"
 
 struct Detector{
     const string name;
@@ -20,4 +17,5 @@ struct Detector{
     const DetectorGroup group;
 
     const HistogramProperties energy_histogram_properties;
+    const HistogramProperties timestamp_difference_histogram_properties;
 };

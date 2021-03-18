@@ -51,7 +51,11 @@ int main(int argc, char* argv[]){
 
     for(int i = first; i <= last; ++i){
         progress_printer(i - first);
+
+        @TREE_LOOP_PREVIOUS@
+
         tree->GetEntry(i);
+        
         @TREE_LOOP@
     }
 

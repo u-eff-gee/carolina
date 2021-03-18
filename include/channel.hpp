@@ -4,19 +4,11 @@
 
 using std::isnan;
 
-#include <functional>
-
-using std::function;
-
 #include <string>
 
 using std::string;
 
-struct HistogramProperties{
-	const unsigned int n_bins;
-	const double minimum;
-	const double maximum;
-};
+#include "histogram_properties.hpp"
 
 struct Channel{
     const string name;

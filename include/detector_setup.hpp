@@ -1,7 +1,4 @@
-#include <utility>
-
-using std::pair;
-
+#include "branch.hpp"
 #include "detector.hpp"
 
 DetectorGroup clover{"clover"};
@@ -9,26 +6,23 @@ DetectorGroup cebr{"cebr"};
 
 vector<DetectorGroup> detector_groups {clover, cebr};
 
-vector<pair<string, unsigned int>> branches{
-	{"amplitude_clover_90", 16},
-	{"amplitude_clover_135", 16},
-	{"integration_long", 16},
-	{"time_clover_90", 16},
-	{"time_clover_135", 16},
-	{"channel_time", 16},
+vector<Branch> branches{
+	{"amplitude_clover_90", 16, false},
+	{"amplitude_clover_135", 16, false},
+	{"integration_long", 16, false},
+	{"time_clover_90", 16, false},
+	{"time_clover_135", 16, false},
+	{"channel_time", 16, false},
+    {"timestamp_clover_90", 1, true}
 };
 
-const unsigned int n_bins_energy_clover = 65536;
-const double min_energy_raw_clover = 0.5;
-const double max_energy_raw_clover = 65536.5;
-const double min_energy_clover = 0.5;
-const double max_energy_clover = 16384.5;
+const HistogramProperties energy_histogram_clover{65536, 0.5, 16384.5};
+const HistogramProperties energy_raw_histogram_clover{65536, 0.5, 65536.5};
 
-const unsigned int n_bins_energy_cebr = 4096;
-const double min_energy_raw_cebr = 0.5;
-const double max_energy_raw_cebr = 4096.5;
-const double min_energy_cebr = 0.5;
-const double max_energy_cebr = 16384.5;
+const HistogramProperties energy_histogram_cebr{4096, 0.5, 16384.5};
+const HistogramProperties energy_raw_histogram_cebr{4096, 0.5, 4096.5};
+
+const HistogramProperties timestamp_difference_histogram{10000, 0., 1000.};
 
 const double tdc_resolution = 0.098; // in nanoseconds per bin
 const double vme_clock_period = 1./16.; // in microseconds, inverse of the VME clock frequency, which is 16 MHz
@@ -38,31 +32,32 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                "amplitude_clover_90", 0, {n_bins_energy_clover, min_energy_raw_clover, max_energy_raw_clover}, {8.195428e-01, 1.917486e-01},
+                "amplitude_clover_90", 0, energy_raw_histogram_clover, {8.195428e-01, 1.917486e-01},
                 "time_clover_90", 0, { 0., tdc_resolution },
                 "timestamp_clover_90", 0, { 0., vme_clock_period }
             },
             {
                 "E2",
-                "amplitude_clover_90", 1, {n_bins_energy_clover, min_energy_raw_clover, max_energy_raw_clover}, {4.511201e+00, 2.209234e-01},
+                "amplitude_clover_90", 1, energy_raw_histogram_clover, {4.511201e+00, 2.209234e-01},
                 "time_clover_90", 1, { 0., tdc_resolution },
                 "timestamp_clover_90", 0, { 0., vme_clock_period }
             },
             {
                 "E3",
-                "amplitude_clover_90", 2, {n_bins_energy_clover, min_energy_raw_clover, max_energy_raw_clover}, {4.082621e+00, 2.246197e-01},
+                "amplitude_clover_90", 2, energy_raw_histogram_clover, {4.082621e+00, 2.246197e-01},
                 "time_clover_90", 2, { 0., tdc_resolution },
                 "timestamp_clover_90", 0, { 0., vme_clock_period }
             },
             {
                 "E4",
-                "amplitude_clover_90", 3, {n_bins_energy_clover, min_energy_raw_clover, max_energy_raw_clover}, {3.356518e00, 2.433405e-01},
+                "amplitude_clover_90", 3, energy_raw_histogram_clover, {3.356518e00, 2.433405e-01},
                 "time_clover_90", 3, { 0., tdc_resolution },
                 "timestamp_clover_90", 0, { 0., vme_clock_period }
             },
         },
         clover,
-        {n_bins_energy_clover, min_energy_clover, max_energy_clover}
+        energy_histogram_clover,
+        timestamp_difference_histogram
     },
 //     {"clover_3",
 //         {
