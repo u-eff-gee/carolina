@@ -13,12 +13,12 @@ using std::endl;
 using std::string;
 using std::to_string;
 
-#include "detector_setup.hpp"
+#include "configure_histograms_1d.hpp"
 
 int main(){
 
     ifstream ifile("../source/tree.cpp.in");
-    ofstream ofile("generated_code/tree.cpp");
+    ofstream ofile("code_generation/histograms_1d.cpp");
 
     unsigned int n_channels = 0;
     for(auto detector: detectors){
@@ -104,7 +104,7 @@ int main(){
     ifile.close();
     ofile.close();
 
-    ofstream cmakelists("generated_code/CMakeLists.txt", std::ios::app);
+    ofstream cmakelists("code_generation/CMakeLists.txt", std::ios::app);
     cmakelists << "add_executable(tree tree.cpp)\n";
     cmakelists << "target_link_libraries(tree ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES})\n\n";
     cmakelists.close();

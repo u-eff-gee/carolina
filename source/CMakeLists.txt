@@ -5,13 +5,8 @@ target_link_libraries(command_line_parser ${Boost_LIBRARIES})
 
 add_library(progress_printer progress_printer.cpp)
 
-add_executable(configure_tree configure_tree.cpp)
-
-add_executable(histograms histograms.cpp)
-target_link_libraries(histograms command_line_parser progress_printer ${ROOT_LIBRARIES})
+add_executable(configure_histograms_1d configure_histograms_1d.cpp)
+target_include_directories(configure_histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include)
 
 add_executable(multithread_screen multithread_screen.cpp)
 target_link_libraries(multithread_screen command_line_parser ${ROOT_LIBRARIES})
-
-add_executable(multithread_merge_output multithread_merge_output.cpp)
-target_link_libraries(multithread_merge_output command_line_parser ${ROOT_LIBRARIES})
