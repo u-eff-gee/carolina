@@ -8,5 +8,8 @@ add_library(progress_printer progress_printer.cpp)
 add_executable(configure_histograms_1d configure_histograms_1d.cpp)
 target_include_directories(configure_histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include)
 
+add_executable(histograms_1d_text histograms_1d_text.cpp)
+target_link_libraries(histograms_1d_text ${Boost_LIBRARIES} ${ROOT_LIBRARIES})
+
 add_executable(multithread_screen multithread_screen.cpp)
 target_link_libraries(multithread_screen command_line_parser ${ROOT_LIBRARIES})
