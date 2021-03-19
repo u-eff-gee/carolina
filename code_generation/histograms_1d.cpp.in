@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
         progress_printer(i - first);
 
         tree->GetEntry(i);
-        
+
         @TREE_LOOP@
     }
 

@@ -18,11 +18,11 @@ vector<Branch> branches{
     {"timestamp_cebr", 1, true}
 };
 
-const HistogramProperties energy_histogram_clover{65536, 0.5, 16384.5};
-const HistogramProperties energy_raw_histogram_clover{65536, 0.5, 65536.5};
+const HistogramProperties energy_histogram_clover{65536, 0., 16384.};
+const HistogramProperties energy_raw_histogram_clover{65536, 0., 65536.};
 
-const HistogramProperties energy_histogram_cebr{4096, 0.5, 16384.5};
-const HistogramProperties energy_raw_histogram_cebr{4096, 0.5, 4096.5};
+const HistogramProperties energy_histogram_cebr{4096, 0., 16384.};
+const HistogramProperties energy_raw_histogram_cebr{4096, 0., 4096.};
 
 const HistogramProperties timestamp_difference_histogram{10000, 0., 1000.};
 
@@ -288,7 +288,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_C",
@@ -301,7 +301,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_E",
@@ -314,7 +314,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_F",
@@ -327,7 +327,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_I",
@@ -340,7 +340,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_M",
@@ -353,7 +353,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_BB",
@@ -366,7 +366,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_BC",
@@ -379,7 +379,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_BD",
@@ -392,7 +392,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_BK",
@@ -405,7 +405,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_BL",
@@ -418,7 +418,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
     {"cebr_BM",
@@ -431,7 +431,7 @@ vector<Detector> detectors{
             },
         },
         cebr,
-        energy_raw_histogram_cebr,
+        energy_histogram_cebr,
         timestamp_difference_histogram
     },
 };

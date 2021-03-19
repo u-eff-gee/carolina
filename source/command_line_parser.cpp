@@ -17,7 +17,7 @@ CommandLineParser::CommandLineParser(){
     desc.add_options()
         ("help", "Produce help message.")
         ("first", po::value<int>()->default_value(1), "First entry to be processed.")
-        ("input_file", po::value<vector<string>>(), "Input file name.") 
+        ("input_file", po::value<vector<string>>(), "Input file names.")
         ("last", po::value<int>()->default_value(0), "Last entry to be processed.")
         ("output_file", po::value<string>()->default_value("output.root"), "Output file name (default: 'output.root').");
     p.add("input_file", -1);
