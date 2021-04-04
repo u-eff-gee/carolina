@@ -40,7 +40,7 @@ int main(int argc, char* argv[]){
 
     if(first > last){
         cout << "Error: first entry (" << first << ") is larger or equal to last entry (" << last << "). Aborting ..." << endl;
-	    abort();
+	    return 0;
     }
 
     ProgressPrinter progress_printer(last-first+1, 0.001);

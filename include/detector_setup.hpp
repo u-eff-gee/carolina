@@ -27,7 +27,7 @@ const HistogramProperties energy_raw_histogram_cebr{4096, 0., 4096.};
 const HistogramProperties timestamp_difference_histogram{10000, 0., 10000.};
 
 const double tdc_resolution = 0.098; // in nanoseconds per bin
-vector<double> timestamp_calibration_parameters{0., 1./16.}; // in microseconds, inverse of the VME clock frequency, which is 16 MHz
+const vector<double> timestamp_calibration_parameters{0., 1./16.}; // in microseconds, inverse of the VME clock frequency, which is 16 MHz
 
 vector<Detector> detectors{
     {"clover_1",

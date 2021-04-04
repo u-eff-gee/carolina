@@ -119,4 +119,6 @@ int main(){
     ifile.close();
     ofile.close();
 
+    cout << "Configured '" << code_generation_dir << "histograms_1d.cpp'." << endl;
+
 }

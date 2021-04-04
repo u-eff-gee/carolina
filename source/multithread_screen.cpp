@@ -41,12 +41,12 @@ int main(int argc, char* argv[]){
 
     if(vm.count("help")){
         cout << desc << endl;
-        abort();
+        return 0;
     }
 
     if(!vm.count("input_file")){
         cout << "No input file given. Aborting ..." << endl;
-        abort();
+        return 0;
     }
 
     const unsigned int n_threads = vm["n_threads"].as<unsigned int>();

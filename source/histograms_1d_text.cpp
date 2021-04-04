@@ -81,12 +81,12 @@ int main(int argc, char* argv[]){
 
     if (vm.count("help")) {
         cout << desc << "\n";
-        return 1;
+        return 0;
     }
 
     if(!vm.count("input_file")){
         cout << "No input file given. Aborting ..." << endl;
-        return 1;
+        return 0;
     }
 
     const vector<string> input_files = vm["input_file"].as<vector<string>>();
