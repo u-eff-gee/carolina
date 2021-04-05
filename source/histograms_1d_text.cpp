@@ -66,7 +66,7 @@ void write_histogram_two_column(TH1 *histogram, const string separator, const st
 int main(int argc, char* argv[]){
 
     po::variables_map vm;
-    po::options_description desc("Write the bin centers and bin contents of all TH1 histograms in a ROOT file to separate single- or two-column text files.");
+    po::options_description desc("Write the bin centers and bin contents of all TH1 histograms in a ROOT file to separate single- or two-column text files");
     po::positional_options_description p;
     desc.add_options()
         ("help", "Produce help message.")
