@@ -14,4 +14,6 @@ set(DETECTOR_SETUP "detector_setup.hpp" CACHE STRING "Set name of header file in
 add_subdirectory(source)
 
 configure_file(code_generation/CMakeLists.txt.in code_generation/CMakeLists.txt)
+configure_file(include/code_generation.hpp.in ${CMAKE_BINARY_DIR}/include/code_generation.hpp)
 configure_file(include/configure_histograms_1d.hpp.in ${CMAKE_BINARY_DIR}/include/configure_histograms_1d.hpp)
+configure_file(include/configure_histograms_2d.hpp.in ${CMAKE_BINARY_DIR}/include/configure_histograms_2d.hpp)

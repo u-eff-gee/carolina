@@ -1,8 +1,16 @@
 #include "branch.hpp"
 #include "detector.hpp"
 
-DetectorGroup clover{"clover"};
-DetectorGroup cebr{"cebr"};
+DetectorGroup clover{
+    "clover",
+    {4096, 0., 16384.},
+    {1000, -500., 500.},
+};
+DetectorGroup cebr{
+    "cebr",
+    {2048, 0., 16384.},
+    {1000, -500., 500.},
+};
 
 vector<DetectorGroup> detector_groups {clover, cebr};
 

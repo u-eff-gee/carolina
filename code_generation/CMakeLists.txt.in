@@ -16,3 +16,8 @@ if(EXISTS histograms_1d.cpp)
     add_executable(histograms_1d histograms_1d.cpp)
     target_link_libraries(histograms_1d ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES})
 endif()
+
+if(EXISTS histograms_2d.cpp)
+    add_executable(histograms_2d histograms_2d.cpp)
+    target_link_libraries(histograms_2d ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES})
+endif()

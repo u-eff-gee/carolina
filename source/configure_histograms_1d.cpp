@@ -10,6 +10,7 @@ using std::endl;
 
 using std::to_string;
 
+#include "code_generation.hpp"
 #include "configure_histograms_1d.hpp"
 
 int main(){

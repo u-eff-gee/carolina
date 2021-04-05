@@ -1,0 +1,6 @@
+#include <string>
+
+using std::string;
+
+const string code_generation_dir = "@CMAKE_SOURCE_DIR@/code_generation/";
+const string code_generation_output_dir = "@CMAKE_BINARY_DIR@/code_generation/";
