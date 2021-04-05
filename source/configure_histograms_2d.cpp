@@ -64,7 +64,7 @@ int main(){
                 }
             }
         } else if(line.find("@TREE_LOOP@") != std::string::npos){
-            for(size_t n_d_0 = 0; n_d_0 < detectors.size(); ++n_d_0){
+            for(size_t n_d_0 = 0; n_d_0 < detectors.size()-1; ++n_d_0){
                 ofile << "\tif(";
 
                 for(size_t n_c_0 = 0; n_c_0 < detectors[n_d_0].channels.size()-1; ++n_c_0){
@@ -92,9 +92,15 @@ int main(){
                                 ofile << "\t\t\t}\n";
                             }
                         }
+
+                        ofile << "\t\t\tenergy_0 = " << detectors[n_d_0].name + "_energies[0]";
+                        for(size_t n_c_0 = 1; n_c_0 < detectors[n_d_0].channels.size(); ++n_c_0){
+                            ofile << " + " << detectors[n_d_0].name + "_energies[" << to_string(n_c_0) << "]";
+                        }
+                        ofile << ";\n";
                     } else{
                         ofile << "\t\t\tenergy_0 = " << detectors[n_d_0].channels[0].energy_calibration_parameters[0] << " + " << detectors[n_d_0].channels[0].energy_calibration_parameters[1] << " * " << detectors[n_d_0].channels[0].energy_branch_name << "[" << detectors[n_d_0].channels[0].energy_branch_index << "];\n";
-                        ofile << "\t\t\ttime_0 = " << detectors[n_d_0].channels[0].time_calibration_parameters[1] << " * " << detectors[n_d_0].channels[0].time_branch_name << "[" << detectors[n_d_0].channels[0].time_branch_index << "];\n";
+                        ofile << "\t\t\ttime_0 = " << detectors[n_d_0].channels[0].time_branch_name << "[" << detectors[n_d_0].channels[0].time_branch_index << "];\n";
                     }
 
                     if(detectors[n_d_1].channels.size() > 1){
@@ -109,9 +115,15 @@ int main(){
                                 ofile << "\t\t\t}\n";
                             }
                         }
+
+                        ofile << "\t\t\tenergy_1 = " << detectors[n_d_1].name + "_energies[0]";
+                        for(size_t n_c_1 = 1; n_c_1 < detectors[n_d_1].channels.size(); ++n_c_1){
+                            ofile << " + " << detectors[n_d_1].name + "_energies[" << to_string(n_c_1) << "]";
+                        }
+                        ofile << ";\n";
                     } else {
                         ofile << "\t\t\tenergy_1 = " << detectors[n_d_1].channels[0].energy_calibration_parameters[0] << " + " << detectors[n_d_1].channels[0].energy_calibration_parameters[1] << " * " << detectors[n_d_1].channels[0].energy_branch_name << "[" << detectors[n_d_1].channels[0].energy_branch_index << "];\n";
-                        ofile << "\t\t\ttime_1 = " << detectors[n_d_1].channels[0].time_calibration_parameters[1] << " * " << detectors[n_d_1].channels[0].time_branch_name << "[" << detectors[n_d_1].channels[0].time_branch_index << "];\n";
+                        ofile << "\t\t\ttime_1 = " << detectors[n_d_1].channels[0].time_branch_name << "[" << detectors[n_d_1].channels[0].time_branch_index << "];\n";
                     }
                     histogram_name_matched = false;
                     for(size_t i = 0; i < detector_groups.size(); ++i){
