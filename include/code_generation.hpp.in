@@ -1,6 +1,57 @@
+#pragma once
+
+#include <iomanip>
+
+using std::scientific;
+
 #include <string>
 
 using std::string;
+using std::to_string;
+
+#include <sstream>
+
+using std::stringstream;
+
+#include <vector>
+
+using std::vector;
+
+#include "branch.hpp"
 
 const string code_generation_dir = "@CMAKE_SOURCE_DIR@/code_generation/";
 const string code_generation_output_dir = "@CMAKE_BINARY_DIR@/code_generation/";
+
+string branch_registration(const vector<Branch> branches, const string indent = ""){
+    string bra_reg = "";
+    for(auto branch: branches){
+        bra_reg = bra_reg + indent + "double " + branch.name + "[" + to_string(branch.n_leaves) + "];\n";
+        if(branch.keep_previous){
+            bra_reg = bra_reg + indent + "double previous_" + branch.name + "[" + to_string(branch.n_leaves) + "];\n";
+        }
+        bra_reg = bra_reg + indent + "tree->SetBranchAddress(\"" + branch.name + "\", " + branch.name + ");\n";
+    }
+
+    return bra_reg;
+}
+
+string calibration_expression(const string variable, const vector<double> calibration_parameters){
+    stringstream cal_exp;
+    bool first_nonzero_term = true;
+
+    for(size_t i = 0; i < calibration_parameters.size(); ++i){
+        if(calibration_parameters[i] != 0.){
+            if(first_nonzero_term){
+                first_nonzero_term = false;
+            } else {
+                cal_exp << " + ";
+            }
+            cal_exp << scientific << calibration_parameters[i];
+            for(size_t j = 0; j < i; ++j){
+                cal_exp << " * " << variable;
+            }
+        }
+    }
+
+    return cal_exp.str();
+}
