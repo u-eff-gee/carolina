@@ -31,19 +31,17 @@ int main(){
 
     while(getline(ifile, line)){
         if(line.find("@REGISTER_BRANCHES@") != std::string::npos){
+
+            ofile << branch_registration(branches, "\t");
+
+        } else if(line.find("@CREATE_HISTOGRAMS@") != std::string::npos){
             ofile << "\tdouble energy_0, energy_1, time_0, time_1;\n";
             ofile << "\tint maximum_energy_deposition_index;\n";
-            for(auto branch: branches){
-                ofile << "\tdouble " << branch.name << "[" << branch.n_leaves << "];\n";
-                ofile << "\ttree->SetBranchAddress(\"" << branch.name << "\", " << branch.name << ");\n";
-            }
-
             for(auto detector: detectors){
                 if(detector.channels.size() > 1){
                     ofile << "\tdouble " << detector.name << "_energies[" << detector.channels.size() << "];\n";
                 }
             }
-        } else if(line.find("@CREATE_HISTOGRAMS@") != std::string::npos){
             for(size_t i = 0; i < detector_groups.size(); ++i){
                 histogram_name = "coincidence_" + detector_groups[i].name + "_" + detector_groups[i].name;
                 ofile << "\tTH2F* " << histogram_name << " = new TH2F(\"" << histogram_name << "\", \"" << histogram_name << "\", " << detector_groups[i].energy_histogram_properties.n_bins << ", " << detector_groups[i].energy_histogram_properties.minimum << ", " << detector_groups[i].energy_histogram_properties.maximum << ", " << detector_groups[i].energy_histogram_properties.n_bins << ", " << detector_groups[i].energy_histogram_properties.minimum << ", " << detector_groups[i].energy_histogram_properties.maximum << ");\n";

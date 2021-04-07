@@ -2,6 +2,7 @@
  * Linear energy calibration for clover channels from run 487, using the 511 keV, 1461 keV, 
  * and 2615 keV background lines.
  */
+#pragma once
 
 #include "branch.hpp"
 #include "detector.hpp"
@@ -49,25 +50,25 @@ vector<Detector> detectors{
         {
             {
                 "E1",
-                "amplitude_clover_90", 0, energy_raw_histogram_clover, {3.211511e+00, 2.887161e-01},
+                "amplitude_clover_90", 0, energy_raw_histogram_clover, {-1.485047e+00, 2.901548e-01, -1.016733e-07},
                 "time_clover_90", 0, { 0., tdc_resolution },
                 "timestamp_clover_90", 0, timestamp_calibration_parameters
             },
             {
                 "E2",
-                "amplitude_clover_90", 1, energy_raw_histogram_clover, {3.735828e+00, 3.325984e-01},
+                "amplitude_clover_90", 1, energy_raw_histogram_clover, {-1.272707e+00, 3.343115e-01, -1.360288e-07},
                 "time_clover_90", 1, { 0., tdc_resolution },
                 "timestamp_clover_90", 1, timestamp_calibration_parameters
             },
             {
                 "E3",
-                "amplitude_clover_90", 2, energy_raw_histogram_clover, {3.612985e+00, 3.389956e-01},
+                "amplitude_clover_90", 2, energy_raw_histogram_clover, {-7.617836e-01, 3.404271e-01, -1.078742e-07},
                 "time_clover_90", 2, { 0., tdc_resolution },
                 "timestamp_clover_90", 2, timestamp_calibration_parameters
             },
             {
                 "E4",
-                "amplitude_clover_90", 3, energy_raw_histogram_clover, {4.277009e+00, 3.667998e-01},
+                "amplitude_clover_90", 3, energy_raw_histogram_clover, {1.001582e-01, 3.681067e-01, -9.131797e-08},
                 "time_clover_90", 3, { 0., tdc_resolution },
                 "timestamp_clover_90", 3, timestamp_calibration_parameters
             },
@@ -213,12 +214,12 @@ vector<Detector> detectors{
                 "time_clover_135", 4, { 0., tdc_resolution },
                 "timestamp_clover_135", 4, timestamp_calibration_parameters
             },
-            {
-                "E2",
-                "amplitude_clover_135", 5, energy_raw_histogram_clover, {5.688416e+00, 1.064333e+00},
-                "time_clover_135", 5, { 0., tdc_resolution },
-                "timestamp_clover_135", 5, timestamp_calibration_parameters
-            },
+            // {
+            //     "E2",
+            //     "amplitude_clover_135", 5, energy_raw_histogram_clover, {5.688416e+00, 1.064333e+00},
+            //     "time_clover_135", 5, { 0., tdc_resolution },
+            //     "timestamp_clover_135", 5, timestamp_calibration_parameters
+            // },
             {
                 "E3",
                 "amplitude_clover_135", 6, energy_raw_histogram_clover, {2.980456e+00, 3.519861e-01},

@@ -30,13 +30,9 @@ int main(){
 
     while(getline(ifile, line)){
         if(line.find("@REGISTER_BRANCHES@") != std::string::npos){
-            for(auto branch: branches){
-                ofile << "\tdouble " << branch.name << "[" << branch.n_leaves << "];\n";
-                if(branch.keep_previous){
-                    ofile << "\tdouble previous_" << branch.name << "[" << branch.n_dependent_leaves << "];\n";
-                }
-                ofile << "\ttree->SetBranchAddress(\"" << branch.name << "\", " << branch.name << ");\n";
-            }
+
+            ofile << branch_registration(branches, "\t");
+
         } else if(line.find("@CREATE_HISTOGRAMS@") != std::string::npos){
             for(auto detector: detectors){
                 if(detector.channels.size() > 1){
@@ -74,7 +70,7 @@ int main(){
                     for(auto channel: detector.channels){
                         energy_variable_name = detector.name + "_energies[" + to_string(n_channel) + "]";
                         ofile << "\t\tif( !isnan(" << channel.energy_branch_name << "[" << channel.energy_branch_index << "])){\n";
-                        ofile << "\t\t\t" << energy_variable_name << " = " << channel.energy_calibration_parameters[0] << " + " << channel.energy_calibration_parameters[1] << " * " << channel.energy_branch_name << "[" << channel.energy_branch_index << "];\n";
+                        ofile << "\t\t\t" << energy_variable_name << " = " << calibration_expression(channel.energy_branch_name + "[" + to_string(channel.energy_branch_index) + "]", channel.energy_calibration_parameters) << ";\n";
 
                         histogram_name = detector.name + "_" + channel.name;
                         ofile << "\t\t\t" << histogram_name << "->Fill(" << energy_variable_name << ");\n";
@@ -83,13 +79,13 @@ int main(){
                         ofile << "\t\t\t" << histogram_name << "->Fill(" << channel.energy_branch_name << "[" << channel.energy_branch_index << "]);\n";
 
                         histogram_name = detector.name + "_" + channel.name + "_timestamp_difference";
-                        ofile << "\t\t\t" << histogram_name << "->Fill(" << channel.timestamp_calibration_parameters[1] << " * (" << channel.timestamp_branch_name << "[0] - previous_" << channel.timestamp_branch_name << "[" << channel.timestamp_branch_index << "]));\n";
+                        ofile << "\t\t\t" << histogram_name << "->Fill(" << calibration_expression("(" + channel.timestamp_branch_name + "[0] - previous_" + channel.timestamp_branch_name + "[" + to_string(channel.timestamp_branch_index) + "])", channel.timestamp_calibration_parameters) << ");\n";
                         ofile << "\t\t\tprevious_" << channel.timestamp_branch_name << "[" << channel.timestamp_branch_index << "] = " << channel.timestamp_branch_name << "[0];\n";
 
                         ofile << "\t\t}\n\t\telse{ " << energy_variable_name << " = 0.; };\n";
 
                         time_variable_name = detector.name + "_times[" + to_string(n_channel) + "]";
-                        ofile << "\t\t" << time_variable_name << " = " << channel.time_calibration_parameters[1] << " * " << channel.time_branch_name << "[" << channel.time_branch_index << "];\n";
+                        ofile << "\t\t" << time_variable_name << " = " << calibration_expression(channel.time_branch_name + "[" + to_string(channel.time_branch_index) + "]", channel.time_calibration_parameters) << ";\n";
 
                         ++n_channel;
                     }
@@ -122,13 +118,13 @@ int main(){
                     for(auto channel: detector.channels){
                         ofile << "\t\tif( !isnan(" << channel.energy_branch_name << "[" << channel.energy_branch_index << "])){\n";
                         histogram_name = detector.name + "_" + channel.name;
-                        ofile << "\t\t\t" << histogram_name << "->Fill(" << channel.energy_calibration_parameters[0] << " + " << channel.energy_calibration_parameters[1] << " * " << channel.energy_branch_name << "[" << channel.energy_branch_index << "]);\n";
+                        ofile << "\t\t\t" << histogram_name << "->Fill(" << calibration_expression(channel.energy_branch_name + "[" + to_string(channel.energy_branch_index) + "]", channel.energy_calibration_parameters) << ");\n";
 
                         histogram_name = detector.name + "_" + channel.name + "_raw";
                         ofile << "\t\t\t" << histogram_name << "->Fill(" << channel.energy_branch_name << "[" << channel.energy_branch_index << "]);\n";
 
                         histogram_name = detector.name + "_" + channel.name + "_timestamp_difference";
-                        ofile << "\t\t\t" << histogram_name << "->Fill(" << channel.timestamp_calibration_parameters[1] << " * (" << channel.timestamp_branch_name << "[0] - previous_" << channel.timestamp_branch_name << "[" << channel.timestamp_branch_index << "]));\n";
+                        ofile << "\t\t\t" << histogram_name << "->Fill(" << calibration_expression("(" + channel.time_branch_name + "[0] - previous_" + channel.timestamp_branch_name + "[" + to_string(channel.timestamp_branch_index) + "])", channel.timestamp_calibration_parameters) << ");\n";
                         ofile << "\t\t\tprevious_" << channel.timestamp_branch_name << "[" << channel.timestamp_branch_index << "] = " << channel.timestamp_branch_name << "[0];\n";
 
                         ofile << "\t\t}\n";
