@@ -1,6 +1,5 @@
 /**
- * Linear energy calibration for clover channels from run 487, using the 511 keV, 1461 keV, 
- * and 2615 keV background lines.
+ * Energy calibration for clover channels from run 487, using background lines.
  */
 #pragma once
 

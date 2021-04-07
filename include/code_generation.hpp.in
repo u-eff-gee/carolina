@@ -18,6 +18,7 @@ using std::stringstream;
 using std::vector;
 
 #include "branch.hpp"
+#include "detector.hpp"
 
 const string code_generation_dir = "@CMAKE_SOURCE_DIR@/code_generation/";
 const string code_generation_output_dir = "@CMAKE_BINARY_DIR@/code_generation/";
@@ -33,6 +34,41 @@ string branch_registration(const vector<Branch> branches, const string indent = 
     }
 
     return bra_reg;
+}
+
+string coincidence_histogram_name(vector<DetectorGroup> detector_groups, Detector detector_0, Detector detector_1){
+    string histogram_name;
+
+    bool histogram_name_matched = false;
+    for(size_t i = 0; i < detector_groups.size(); ++i){
+        for(size_t j = i; j < detector_groups.size(); ++j){
+            if(detector_groups[i].name == detector_0.group.name && detector_groups[j].name == detector_1.group.name){
+                histogram_name = detector_0.group.name + "_" + detector_1.group.name;
+                histogram_name_matched = true;
+                break;
+            }
+            if(detector_groups[i].name == detector_1.group.name && detector_groups[j].name == detector_0.group.name){
+                histogram_name = detector_1.group.name + "_" + detector_0.group.name;
+                histogram_name_matched = true;
+                break;
+            }
+        }
+        if(histogram_name_matched){
+            break;
+        }
+    }
+
+    return histogram_name;
+}
+
+string energy_deposition_in_detector(const Detector detector, const string indent = ""){
+    string ene_dep = "";
+    for(size_t n_channel = 0; n_channel < detector.channels.size()-1; ++n_channel){
+        ene_dep = ene_dep + "!isnan(" + detector.channels[n_channel].energy_branch_name + "[" + to_string(detector.channels[n_channel].energy_branch_index) + "]) || ";
+    }
+    ene_dep = ene_dep + "!isnan(" + detector.channels[detector.channels.size()-1].energy_branch_name + "[" + to_string(detector.channels[detector.channels.size()-1].energy_branch_index) + "])";
+
+    return ene_dep;
 }
 
 string calibration_expression(const string variable, const vector<double> calibration_parameters){
@@ -54,4 +90,23 @@ string calibration_expression(const string variable, const vector<double> calibr
     }
 
     return cal_exp.str();
+}
+
+string calibrate_if_not_nan(const string variable, const vector<double> calibration_parameters, const string return_value_if_nan="0."){
+    stringstream cal_exp;
+
+    cal_exp << "isnan(" << variable << ") ? " << return_value_if_nan << " : " << calibration_expression(variable, calibration_parameters);
+
+    return cal_exp.str();
+}
+
+string sum_over_array(const string array_variable, const size_t array_size, const size_t min_index = 0){
+    string sum;
+
+    sum = sum + array_variable + "[" + to_string(min_index) + "]";
+    for(size_t i = min_index+1; i < array_size; ++i){
+        sum = sum + " + " + array_variable + "[" + to_string(i) + "]";
+    }
+
+    return sum;
 }
