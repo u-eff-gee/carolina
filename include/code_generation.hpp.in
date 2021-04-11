@@ -23,6 +23,10 @@ using std::vector;
 const string code_generation_dir = "@CMAKE_SOURCE_DIR@/code_generation/";
 const string code_generation_output_dir = "@CMAKE_BINARY_DIR@/code_generation/";
 
+string energy_branch(const Channel channel){
+    return channel.energy_branch_name + "[" + to_string(channel.energy_branch_index) + "]";
+}
+
 string branch_registration(const vector<Branch> branches, const string indent = ""){
     string bra_reg = "";
     for(auto branch: branches){
@@ -82,9 +86,15 @@ string calibration_expression(const string variable, const vector<double> calibr
             } else {
                 cal_exp << " + ";
             }
-            cal_exp << scientific << calibration_parameters[i];
+            if(calibration_parameters[i] != 1.){
+                cal_exp << scientific << calibration_parameters[i];
+            }
             for(size_t j = 0; j < i; ++j){
-                cal_exp << " * " << variable;
+                if(calibration_parameters[i] == 1. && j == 0){
+                    cal_exp << variable;
+                } else {
+                    cal_exp << " * " << variable;
+                }
             }
         }
     }
@@ -98,6 +108,21 @@ string calibrate_if_not_nan(const string variable, const vector<double> calibrat
     cal_exp << "isnan(" << variable << ") ? " << return_value_if_nan << " : " << calibration_expression(variable, calibration_parameters);
 
     return cal_exp.str();
+}
+
+string addback_expression(const Detector detector, const string addback_energy_array, const string maximum_energy_deposition_pointer, const string indent = ""){
+    string add_bck_exp = "";
+    for(size_t n_c = 0; n_c < detector.channels.size(); ++n_c){
+        add_bck_exp = add_bck_exp + indent + addback_energy_array + "[" + to_string(n_c) + "] = " + calibrate_if_not_nan(energy_branch(detector.channels[n_c]), {0., 1.}) + ";\n";
+    }
+
+    add_bck_exp = add_bck_exp + indent + maximum_energy_deposition_pointer + " = max_element(&" + addback_energy_array + "[0], &" + addback_energy_array + "[" + to_string(detector.channels.size()-1) + "]);\n";
+
+    for(size_t n_c_0 = 0; n_c_0 < detector.channels.size(); ++n_c_0){
+        add_bck_exp = add_bck_exp + indent + "if(" + maximum_energy_deposition_pointer + " - &" + addback_energy_array + "[0] == " + to_string(n_c_0) + "){\n";
+    }
+
+    return add_bck_exp;
 }
 
 string sum_over_array(const string array_variable, const size_t array_size, const size_t min_index = 0){

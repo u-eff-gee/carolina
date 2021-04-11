@@ -64,7 +64,6 @@ int main(){
             for(auto detector: detectors){
                 size_t n_channel = 0;
                 string energy_variable_name, time_variable_name;
-                string addback_expression = "";
 
                 if(detector.channels.size() > 1){
                     for(auto channel: detector.channels){
@@ -90,30 +89,7 @@ int main(){
                         ++n_channel;
                     }
 
-                    for(size_t n_c = 0; n_c < detector.channels.size(); ++n_c){
-                        ofile << "\t\t" << detector.name << "_addback_energies[" << n_c << "] = 0.;\n";
-                        ofile << "\t\t" << detector.name << "_addback_skip[" << n_c << "] = false;\n";
-                    }
-
-                    for(size_t n_c_0 = 0; n_c_0 < detector.channels.size(); ++n_c_0){
-                        ofile << "\t\tif(!" << detector.name << "_addback_skip[" << n_c_0 << "]){\n";
-                        ofile << "\t\t\t" << detector.name << "_addback_energies[" << n_c_0 << "] = " << detector.name << "_energies[" << n_c_0 << "];\n";
-                        for(size_t n_c_1 = n_c_0+1; n_c_1 < detector.channels.size(); ++n_c_1){
-                            ofile << "\t\t\tif(";
-                            ofile << detector.channel_coincidence_window.first << " < " << detector.name + "_times[" << n_c_0 << "] - " << detector.name + "_times[" << n_c_1 << "] && " << detector.name + "_times[" << n_c_0 << "] - " << detector.name + "_times[" << n_c_1 << "] < " << detector.channel_coincidence_window.second << " && !" << detector.name << "_addback_skip[" << n_c_1 << "]";
-                            ofile << "){\n";
-                            ofile << "\t\t\t\t" << detector.name << "_addback_energies[" << n_c_0 << "] += " << detector.name << "_energies[" << n_c_1 << "];\n";
-                            ofile << "\t\t\t\t" << detector.name << "_addback_skip[" << n_c_1 << "] = true;\n";
-                            ofile << "\t\t\t}\n";
-                        }
-                        ofile << "\t\t}\n";
-                    }
-
-                    for(size_t n_c = 0; n_c < detector.channels.size(); ++n_c){
-                        ofile << "\t\tif(" << detector.name << "_addback_energies[" << n_c << "] != 0.){\n";
-                        ofile << "\t\t\t" << detector.name << "_addback->Fill(" << detector.name << "_addback_energies[" << n_c << "]);\n";
-                        ofile << "\t\t}\n";
-                    }
+                    ofile << addback_expression(detector, detector.name + "_addback_energies", "maximum_energy_deposition", "\t\t");
                 } else{
                     for(auto channel: detector.channels){
                         ofile << "\t\tif( !isnan(" << channel.energy_branch_name << "[" << channel.energy_branch_index << "])){\n";

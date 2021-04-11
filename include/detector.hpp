@@ -18,7 +18,7 @@ using std::vector;
 struct Detector{
     const string name;
     const vector<Channel> channels;
-    const pair<double, double> channel_coincidence_window;
+    const double channel_coincidence_window;
     const DetectorGroup group;
 
     const HistogramProperties energy_histogram_properties;
