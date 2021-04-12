@@ -24,11 +24,13 @@ start_time(time(nullptr)), n_entries(ne), inverse_n_entries(1./ (double) ne), up
 }
 
 void ProgressPrinter::operator()(const long index){
-    if((double) index*inverse_n_entries >= current_percentage){
+    const double percentage = index*inverse_n_entries;
+
+    if(percentage >= current_percentage){
         time_t current_time = time(nullptr);
         cout << get_time_string() << " : " << setw(5) << current_percentage*100. << " % processed in " << setw(5) << current_time - start_time << " second(s)." << endl;
 
-        current_percentage += update_increment;
+        current_percentage = percentage + update_increment;
     }
 }
 
