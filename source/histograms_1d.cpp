@@ -39,6 +39,7 @@ int main(int argc, char** argv){
 
     vector<TH1D*> addback_histograms;
     vector<vector<TH1D*>> energy_histograms;
+    vector<vector<TH1D*>> energy_raw_histograms;
     string histogram_name;
 
     for(size_t n_d = 0; n_d < detectors.size(); ++n_d){
@@ -49,9 +50,13 @@ int main(int argc, char** argv){
             addback_histograms.push_back(nullptr);
         }
         energy_histograms.push_back(vector<TH1D*>());
+        energy_raw_histograms.push_back(vector<TH1D*>());
         for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
             histogram_name = detectors[n_d].name + "_" + detectors[n_d].channels[n_c].name;
             energy_histograms[n_d].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_d].group.energy_histogram_properties.n_bins, detectors[n_d].group.energy_histogram_properties.minimum, detectors[n_d].group.energy_histogram_properties.maximum));
+
+            histogram_name = histogram_name + "_raw";
+            energy_raw_histograms[n_d].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_d].group.energy_raw_histogram_properties.n_bins, detectors[n_d].group.energy_raw_histogram_properties.minimum, detectors[n_d].group.energy_raw_histogram_properties.maximum));
         }
     }
 
@@ -64,6 +69,7 @@ int main(int argc, char** argv){
 
         for(size_t n_d = 0; n_d < detectors.size(); ++n_d){
             for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
+                energy_raw_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].energy);
                 detectors[n_d].channels[n_c].calibrate();
                 if(detectors[n_d].channels[n_c].energy_calibrated != 0.){
                     energy_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].energy_calibrated);
@@ -88,6 +94,7 @@ int main(int argc, char** argv){
         }
         for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
             energy_histograms[n_d][n_c]->Write();
+            energy_raw_histograms[n_d][n_c]->Write();
         }
     }
 
