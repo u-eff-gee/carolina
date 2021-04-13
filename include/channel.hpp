@@ -10,10 +10,10 @@ using std::string;
 #include "vme.hpp"
 
 double polynomial_calibration(double uncalibrated, vector<double> calibration_parameters){
-    double calibrated = calibration_parameters[0];
+    double calibrated = calibration_parameters[calibration_parameters.size()-1];
 
-    for(size_t i = 1; i < calibration_parameters.size(); ++i){
-        calibrated += calibration_parameters[i]*pow(uncalibrated, i);
+    for(int i = calibration_parameters.size()-2; i >= 0; --i){
+        calibrated = calibration_parameters[i] + uncalibrated*calibrated;
     }
 
     return calibrated;
