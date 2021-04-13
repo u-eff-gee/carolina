@@ -30,7 +30,7 @@ void ProgressPrinter::operator()(const long index){
         time_t current_time = time(nullptr);
         cout << get_time_string() << " : " << setw(5) << current_percentage*100. << " % processed in " << setw(5) << current_time - start_time << " second(s)." << endl;
 
-        current_percentage = percentage + update_increment;
+        current_percentage = ((int) ((percentage + update_increment)/update_increment))*update_increment;
     }
 }
 
