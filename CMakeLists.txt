@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(carolina VERSION 0.1.0)
+project(carolina VERSION 0.2.0)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
@@ -13,7 +13,4 @@ set(DETECTOR_SETUP "detector_setup.hpp" CACHE STRING "Set name of header file in
 
 add_subdirectory(source)
 
-configure_file(code_generation/CMakeLists.txt.in code_generation/CMakeLists.txt)
-configure_file(include/code_generation.hpp.in ${CMAKE_BINARY_DIR}/include/code_generation.hpp)
-configure_file(include/configure_histograms_1d.hpp.in ${CMAKE_BINARY_DIR}/include/configure_histograms_1d.hpp)
-configure_file(include/configure_histograms_2d.hpp.in ${CMAKE_BINARY_DIR}/include/configure_histograms_2d.hpp)
+configure_file(include/histograms_1d.hpp.in include/histograms_1d.hpp)

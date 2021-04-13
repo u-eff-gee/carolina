@@ -4,9 +4,8 @@
 
 using std::string;
 
+template<class T, size_t n_leaves>
 struct Branch{
     const string name;
-    const unsigned int n_leaves;
-    const unsigned int n_dependent_leaves;
-    const bool keep_previous;
+    T leaves[n_leaves];
 };
