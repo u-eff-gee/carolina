@@ -14,3 +14,4 @@ set(DETECTOR_SETUP "detector_setup.hpp" CACHE STRING "Set name of header file in
 add_subdirectory(source)
 
 configure_file(include/histograms_1d.hpp.in include/histograms_1d.hpp)
+configure_file(include/histograms_2d.hpp.in include/histograms_2d.hpp)

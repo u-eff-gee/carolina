@@ -13,13 +13,18 @@ DetectorGroup clover{
     coincidence_window,
     {16384, 0., 16384.},
     {65536, 0., 65536.},
+    {1000, -500., 500.},
+    {2048, 0., 16384.}
 };
 DetectorGroup cebr{
     "cebr",
     coincidence_window,
     {4096, 0., 16384.},
     {4096, 0., 4096.},
+    {1000, -500., 500.},
+    {512, 0., 16384.}
 };
+vector<DetectorGroup> groups = {clover, cebr};
 
 const double tdc_resolution = 0.098; // in nanoseconds, tdc resolution in nanoseconds per bin
 
