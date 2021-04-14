@@ -11,6 +11,8 @@ include(${ROOT_USE_FILE})
 
 set(DETECTOR_SETUP "detector_setup.hpp" CACHE STRING "Set name of header file in ${CMAKE_SOURCE_DIR}/include/ that contains the detector setup. Default: 'detector_setup.hpp'.")
 
+add_compile_options(-Wall -Wextra)
+
 add_subdirectory(source)
 
 configure_file(include/histograms_1d.hpp.in include/histograms_1d.hpp)
