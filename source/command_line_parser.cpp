@@ -36,7 +36,4 @@ void CommandLineParser::operator()(int argc, char* argv[]){
         cout << "No input file given. Aborting ..." << endl;
         abort();
     }
-
-    const int first = vm["first"].as<int>();
-    const int last = vm["last"].as<int>();
 }

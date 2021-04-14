@@ -60,8 +60,6 @@ int main(int argc, char** argv){
         }
     }
 
-    size_t histogram_index = 0;
-
     for(int i = first; i <= last; ++i){
         progress_printer(i - first);
 
