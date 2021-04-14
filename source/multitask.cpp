@@ -10,6 +10,7 @@ using std::endl;
 #include <string>
 
 using std::string;
+using std::to_string;
 
 #include <vector>
 
@@ -78,31 +79,59 @@ int main(int argc, char* argv[]){
         output_file_name = "multitask_" + vm["script"].as<string>() + "_" + tool + ".sh";
     }
 
-    ofstream output_file(output_file_name);
-    output_file << "#!/bin/bash\n";
-    for(unsigned int i = 0; i < n_tasks; ++i){
-        if(tool == "screen"){
-            output_file << "screen -dm ./";
-        } else {
-            output_file << "./";
-        }
-        output_file << vm["script"].as<string>()
-            << " ";
-        for(auto input_file: input_files){
-            output_file << input_file << " ";
-        }
+    if(tool == "screen"){
+	    ofstream output_file(output_file_name);
+	    output_file << "#!/bin/bash\n";
+	    for(unsigned int i = 0; i < n_tasks; ++i){
+		output_file << "screen -dm ./";
+		output_file << vm["script"].as<string>() << " ";
+		for(auto input_file: input_files){
+		    output_file << input_file << " ";
+		}
 
-        output_file << "--first " << i*increment + 1 << " "
-        << "--last " << (i == n_tasks - 1 ? (i+1)*increment + modulo : (i+1)*increment) << " "
-        << "--output_file output_" << i << ".root"
-        << "\n";
+		output_file << "--first " << i*increment + 1 << " "
+		<< "--last " << (i == n_tasks - 1 ? (i+1)*increment + modulo : (i+1)*increment) << " "
+		<< "--output_file output_" << i << ".root"
+		<< "\n";
+	    }
+
+	    cout << "Generated shell script '" << output_file_name << "' which runs '" << vm["script"].as<string>() << "' on " << n_tasks << " tasks." << endl;
+	    cout << "To execute, type:" << endl;
+	    cout << "\t./" << vm["output_file"].as<string>() << endl;
+	    cout << "You may have to make the shell script executable first:" << endl;
+	    cout << "\tchmod +x " << vm["output_file"].as<string>() << endl;
+
+	    output_file.close();
     }
 
-    cout << "Generated shell script '" << output_file_name << "' which runs '" << vm["script"].as<string>() << "' on " << n_tasks << " tasks." << endl;
-    cout << "To execute, type:" << endl;
-    cout << "\t./" << vm["output_file"].as<string>() << endl;
-    cout << "You may have to make the shell script executable first:" << endl;
-    cout << "\tchmod +x " << vm["output_file"].as<string>() << endl;
+    if(tool == "slurm"){
+	ofstream output_file(output_file_name);
+	output_file << "#!/bin/bash\n";
+	output_file << "#SBATCH -a 0-" << n_tasks-1 << "\n";
+	output_file << "bash multitask_" << vm["script"].as<string>() + "_" + tool + "_${SLURM_ARRAY_TASK_ID}.sh" << "\n";
+	output_file.close();
+	cout << "Generated shell script '" << output_file_name << "' which runs '" << vm["script"].as<string>() << "' on " << n_tasks << " tasks." << endl;
+	cout << "To execute, type:" << endl;
+	cout << "\tsbatch " << output_file_name << endl;
+	cout << "You may have to make the shell script executable first:" << endl;
+	cout << "\tchmod +x " << vm["output_file"].as<string>() << endl;
+	cout << "The shell script will run the following input files, which represent multiple calls to '" << vm["script"].as<string>() << ":" << endl;
 
-    output_file.close();
+	    for(unsigned int i = 0; i < n_tasks; ++i){
+        	output_file_name = "multitask_" + vm["script"].as<string>() + "_" + tool + "_" + to_string(i) + ".sh";
+		ofstream output_file(output_file_name);
+		output_file << "./";
+		output_file << vm["script"].as<string>() << " ";
+		for(auto input_file: input_files){
+		    output_file << input_file << " ";
+		}
+
+		output_file << "--first " << i*increment + 1 << " "
+		<< "--last " << (i == n_tasks - 1 ? (i+1)*increment + modulo : (i+1)*increment) << " "
+		<< "--output_file output_" << i << ".root"
+		<< "\n";
+		output_file.close();
+		cout << "\t" << output_file_name << endl;
+	    }
+    }
 }
