@@ -42,7 +42,7 @@ struct Detector{
 
                 for(size_t n_c_1 = n_c_0+1; n_c_1 < channels.size(); ++n_c_1){
                     if(channels[n_c_1].energy_calibrated > 0.){
-                        if(!added_back[n_c_1] && fabs(channels[n_c_1].time_calibrated - channels[n_c_0].time_calibrated) < group.coincidence_window){
+                        if(!added_back[n_c_1] && fabs(channels[n_c_1].time_calibrated - channels[n_c_0].time_calibrated) < group.coincidence_window_half_width){
                             addback_energies[n_c_0] += channels[n_c_1].energy_calibrated;
                             added_back[n_c_1] = true;
                             if(channels[n_c_1].energy_calibrated > channels[n_c_0].energy_calibrated){

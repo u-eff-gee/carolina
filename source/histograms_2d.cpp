@@ -130,14 +130,14 @@ int main(int argc, char** argv){
                         for(size_t n_d_1 = n_d_0+1; n_d_1 < detectors.size(); ++n_d_1){
                             if(detectors[n_d_1].channels.size() > 1){
                                 for(size_t n_c_1 = 0; n_c_1 < detectors[n_d_1].channels.size(); ++n_c_1){
-                                    if(detectors[n_d_1].addback_energies[n_c_1] != 0. && fabs(detectors[n_d_1].addback_times[n_c_1] - detectors[n_d_0].addback_times[n_c_0]) <= max(detectors[n_d_0].group.coincidence_window, detectors[n_d_1].group.coincidence_window)){
+                                    if(detectors[n_d_1].addback_energies[n_c_1] != 0. && fabs(detectors[n_d_1].addback_times[n_c_1] - detectors[n_d_0].addback_times[n_c_0]) <= max(detectors[n_d_0].group.coincidence_window_half_width, detectors[n_d_1].group.coincidence_window_half_width)){
                                         histogram_index = coincidence_histogram_index(detectors[n_d_0].group, detectors[n_d_1].group);
                                         coincidence_histograms[histogram_index]->Fill(detectors[n_d_0].addback_energies[n_c_0], detectors[n_d_1].addback_energies[n_c_1]);
                                         time_difference_histograms[histogram_index]->Fill(detectors[n_d_0].addback_times[n_c_0]- detectors[n_d_1].addback_times[n_c_1]);
                                     }
                                 }
                             } else{
-                                if(detectors[n_d_1].channels[0].energy_calibrated != 0. && fabs(detectors[n_d_1].channels[0].time_calibrated - detectors[n_d_0].addback_times[n_c_0]) <= max(detectors[n_d_0].group.coincidence_window, detectors[n_d_1].group.coincidence_window)){
+                                if(detectors[n_d_1].channels[0].energy_calibrated != 0. && fabs(detectors[n_d_1].channels[0].time_calibrated - detectors[n_d_0].addback_times[n_c_0]) <= max(detectors[n_d_0].group.coincidence_window_half_width, detectors[n_d_1].group.coincidence_window_half_width)){
                                     histogram_index = coincidence_histogram_index(detectors[n_d_0].group, detectors[n_d_1].group);
                                     coincidence_histograms[histogram_index]->Fill(detectors[n_d_0].addback_energies[n_c_0], detectors[n_d_1].channels[0].energy_calibrated);
                                     time_difference_histograms[histogram_index]->Fill(detectors[n_d_0].addback_times[n_c_0]- detectors[n_d_1].channels[0].time_calibrated);
@@ -151,14 +151,14 @@ int main(int argc, char** argv){
                     for(size_t n_d_1 = n_d_0+1; n_d_1 < detectors.size(); ++n_d_1){
                         if(detectors[n_d_1].channels.size() > 1){
                             for(size_t n_c_1 = 0; n_c_1 < detectors[n_d_1].channels.size(); ++n_c_1){
-                                if(detectors[n_d_1].addback_energies[n_c_1] != 0. && fabs(detectors[n_d_1].addback_times[n_c_1] - detectors[n_d_0].channels[0].time_calibrated) <= max(detectors[n_d_0].group.coincidence_window, detectors[n_d_1].group.coincidence_window)){
+                                if(detectors[n_d_1].addback_energies[n_c_1] != 0. && fabs(detectors[n_d_1].addback_times[n_c_1] - detectors[n_d_0].channels[0].time_calibrated) <= max(detectors[n_d_0].group.coincidence_window_half_width, detectors[n_d_1].group.coincidence_window_half_width)){
                                     histogram_index = coincidence_histogram_index(detectors[n_d_0].group, detectors[n_d_1].group);
                                     coincidence_histograms[histogram_index]->Fill(detectors[n_d_0].channels[0].time_calibrated, detectors[n_d_1].addback_energies[n_c_1]);
                                     time_difference_histograms[histogram_index]->Fill(detectors[n_d_0].channels[0].time_calibrated- detectors[n_d_1].addback_times[n_c_1]);
                                 }
                             }
                         } else{
-                            if(detectors[n_d_1].channels[0].energy_calibrated != 0. && fabs(detectors[n_d_1].channels[0].time_calibrated - detectors[n_d_0].channels[0].time_calibrated) <= max(detectors[n_d_0].group.coincidence_window, detectors[n_d_1].group.coincidence_window)){
+                            if(detectors[n_d_1].channels[0].energy_calibrated != 0. && fabs(detectors[n_d_1].channels[0].time_calibrated - detectors[n_d_0].channels[0].time_calibrated) <= max(detectors[n_d_0].group.coincidence_window_half_width, detectors[n_d_1].group.coincidence_window_half_width)){
                                 histogram_index = coincidence_histogram_index(detectors[n_d_0].group, detectors[n_d_1].group);
                                 coincidence_histograms[histogram_index]->Fill(detectors[n_d_0].channels[0].energy_calibrated, detectors[n_d_1].channels[0].energy_calibrated);
                                 time_difference_histograms[histogram_index]->Fill(detectors[n_d_0].channels[0].time_calibrated- detectors[n_d_1].channels[0].time_calibrated);

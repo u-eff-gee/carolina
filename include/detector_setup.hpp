@@ -6,11 +6,11 @@
 #include "mdpp16.hpp"
 #include "detector.hpp"
 
-const double coincidence_window = 200.;
+const double coincidence_window_half_width = 100.;
 
 DetectorGroup clover{
     "clover",
-    coincidence_window,
+    coincidence_window_half_width,
     {16384, 0., 16384.},
     {65536, 0., 65536.},
     {1000, -500., 500.},
@@ -18,7 +18,7 @@ DetectorGroup clover{
 };
 DetectorGroup cebr{
     "cebr",
-    coincidence_window,
+    coincidence_window_half_width,
     {4096, 0., 16384.},
     {4096, 0., 4096.},
     {1000, -500., 500.},
