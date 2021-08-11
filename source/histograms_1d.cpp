@@ -40,23 +40,34 @@ int main(int argc, char** argv){
     vector<TH1D*> addback_histograms;
     vector<vector<TH1D*>> energy_histograms;
     vector<vector<TH1D*>> energy_raw_histograms;
+    vector<vector<vector<vector<TH1D*>>>> time_difference_histograms;
     string histogram_name;
 
-    for(size_t n_d = 0; n_d < detectors.size(); ++n_d){
-        if(detectors[n_d].channels.size() > 1){
-            histogram_name = detectors[n_d].name + "_addback";
-            addback_histograms.push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_d].group.energy_histogram_properties.n_bins, detectors[n_d].group.energy_histogram_properties.minimum, detectors[n_d].group.energy_histogram_properties.maximum));
+    for(size_t n_detector_1 = 0; n_detector_1 < detectors.size(); ++n_detector_1){
+        if(detectors[n_detector_1].channels.size() > 1){
+            histogram_name = detectors[n_detector_1].name + "_addback";
+            addback_histograms.push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_detector_1].group.energy_histogram_properties.n_bins, detectors[n_detector_1].group.energy_histogram_properties.minimum, detectors[n_detector_1].group.energy_histogram_properties.maximum));
         } else {
             addback_histograms.push_back(nullptr);
         }
         energy_histograms.push_back(vector<TH1D*>());
         energy_raw_histograms.push_back(vector<TH1D*>());
-        for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
-            histogram_name = detectors[n_d].name + "_" + detectors[n_d].channels[n_c].name;
-            energy_histograms[n_d].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_d].group.energy_histogram_properties.n_bins, detectors[n_d].group.energy_histogram_properties.minimum, detectors[n_d].group.energy_histogram_properties.maximum));
+        time_difference_histograms.push_back(vector<vector<vector<TH1D*>>>());
+        for(size_t n_channel_1 = 0; n_channel_1 < detectors[n_detector_1].channels.size(); ++n_channel_1){
+            time_difference_histograms[n_detector_1].push_back(vector<vector<TH1D*>>());
+            histogram_name = detectors[n_detector_1].name + "_" + detectors[n_detector_1].channels[n_channel_1].name;
+            energy_histograms[n_detector_1].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_detector_1].group.energy_histogram_properties.n_bins, detectors[n_detector_1].group.energy_histogram_properties.minimum, detectors[n_detector_1].group.energy_histogram_properties.maximum));
 
             histogram_name = histogram_name + "_raw";
-            energy_raw_histograms[n_d].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_d].group.energy_raw_histogram_properties.n_bins, detectors[n_d].group.energy_raw_histogram_properties.minimum, detectors[n_d].group.energy_raw_histogram_properties.maximum));
+            energy_raw_histograms[n_detector_1].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_detector_1].group.energy_raw_histogram_properties.n_bins, detectors[n_detector_1].group.energy_raw_histogram_properties.minimum, detectors[n_detector_1].group.energy_raw_histogram_properties.maximum));
+
+            for(size_t n_detector_2 = n_detector_1 + 1; n_detector_2 < detectors.size(); ++n_detector_2){
+                time_difference_histograms[n_detector_1][n_channel_1].push_back(vector<TH1D*>());
+                for(size_t n_channel_2 = 0; n_channel_2 < detectors[n_detector_2].channels.size(); ++n_channel_2){
+                    histogram_name = detectors[n_detector_1].name + "_" + detectors[n_detector_1].channels[n_channel_1].name + "_" + detectors[n_detector_2].name + "_" + detectors[n_detector_2].channels[n_channel_2].name + "_tdiff";
+                    time_difference_histograms[n_detector_1][n_channel_1][n_detector_2-n_detector_1-1].push_back(new TH1D(histogram_name.c_str(), histogram_name.c_str(), detectors[n_detector_1].group.time_difference_histogram_properties.n_bins, detectors[n_detector_1].group.time_difference_histogram_properties.minimum, detectors[n_detector_1].group.time_difference_histogram_properties.maximum));
+                }
+            }
         }
     }
 
@@ -65,19 +76,28 @@ int main(int argc, char** argv){
 
         tree->GetEntry(i);
 
-        for(size_t n_d = 0; n_d < detectors.size(); ++n_d){
-            for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
-                energy_raw_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].get_amplitude());
-                detectors[n_d].channels[n_c].calibrate();
-                if(detectors[n_d].channels[n_c].energy_calibrated != 0.){
-                    energy_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].energy_calibrated);
+        for(size_t n_detector_1 = 0; n_detector_1 < detectors.size(); ++n_detector_1){
+            for(size_t n_channel_1 = 0; n_channel_1 < detectors[n_detector_1].channels.size(); ++n_channel_1){
+                if(detectors[n_detector_1].channels[n_channel_1].get_amplitude() > detectors[n_detector_1].channels[n_channel_1].amplitude_threshold){
+                    energy_raw_histograms[n_detector_1][n_channel_1]->Fill(detectors[n_detector_1].channels[n_channel_1].get_amplitude());
+                    detectors[n_detector_1].channels[n_channel_1].calibrate(i);
+                    if(detectors[n_detector_1].channels[n_channel_1].energy_calibrated){
+                        energy_histograms[n_detector_1][n_channel_1]->Fill(detectors[n_detector_1].channels[n_channel_1].energy_calibrated);
+                    }
+                    for(size_t n_detector_2 = n_detector_1+1; n_detector_2 < detectors.size(); ++n_detector_2){
+                        for(size_t n_channel_2 = 0; n_channel_2 < detectors[n_detector_2].channels.size(); ++n_channel_2){
+                            if(detectors[n_detector_2].channels[n_channel_2].get_amplitude() > detectors[n_detector_2].channels[n_channel_2].amplitude_threshold){
+                                time_difference_histograms[n_detector_1][n_channel_1][n_detector_2-n_detector_1-1][n_channel_2]->Fill(detectors[n_detector_1].channels[n_channel_1].time_calibrated-detectors[n_detector_2].channels[n_channel_2].time_calibrated);
+                            }
+                        }
+                    }
                 }
             }
-            if(detectors[n_d].channels.size() > 1){
-                detectors[n_d].addback();
-                for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
-                    if(detectors[n_d].addback_energies[n_c] != 0.){
-                        addback_histograms[n_d]->Fill(detectors[n_d].addback_energies[n_c]);
+            if(detectors[n_detector_1].channels.size() > 1){
+                detectors[n_detector_1].addback();
+                for(size_t n_channel_1 = 0; n_channel_1 < detectors[n_detector_1].channels.size(); ++n_channel_1){
+                    if(detectors[n_detector_1].addback_energies[n_channel_1] > detectors[n_detector_1].channels[n_channel_1].amplitude_threshold){
+                        addback_histograms[n_detector_1]->Fill(detectors[n_detector_1].addback_energies[n_channel_1]);
                     }
                 }
             }
@@ -86,13 +106,18 @@ int main(int argc, char** argv){
 
     TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
 
-    for(size_t n_d = 0; n_d < detectors.size(); ++n_d){
-        if(detectors[n_d].channels.size() > 1){
-            addback_histograms[n_d]->Write();
+    for(size_t n_detector_1 = 0; n_detector_1 < detectors.size(); ++n_detector_1){
+        if(detectors[n_detector_1].channels.size() > 1){
+            addback_histograms[n_detector_1]->Write();
         }
-        for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
-            energy_histograms[n_d][n_c]->Write();
-            energy_raw_histograms[n_d][n_c]->Write();
+        for(size_t n_channel_1 = 0; n_channel_1 < detectors[n_detector_1].channels.size(); ++n_channel_1){
+            energy_histograms[n_detector_1][n_channel_1]->Write();
+            energy_raw_histograms[n_detector_1][n_channel_1]->Write();
+            for(size_t n_detector_2 = n_detector_1 + 1; n_detector_2 < detectors.size(); ++n_detector_2){
+                for(size_t n_channel_2 = 0; n_channel_2 < detectors[n_detector_1].channels.size(); ++n_channel_2){
+                    time_difference_histograms[n_detector_1][n_channel_1][n_detector_2-n_detector_1-1][n_channel_2]->Write();
+                }
+            }
         }
     }
 
