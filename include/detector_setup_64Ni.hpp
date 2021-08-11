@@ -1,5 +1,9 @@
 #pragma once
 
+#include <limits>
+
+using std::numeric_limits;
+
 #include "sis3316.hpp"
 #include "detector.hpp"
 
@@ -35,7 +39,7 @@ vector<Detector> detectors{
     {"labr_1",
         {
             {
-                "E", modules[0],  0, {0., 1.}, 5.
+                "E", modules[0],  0, {{numeric_limits<int>::max(), {0., 1.}}}, 5.
             },
         },
         labr,
@@ -43,7 +47,7 @@ vector<Detector> detectors{
     {"labr_2",
         {
             {
-                "E", modules[0],  1, {0., 1.}, 5.
+                "E", modules[0],  1, {{numeric_limits<int>::max(), {0., 1.}}}, 5.
             },
         },
         labr,
@@ -51,7 +55,7 @@ vector<Detector> detectors{
     {"labr_3",
         {
             {
-                "E", modules[0],  2, {0., 1.}, 5.
+                "E", modules[0],  2, {{numeric_limits<int>::max(), {0., 1.}}}, 5.
             },
         },
         labr,
@@ -59,7 +63,7 @@ vector<Detector> detectors{
     {"labr_4",
         {
             {
-                "E", modules[0],  3, {0., 1.}, 5.
+                "E", modules[0],  3, {{numeric_limits<int>::max(), {0., 1.}}}, 5.
             },
         },
         labr,
@@ -67,7 +71,7 @@ vector<Detector> detectors{
     {"hpge_1",
         {
             {
-                "E", modules[0],  4, {0., 1.}, 20.
+                "E", modules[0],  4, {{numeric_limits<int>::max(), {0., 1.}}}, 20.
             },
         },
         hpge,
@@ -75,7 +79,7 @@ vector<Detector> detectors{
     {"hpge_2",
         {
             {
-                "E", modules[0],  5, {0., 1.}, 20.
+                "E", modules[0],  5, {{numeric_limits<int>::max(), {0., 1.}}}, 20.
             },
         },
         hpge,
@@ -83,7 +87,7 @@ vector<Detector> detectors{
     {"hpge_6",
         {
             {
-                "E", modules[0],  6, {0., 1.}, 20.
+                "E", modules[0],  6, {{numeric_limits<int>::max(), {0., 1.}}}, 20.
             },
         },
         hpge,
@@ -91,7 +95,7 @@ vector<Detector> detectors{
     {"hpge_4",
         {
             {
-                "E", modules[0],  7, {0., 1.}, 20.
+                "E", modules[0],  7, {{numeric_limits<int>::max(), {0., 1.}}}, 20.
             },
         },
         hpge,

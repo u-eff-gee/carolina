@@ -4,6 +4,10 @@
 
 #include <string>
 
+#include <utility>
+
+using std::pair;
+
 using std::string;
 
 #include "module.hpp"
@@ -20,7 +24,7 @@ double polynomial_calibration(double uncalibrated, vector<double> calibration_pa
 }
 
 struct Channel{
-    Channel(const string name, Module& module, const size_t leaf, const vector<double> energy_calibration_parameters, const double amplitude_threshold=0.):
+    Channel(const string name, Module& module, const size_t leaf, const vector<pair<int, vector<double>>> energy_calibration_parameters, const double amplitude_threshold=0.):
     name(name),
     module(module),
     leaf(leaf),
@@ -31,7 +35,7 @@ struct Channel{
     const string name;
     Module &module;
     const size_t leaf;
-    vector<double> energy_calibration_parameters;
+    vector<pair<int, vector<double>>> energy_calibration_parameters;
 
     double energy_calibrated, time_calibrated, timestamp_calibrated;
     const double amplitude_threshold;
@@ -44,7 +48,12 @@ struct Channel{
         if(isnan(module.get_amplitude(leaf))){
             energy_calibrated = 0.;
         } else {
-            energy_calibrated = polynomial_calibration(module.get_amplitude(leaf), energy_calibration_parameters);
+            for(auto ene_cal_par: energy_calibration_parameters){
+                if(n_entry < ene_cal_par.first){
+                    energy_calibrated = polynomial_calibration(module.get_amplitude(leaf), ene_cal_par.second);
+                    break;
+                }
+            }
             time_calibrated = module.get_time(leaf)*module.tdc_resolution;
             timestamp_calibrated = module.get_timestamp(leaf)*INVERSE_VME_CLOCK_FREQUENCY;
         }
