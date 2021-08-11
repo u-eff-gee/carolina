@@ -101,7 +101,7 @@ int main(int argc, char* argv[]){
         prefix = trim_input_file_name(input_file) + "_";
 
         TKey* key;
-        while(key = (TKey*) next_key()){
+        while((key = (TKey*) next_key())){
             TObject *obj = key->ReadObj();
             if(obj->IsA()->InheritsFrom(TH1::Class())){
                 TH1* histogram = (TH1*) obj;

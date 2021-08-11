@@ -32,6 +32,7 @@ int main(int argc, char* argv[]){
         ("n_tasks", po::value<unsigned int>()->default_value(1), "Number of tasks (default: 1).")
         ("script", po::value<string>()->default_value("histograms_1d"), "Name of the script to be run in multitasking mode (default: 'histograms_1d').")
         ("output_file", po::value<string>()->default_value("default"), "Output file name (default: 'multitask_SCRIPT_TOOL.sh', where SCRIPT is the name of the analysis script and TOOL is the multitasking tool).")
+        ("tree", po::value<string>()->default_value("clover_array"), "TTree name (default: 'clover_array')");
         ;
     po::positional_options_description p;
     p.add("input_file", -1);
@@ -63,7 +64,7 @@ int main(int argc, char* argv[]){
 
     const unsigned int n_tasks = vm["n_tasks"].as<unsigned int>();
 
-    TChain *chain = new TChain("clover_array");
+    TChain *chain = new TChain(vm["tree"].as<string>().c_str());
     vector<string> input_files = vm["input_file"].as<vector<string>>();
     for(auto input_file: input_files){
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
@@ -89,7 +90,8 @@ int main(int argc, char* argv[]){
 		    output_file << input_file << " ";
 		}
 
-		output_file << "--first " << i*increment + 1 << " "
+		output_file << "--tree " << vm["tree"].as<string>() << " "
+        << "--first " << i*increment + 1 << " "
 		<< "--last " << (i == n_tasks - 1 ? (i+1)*increment + modulo : (i+1)*increment) << " "
 		<< "--output_file output_" << i << ".root"
 		<< "\n";
@@ -97,7 +99,7 @@ int main(int argc, char* argv[]){
 
 	    cout << "Generated shell script '" << output_file_name << "' which runs '" << vm["script"].as<string>() << "' on " << n_tasks << " tasks." << endl;
 	    cout << "To execute, type:" << endl;
-	    cout << "\t./" << vm["output_file"].as<string>() << endl;
+	    cout << "\t./" << output_file_name << endl;
 	    cout << "You may have to make the shell script executable first:" << endl;
 	    cout << "\tchmod +x " << vm["output_file"].as<string>() << endl;
 
@@ -112,7 +114,7 @@ int main(int argc, char* argv[]){
         cout << "To execute, type:" << endl;
         cout << "\tsbatch " << output_file_name << endl;
         cout << "You may have to make the shell script executable first:" << endl;
-        cout << "\tchmod +x " << vm["output_file"].as<string>() << endl;
+        cout << "\tchmod +x " << output_file_name << endl;
         cout << "The shell script will run the following input files, which represent multiple calls to '" << vm["script"].as<string>() << ":" << endl;
 
 	    for(unsigned int i = 0; i < n_tasks; ++i){
@@ -124,7 +126,8 @@ int main(int argc, char* argv[]){
                 output_file << input_file << " ";
             }
 
-            output_file << "--first " << i*increment + 1 << " "
+            output_file << "--tree " << vm["tree"].as<string>() << " "
+            << "--first " << i*increment + 1 << " "
             << "--last " << (i == n_tasks - 1 ? (i+1)*increment + modulo : (i+1)*increment) << " "
             << "--output_file output_" << i << ".root"
             << "\n";

@@ -16,7 +16,7 @@ int main(int argc, char** argv){
     command_line_parser(argc, argv);
     po::variables_map vm = command_line_parser.get_variables_map();
 
-    TChain *tree = new TChain("clover_array");
+    TChain *tree = new TChain(vm["tree"].as<string>().c_str());
     vector<string> input_files = vm["input_file"].as<vector<string>>();
     for(auto input_file: input_files){
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
@@ -67,7 +67,7 @@ int main(int argc, char** argv){
 
         for(size_t n_d = 0; n_d < detectors.size(); ++n_d){
             for(size_t n_c = 0; n_c < detectors[n_d].channels.size(); ++n_c){
-                energy_raw_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].energy);
+                energy_raw_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].get_amplitude());
                 detectors[n_d].channels[n_c].calibrate();
                 if(detectors[n_d].channels[n_c].energy_calibrated != 0.){
                     energy_histograms[n_d][n_c]->Fill(detectors[n_d].channels[n_c].energy_calibrated);
