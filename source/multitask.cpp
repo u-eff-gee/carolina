@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
         cout << "\t./" << output_file_name << endl;
         cout << "You may have to make the shell script executable first:"
              << endl;
-        cout << "\tchmod +x " << vm["output_file"].as<string>() << endl;
+        cout << "\tchmod +x " << output_file_name << endl;
 
         output_file.close();
     } else if (tool == "slurm") {
