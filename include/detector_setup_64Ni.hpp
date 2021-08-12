@@ -7,79 +7,118 @@ using std::numeric_limits;
 #include "detector.hpp"
 #include "sis3316.hpp"
 
-DetectorGroup hpge{"hpge",
-                   {65536, -0.125, 16383.875},
-                   {65536, -0.5, 65535.5},
-                   {8192, -4096., 4096.},
-                   {2048, 0., 16384.}};
-DetectorGroup labr{"labr",
-                   {16384, -0.5, 16383.5},
-                   {16384, -0.03125, 1023.96875},
-                   {8192, -4096., 4096.},
-                   {512, 0., 16384.}};
+DetectorGroup hpge{
+    .name = "hpge",
+    .energy_histogram_properties = {65536, -0.125, 16383.875},
+    .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+    .time_difference_histogram_properties = {8192, -4096., 4096.},
+    .energy_histogram_coincidence_properties = {2048, 0., 16384.}};
+DetectorGroup labr{
+    "labr", .energy_histogram_properties = {16384, -0.5, 16383.5},
+    .energy_raw_histogram_properties = {16384, -0.03125, 1023.96875},
+    .time_difference_histogram_properties = {8192, -4096., 4096.},
+    .energy_histogram_coincidence_properties = {512, 0., 16384.}};
 vector<DetectorGroup> groups = {hpge, labr};
 
-const double tdc_resolution =
-    0.125; // in nanoseconds, tdc resolution in nanoseconds per bin
-
 vector<SIS3316> modules = {
-    {tdc_resolution},
+    {.tdc_resolution =
+         0.125}, // in nanoseconds, tdc resolution in nanoseconds per bin
 };
 
 vector<Detector> detectors{
     {
-        "labr_1",
+        .name = "labr_1",
         {
-            {"E", modules[0], 0, {{numeric_limits<int>::max(), {0., 1.}}}, 5.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 0,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 5.},
         },
         labr,
     },
     {
-        "labr_2",
+        .name = "labr_2",
         {
-            {"E", modules[0], 1, {{numeric_limits<int>::max(), {0., 1.}}}, 5.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 1,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 5.},
         },
         labr,
     },
     {
-        "labr_3",
+        .name = "labr_3",
         {
-            {"E", modules[0], 2, {{numeric_limits<int>::max(), {0., 1.}}}, 5.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 2,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 5.},
         },
         labr,
     },
     {
-        "labr_4",
+        .name = "labr_4",
         {
-            {"E", modules[0], 3, {{numeric_limits<int>::max(), {0., 1.}}}, 5.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 3,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 5.},
         },
         labr,
     },
     {
-        "hpge_1",
+        .name = "hpge_1",
         {
-            {"E", modules[0], 4, {{numeric_limits<int>::max(), {0., 1.}}}, 20.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 4,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 20.},
         },
         hpge,
     },
     {
-        "hpge_2",
+        .name = "hpge_2",
         {
-            {"E", modules[0], 5, {{numeric_limits<int>::max(), {0., 1.}}}, 20.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 5,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 20.},
         },
         hpge,
     },
     {
-        "hpge_6",
+        .name = "hpge_3",
         {
-            {"E", modules[0], 6, {{numeric_limits<int>::max(), {0., 1.}}}, 20.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 6,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 20.},
         },
         hpge,
     },
     {
-        "hpge_4",
+        .name = "hpge_4",
         {
-            {"E", modules[0], 7, {{numeric_limits<int>::max(), {0., 1.}}}, 20.},
+            {.name = "E",
+             .module = modules[0],
+             .leaf = 7,
+             .energy_calibration_parameters = {{numeric_limits<int>::max(),
+                                                {0., 1.}}},
+             .amplitude_threshold = 20.},
         },
         hpge,
     },

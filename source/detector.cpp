@@ -1,9 +1,8 @@
 #include "detector.hpp"
 
-Detector::Detector(
-    const string name, const vector<Channel> channels,
-    const DetectorGroup group,
-    const double addback_coincidence_window)
+Detector::Detector(const string name, const vector<Channel> channels,
+                   const DetectorGroup group,
+                   const double addback_coincidence_window)
     : name(name), channels(channels), group(group),
       addback_coincidence_window(addback_coincidence_window) {
     added_back = vector<bool>(channels.size(), false);

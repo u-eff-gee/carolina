@@ -41,7 +41,7 @@ struct Channel {
     double get_timestamp() const { return module.get_timestamp(leaf); }
 
     double polynomial_calibration(double uncalibrated,
-                                vector<double> calibration_parameters) const;
+                                  vector<double> calibration_parameters) const;
 
     void calibrate(const int n_entry);
 };
