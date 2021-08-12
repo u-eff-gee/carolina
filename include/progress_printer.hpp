@@ -1,14 +1,14 @@
 #pragma once
 
-class ProgressPrinter{
+class ProgressPrinter {
 
-public:
+  public:
     ProgressPrinter(const long ne, const double ui);
 
     void operator()(const long index);
 
-private:
-    char* get_time_string() const;
+  private:
+    char *get_time_string() const;
 
     const time_t start_time;
     const long n_entries;

@@ -4,7 +4,7 @@ using std::to_string;
 
 #include "sis3316.hpp"
 
-void SIS3316::register_branches(TTree* tree){
+void SIS3316::register_branches(TTree *tree) {
 
     tree->SetBranchAddress("ADC1CH1MAXE1", &amplitude_e1.leaves[0]);
     tree->SetBranchAddress("ADC1CH1MAXE2", &amplitude_e2.leaves[0]);
