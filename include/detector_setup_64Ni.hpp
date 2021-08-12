@@ -4,6 +4,7 @@
 
 using std::numeric_limits;
 
+#include "coincidence_matrix.hpp"
 #include "detector.hpp"
 #include "sis3316.hpp"
 
@@ -11,18 +12,16 @@ DetectorGroup hpge{
     .name = "hpge",
     .energy_histogram_properties = {65536, -0.125, 16383.875},
     .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
-    .time_difference_histogram_properties = {8192, -4096., 4096.},
-    .energy_histogram_coincidence_properties = {2048, 0., 16384.}};
+    .time_difference_histogram_properties = {8192, -4096., 4096.}};
 DetectorGroup labr{
     "labr", .energy_histogram_properties = {16384, -0.5, 16383.5},
     .energy_raw_histogram_properties = {16384, -0.03125, 1023.96875},
-    .time_difference_histogram_properties = {8192, -4096., 4096.},
-    .energy_histogram_coincidence_properties = {512, 0., 16384.}};
+    .time_difference_histogram_properties = {8192, -4096., 4096.}};
 vector<DetectorGroup> groups = {hpge, labr};
 
 vector<SIS3316> modules = {
-    {.tdc_resolution =
-         0.125}, // in nanoseconds, tdc resolution in nanoseconds per bin
+    {.tdc_resolution = 0.125}, // in nanoseconds, tdc resolution in
+                               // nanoseconds per bin
 };
 
 vector<Detector> detectors{
@@ -123,3 +122,6 @@ vector<Detector> detectors{
         hpge,
     },
 };
+
+const vector<CoincidenceMatrix> coincidence_matrices{
+    {"labr1_labr2", {0}, {1}, {1024, 0., 16384.}, {1024, 0., 16384.}, true}};

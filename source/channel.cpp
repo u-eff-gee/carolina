@@ -14,9 +14,8 @@ Channel::polynomial_calibration(double uncalibrated,
 }
 
 void Channel::calibrate(const int n_entry) {
-    if (isnan(module.get_amplitude(leaf))) {
-        energy_calibrated = 0.;
-    } else {
+    energy_calibrated = 0.;
+    if (!isnan(module.get_amplitude(leaf))) {
         for (auto ene_cal_par : energy_calibration_parameters) {
             if (n_entry < ene_cal_par.first) {
                 energy_calibrated = polynomial_calibration(

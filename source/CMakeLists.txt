@@ -26,9 +26,9 @@ target_link_libraries(histograms_1d detector module ${Boost_LIBRARIES} command_l
 add_executable(histograms_1d_text histograms_1d_text.cpp)
 target_link_libraries(histograms_1d_text ${Boost_LIBRARIES} command_line_parser ${ROOT_LIBRARIES})
 
-#add_executable(histograms_2d histograms_2d.cpp)
-#target_include_directories(histograms_2d PUBLIC ${CMAKE_BINARY_DIR}/include)
-#target_link_libraries(histograms_2d mdpp16 ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES})
+add_executable(histograms_2d histograms_2d.cpp)
+target_include_directories(histograms_2d PUBLIC ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(histograms_2d detector module ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES} sis3316)
 
 add_executable(multitask multitask.cpp)
 target_link_libraries(multitask ${Boost_LIBRARIES} ${ROOT_LIBRARIES})
