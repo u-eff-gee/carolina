@@ -14,9 +14,14 @@ target_link_libraries(mdpp16 module ${ROOT_LIBRARIES})
 add_library(sis3316 sis3316.cpp)
 target_link_libraries(sis3316 module ${ROOT_LIBRARIES})
 
+add_library(channel channel.cpp)
+
+add_library(detector detector.cpp)
+target_link_libraries(detector channel)
+
 add_executable(histograms_1d histograms_1d.cpp)
 target_include_directories(histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include)
-target_link_libraries(histograms_1d module ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES} sis3316)
+target_link_libraries(histograms_1d detector module ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES} sis3316)
 
 add_executable(histograms_1d_text histograms_1d_text.cpp)
 target_link_libraries(histograms_1d_text ${Boost_LIBRARIES} command_line_parser ${ROOT_LIBRARIES})
