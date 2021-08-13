@@ -133,23 +133,21 @@ int main(int argc, char **argv) {
                  n_channel_1 < detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
                 if (detectors[n_detector_1]
-                        .channels[n_channel_1]
-                        .get_amplitude() > detectors[n_detector_1]
-                                               .channels[n_channel_1]
-                                               .amplitude_threshold) {
+                            .channels[n_channel_1]
+                            .get_amplitude() > detectors[n_detector_1]
+                                                   .channels[n_channel_1]
+                                                   .amplitude_threshold &&
+                    detectors[n_detector_1].channels[n_channel_1].get_time() >
+                        0.) {
                     energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
                         detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_amplitude());
                     detectors[n_detector_1].channels[n_channel_1].calibrate(i);
-                    if (detectors[n_detector_1]
+                    energy_histograms[n_detector_1][n_channel_1]->Fill(
+                        detectors[n_detector_1]
                             .channels[n_channel_1]
-                            .energy_calibrated) {
-                        energy_histograms[n_detector_1][n_channel_1]->Fill(
-                            detectors[n_detector_1]
-                                .channels[n_channel_1]
-                                .energy_calibrated);
-                    }
+                            .energy_calibrated);
                     for (size_t n_detector_2 = n_detector_1 + 1;
                          n_detector_2 < detectors.size(); ++n_detector_2) {
                         for (size_t n_channel_2 = 0;
@@ -157,11 +155,14 @@ int main(int argc, char **argv) {
                              detectors[n_detector_2].channels.size();
                              ++n_channel_2) {
                             if (detectors[n_detector_2]
-                                    .channels[n_channel_2]
-                                    .get_amplitude() >
+                                        .channels[n_channel_2]
+                                        .get_amplitude() >
+                                    detectors[n_detector_2]
+                                        .channels[n_channel_2]
+                                        .amplitude_threshold &&
                                 detectors[n_detector_2]
-                                    .channels[n_channel_2]
-                                    .amplitude_threshold) {
+                                        .channels[n_channel_2]
+                                        .get_time() > 0.) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1]
                                     [n_detector_2 - n_detector_1 - 1]
