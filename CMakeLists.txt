@@ -15,5 +15,6 @@ add_compile_options(-Wall -Wextra)
 
 add_subdirectory(source)
 
+configure_file(include/energy_vs_time.hpp.in include/energy_vs_time.hpp)
 configure_file(include/histograms_1d.hpp.in include/histograms_1d.hpp)
 configure_file(include/histograms_2d.hpp.in include/histograms_2d.hpp)
