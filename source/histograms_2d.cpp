@@ -18,7 +18,11 @@ using std::endl;
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
-    command_line_parser(argc, argv);
+    int command_line_parser_status;
+    command_line_parser(argc, argv, command_line_parser_status);
+    if (command_line_parser_status) {
+        return 0;
+    }
     po::variables_map vm = command_line_parser.get_variables_map();
 
     TChain *tree = new TChain(vm["tree"].as<string>().c_str());
@@ -65,8 +69,11 @@ int main(int argc, char **argv) {
         progress_printer(i - first);
 
         tree->GetEntry(i);
-        for(size_t n_detector = 0; n_detector < detectors.size(); ++n_detector){
-            for(size_t n_channel = 0; n_channel < detectors[n_detector].channels.size(); ++n_channel){
+        for (size_t n_detector = 0; n_detector < detectors.size();
+             ++n_detector) {
+            for (size_t n_channel = 0;
+                 n_channel < detectors[n_detector].channels.size();
+                 ++n_channel) {
                 detectors[n_detector].channels[n_channel].calibrate(i);
             }
         }
@@ -79,34 +86,42 @@ int main(int argc, char **argv) {
                     for (size_t n_channel_1 = 0;
                          n_channel_1 < detectors[n_detector_1].channels.size();
                          ++n_channel_1) {
-                        for (auto n_detector_2 :
-                             coincidence_matrices[n_matrix].y_data) {
-                            for (size_t n_channel_2 = 0;
-                                 n_channel_2 <
-                                 detectors[n_detector_2].channels.size();
-                                 ++n_channel_2) {
-                                if (detectors[n_detector_1]
-                                            .channels[n_channel_1]
-                                            .energy_calibrated > 0. &&
-                                    detectors[n_detector_2]
-                                            .channels[n_channel_2]
-                                            .energy_calibrated > 0.) {
-                                    coincidence_histograms[n_matrix]->Fill(
+                        if (detectors[n_detector_1]
+                                .channels[n_channel_1]
+                                .energy_calibrated > 0.) {
+                            for (auto n_detector_2 :
+                                 coincidence_matrices[n_matrix].y_data) {
+                                for (size_t n_channel_2 = 0;
+                                     n_channel_2 <
+                                     detectors[n_detector_2].channels.size();
+                                     ++n_channel_2) {
+                                    if (detectors[n_detector_2]
+                                                .channels[n_channel_2]
+                                                .energy_calibrated > 0. &&
                                         detectors[n_detector_1]
-                                            .channels[n_channel_1]
-                                            .energy_calibrated,
-                                        detectors[n_detector_2]
-                                            .channels[n_channel_2]
-                                            .energy_calibrated);
-                                    if (coincidence_matrices[n_matrix]
-                                            .symmetrize) {
-                                        coincidence_histograms[n_matrix]->Fill(
+                                                .channels[n_channel_1]
+                                                .time_calibrated -
                                             detectors[n_detector_2]
                                                 .channels[n_channel_2]
-                                                .energy_calibrated,
+                                                .time_calibrated) {
+                                        coincidence_histograms[n_matrix]->Fill(
                                             detectors[n_detector_1]
                                                 .channels[n_channel_1]
+                                                .energy_calibrated,
+                                            detectors[n_detector_2]
+                                                .channels[n_channel_2]
                                                 .energy_calibrated);
+                                        if (coincidence_matrices[n_matrix]
+                                                .symmetrize) {
+                                            coincidence_histograms[n_matrix]
+                                                ->Fill(
+                                                    detectors[n_detector_2]
+                                                        .channels[n_channel_2]
+                                                        .energy_calibrated,
+                                                    detectors[n_detector_1]
+                                                        .channels[n_channel_1]
+                                                        .energy_calibrated);
+                                        }
                                     }
                                 }
                             }
@@ -114,6 +129,22 @@ int main(int argc, char **argv) {
                     }
                 }
             }
+            // else {
+            //     for (size_t n_detector_1 = 0;
+            //          n_detector_1 <
+            //          coincidence_matrices[n_matrix].x_data.size();
+            //          ++i) {
+            //         for (size_t n_channel_1 = 0;
+            //              n_channel_1 <
+            //              detectors[n_detector_1].channels.size();
+            //              ++n_channel_1) {
+            //             if (detectors[n_detector_1]
+            //                     .channels[n_channel_1]
+            //                     .energy_calibrated > 0.) {
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 

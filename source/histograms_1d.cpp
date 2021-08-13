@@ -13,7 +13,11 @@ using std::endl;
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
-    command_line_parser(argc, argv);
+    int command_line_parser_status;
+    command_line_parser(argc, argv, command_line_parser_status);
+    if (command_line_parser_status) {
+        return 0;
+    }
     po::variables_map vm = command_line_parser.get_variables_map();
 
     TChain *tree = new TChain(vm["tree"].as<string>().c_str());

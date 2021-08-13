@@ -27,19 +27,19 @@ CommandLineParser::CommandLineParser() {
     p.add("input_file", -1);
 }
 
-void CommandLineParser::operator()(int argc, char *argv[]) {
+void CommandLineParser::operator()(int argc, char *argv[], int &status) {
     po::store(
         po::command_line_parser(argc, argv).options(desc).positional(p).run(),
         vm);
     po::notify(vm);
 
+    status = 0;
+
     if (vm.count("help")) {
         cout << desc << endl;
-        abort();
-    }
-
-    if (!vm.count("input_file")) {
+        status = 1;
+    } else if (!vm.count("input_file")) {
         cout << "No input file given. Aborting ..." << endl;
-        abort();
+        status = 1;
     }
 }
