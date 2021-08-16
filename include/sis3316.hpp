@@ -17,6 +17,7 @@ struct SIS3316 : public Module {
     Branch<unsigned int, 8> timestamp;
 
     void register_branches(TTree *tree) override final;
+    vector<string> get_branch_names(const size_t leaf) const override final;
     double get_amplitude(const size_t leaf) const override final {
         return amplitude_conversion *
                (amplitude_e2.leaves[leaf] - amplitude_e1.leaves[leaf]);
