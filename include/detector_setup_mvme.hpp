@@ -37,10 +37,6 @@ vector<MDPP16> modules = {
      tdc_resolution},
 };
 
-const vector<double> timestamp_calibration_parameters{
-    0., 1. / 16.}; // in microseconds, inverse of the VME clock frequency, which
-                   // is 16 MHz
-
 vector<Detector> detectors{
     {
         "clover_1",
@@ -295,4 +291,4 @@ vector<Detector> detectors{
     {"cebr_BM", {{"E", modules[2], 13, {0., 1.}}}, cebr},
 };
 
-const DetectorSetup detector_setup(modules, detector_groups, detectors);
+DetectorSetup detector_setup(modules, detector_groups, detectors);

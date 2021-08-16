@@ -50,17 +50,18 @@ int main(int argc, char **argv) {
     vector<vector<vector<vector<TH1D *>>>> time_difference_histograms;
     string histogram_name;
 
-    for (size_t n_detector_1 = 0; n_detector_1 < detectors.size();
-         ++n_detector_1) {
-        if (detectors[n_detector_1].channels.size() > 1) {
-            histogram_name = detectors[n_detector_1].name + "_addback";
+    for (size_t n_detector_1 = 0;
+         n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
+        if (detector_setup.detectors[n_detector_1].channels.size() > 1) {
+            histogram_name =
+                detector_setup.detectors[n_detector_1].name + "_addback";
             addback_histograms.push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.n_bins,
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.minimum,
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.maximum));
         } else {
             addback_histograms.push_back(nullptr);
@@ -69,56 +70,66 @@ int main(int argc, char **argv) {
         energy_raw_histograms.push_back(vector<TH1D *>());
         time_difference_histograms.push_back(vector<vector<vector<TH1D *>>>());
         for (size_t n_channel_1 = 0;
-             n_channel_1 < detectors[n_detector_1].channels.size();
+             n_channel_1 <
+             detector_setup.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
             time_difference_histograms[n_detector_1].push_back(
                 vector<vector<TH1D *>>());
-            histogram_name = detectors[n_detector_1].name + "_" +
-                             detectors[n_detector_1].channels[n_channel_1].name;
+            histogram_name = detector_setup.detectors[n_detector_1].name + "_" +
+                             detector_setup.detectors[n_detector_1]
+                                 .channels[n_channel_1]
+                                 .name;
             energy_histograms[n_detector_1].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.n_bins,
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.minimum,
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.maximum));
 
             histogram_name = histogram_name + "_raw";
             energy_raw_histograms[n_detector_1].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_raw_histogram_properties.n_bins,
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_raw_histogram_properties.minimum,
-                         detectors[n_detector_1]
+                         detector_setup.detectors[n_detector_1]
                              .group.energy_raw_histogram_properties.maximum));
 
             for (size_t n_detector_2 = n_detector_1 + 1;
-                 n_detector_2 < detectors.size(); ++n_detector_2) {
+                 n_detector_2 < detector_setup.detectors.size();
+                 ++n_detector_2) {
                 time_difference_histograms[n_detector_1][n_channel_1].push_back(
                     vector<TH1D *>());
                 for (size_t n_channel_2 = 0;
-                     n_channel_2 < detectors[n_detector_2].channels.size();
+                     n_channel_2 <
+                     detector_setup.detectors[n_detector_2].channels.size();
                      ++n_channel_2) {
                     histogram_name =
-                        detectors[n_detector_1].name + "_" +
-                        detectors[n_detector_1].channels[n_channel_1].name +
-                        "_" + detectors[n_detector_2].name + "_" +
-                        detectors[n_detector_2].channels[n_channel_2].name +
+                        detector_setup.detectors[n_detector_1].name + "_" +
+                        detector_setup.detectors[n_detector_1]
+                            .channels[n_channel_1]
+                            .name +
+                        "_" + detector_setup.detectors[n_detector_2].name +
+                        "_" +
+                        detector_setup.detectors[n_detector_2]
+                            .channels[n_channel_2]
+                            .name +
                         "_tdiff";
                     time_difference_histograms
                         [n_detector_1][n_channel_1]
                         [n_detector_2 - n_detector_1 - 1]
                             .push_back(new TH1D(
                                 histogram_name.c_str(), histogram_name.c_str(),
-                                detectors[n_detector_1]
+                                detector_setup.detectors[n_detector_1]
                                     .group.time_difference_histogram_properties
                                     .n_bins,
-                                detectors[n_detector_1]
+                                detector_setup.detectors[n_detector_1]
                                     .group.time_difference_histogram_properties
                                     .minimum,
-                                detectors[n_detector_1]
+                                detector_setup.detectors[n_detector_1]
                                     .group.time_difference_histogram_properties
                                     .maximum));
                 }
@@ -131,50 +142,59 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
-        for (size_t n_detector_1 = 0; n_detector_1 < detectors.size();
-             ++n_detector_1) {
+        for (size_t n_detector_1 = 0;
+             n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
             for (size_t n_channel_1 = 0;
-                 n_channel_1 < detectors[n_detector_1].channels.size();
+                 n_channel_1 <
+                 detector_setup.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
-                if (detectors[n_detector_1]
+                if (detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
-                            .get_amplitude() > detectors[n_detector_1]
-                                                   .channels[n_channel_1]
-                                                   .amplitude_threshold &&
-                    detectors[n_detector_1].channels[n_channel_1].get_time() >
-                        0.) {
+                            .get_amplitude() >
+                        detector_setup.detectors[n_detector_1]
+                            .channels[n_channel_1]
+                            .amplitude_threshold &&
+                    detector_setup.detectors[n_detector_1]
+                            .channels[n_channel_1]
+                            .get_time() > 0.) {
                     energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
-                        detectors[n_detector_1]
+                        detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_amplitude());
-                    detectors[n_detector_1].channels[n_channel_1].calibrate(i);
+                    detector_setup.detectors[n_detector_1]
+                        .channels[n_channel_1]
+                        .calibrate(i);
                     energy_histograms[n_detector_1][n_channel_1]->Fill(
-                        detectors[n_detector_1]
+                        detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .energy_calibrated);
                     for (size_t n_detector_2 = n_detector_1 + 1;
-                         n_detector_2 < detectors.size(); ++n_detector_2) {
+                         n_detector_2 < detector_setup.detectors.size();
+                         ++n_detector_2) {
                         for (size_t n_channel_2 = 0;
                              n_channel_2 <
-                             detectors[n_detector_2].channels.size();
+                             detector_setup.detectors[n_detector_2]
+                                 .channels.size();
                              ++n_channel_2) {
-                            if (detectors[n_detector_2]
+                            if (detector_setup.detectors[n_detector_2]
                                         .channels[n_channel_2]
                                         .get_amplitude() >
-                                    detectors[n_detector_2]
+                                    detector_setup.detectors[n_detector_2]
                                         .channels[n_channel_2]
                                         .amplitude_threshold &&
-                                detectors[n_detector_2]
+                                detector_setup.detectors[n_detector_2]
                                         .channels[n_channel_2]
                                         .get_time() > 0.) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1]
                                     [n_detector_2 - n_detector_1 - 1]
                                     [n_channel_2]
-                                        ->Fill(detectors[n_detector_1]
+                                        ->Fill(detector_setup
+                                                   .detectors[n_detector_1]
                                                    .channels[n_channel_1]
                                                    .time_calibrated -
-                                               detectors[n_detector_2]
+                                               detector_setup
+                                                   .detectors[n_detector_2]
                                                    .channels[n_channel_2]
                                                    .time_calibrated);
                             }
@@ -182,17 +202,19 @@ int main(int argc, char **argv) {
                     }
                 }
             }
-            if (detectors[n_detector_1].channels.size() > 1) {
-                detectors[n_detector_1].addback();
+            if (detector_setup.detectors[n_detector_1].channels.size() > 1) {
+                detector_setup.detectors[n_detector_1].addback();
                 for (size_t n_channel_1 = 0;
-                     n_channel_1 < detectors[n_detector_1].channels.size();
+                     n_channel_1 <
+                     detector_setup.detectors[n_detector_1].channels.size();
                      ++n_channel_1) {
-                    if (detectors[n_detector_1].addback_energies[n_channel_1] >
-                        detectors[n_detector_1]
+                    if (detector_setup.detectors[n_detector_1]
+                            .addback_energies[n_channel_1] >
+                        detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .amplitude_threshold) {
                         addback_histograms[n_detector_1]->Fill(
-                            detectors[n_detector_1]
+                            detector_setup.detectors[n_detector_1]
                                 .addback_energies[n_channel_1]);
                     }
                 }
@@ -202,20 +224,23 @@ int main(int argc, char **argv) {
 
     TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
 
-    for (size_t n_detector_1 = 0; n_detector_1 < detectors.size();
-         ++n_detector_1) {
-        if (detectors[n_detector_1].channels.size() > 1) {
+    for (size_t n_detector_1 = 0;
+         n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
+        if (detector_setup.detectors[n_detector_1].channels.size() > 1) {
             addback_histograms[n_detector_1]->Write();
         }
         for (size_t n_channel_1 = 0;
-             n_channel_1 < detectors[n_detector_1].channels.size();
+             n_channel_1 <
+             detector_setup.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
             energy_histograms[n_detector_1][n_channel_1]->Write();
             energy_raw_histograms[n_detector_1][n_channel_1]->Write();
             for (size_t n_detector_2 = n_detector_1 + 1;
-                 n_detector_2 < detectors.size(); ++n_detector_2) {
+                 n_detector_2 < detector_setup.detectors.size();
+                 ++n_detector_2) {
                 for (size_t n_channel_2 = 0;
-                     n_channel_2 < detectors[n_detector_1].channels.size();
+                     n_channel_2 <
+                     detector_setup.detectors[n_detector_1].channels.size();
                      ++n_channel_2) {
                     time_difference_histograms[n_detector_1][n_channel_1]
                                               [n_detector_2 - n_detector_1 - 1]

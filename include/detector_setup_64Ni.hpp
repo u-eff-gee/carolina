@@ -149,4 +149,4 @@ vector<Detector> detectors{
 const vector<CoincidenceMatrix> coincidence_matrices{
     {"labr1_labr2", {0}, {1}, {1024, 0., 16384.}, {1024, 0., 16384.}, true}};
 
-const DetectorSetup detector_setup(modules, detector_groups, detectors);
+DetectorSetup detector_setup(modules, detector_groups, detectors);

@@ -69,12 +69,15 @@ int main(int argc, char **argv) {
         progress_printer(i - first);
 
         tree->GetEntry(i);
-        for (size_t n_detector = 0; n_detector < detectors.size();
-             ++n_detector) {
+        for (size_t n_detector = 0;
+             n_detector < detector_setup.detectors.size(); ++n_detector) {
             for (size_t n_channel = 0;
-                 n_channel < detectors[n_detector].channels.size();
+                 n_channel <
+                 detector_setup.detectors[n_detector].channels.size();
                  ++n_channel) {
-                detectors[n_detector].channels[n_channel].calibrate(i);
+                detector_setup.detectors[n_detector]
+                    .channels[n_channel]
+                    .calibrate(i);
             }
         }
 
@@ -84,41 +87,48 @@ int main(int argc, char **argv) {
                 for (auto n_detector_1 :
                      coincidence_matrices[n_matrix].x_data) {
                     for (size_t n_channel_1 = 0;
-                         n_channel_1 < detectors[n_detector_1].channels.size();
+                         n_channel_1 <
+                         detector_setup.detectors[n_detector_1].channels.size();
                          ++n_channel_1) {
-                        if (detectors[n_detector_1]
+                        if (detector_setup.detectors[n_detector_1]
                                 .channels[n_channel_1]
                                 .energy_calibrated > 0.) {
                             for (auto n_detector_2 :
                                  coincidence_matrices[n_matrix].y_data) {
                                 for (size_t n_channel_2 = 0;
                                      n_channel_2 <
-                                     detectors[n_detector_2].channels.size();
+                                     detector_setup.detectors[n_detector_2]
+                                         .channels.size();
                                      ++n_channel_2) {
-                                    if (detectors[n_detector_2]
+                                    if (detector_setup.detectors[n_detector_2]
                                                 .channels[n_channel_2]
                                                 .energy_calibrated > 0. &&
-                                        detectors[n_detector_1]
+                                        detector_setup.detectors[n_detector_1]
                                                 .channels[n_channel_1]
                                                 .time_calibrated -
-                                            detectors[n_detector_2]
+                                            detector_setup
+                                                .detectors[n_detector_2]
                                                 .channels[n_channel_2]
                                                 .time_calibrated) {
                                         coincidence_histograms[n_matrix]->Fill(
-                                            detectors[n_detector_1]
+                                            detector_setup
+                                                .detectors[n_detector_1]
                                                 .channels[n_channel_1]
                                                 .energy_calibrated,
-                                            detectors[n_detector_2]
+                                            detector_setup
+                                                .detectors[n_detector_2]
                                                 .channels[n_channel_2]
                                                 .energy_calibrated);
                                         if (coincidence_matrices[n_matrix]
                                                 .symmetrize) {
                                             coincidence_histograms[n_matrix]
                                                 ->Fill(
-                                                    detectors[n_detector_2]
+                                                    detector_setup
+                                                        .detectors[n_detector_2]
                                                         .channels[n_channel_2]
                                                         .energy_calibrated,
-                                                    detectors[n_detector_1]
+                                                    detector_setup
+                                                        .detectors[n_detector_1]
                                                         .channels[n_channel_1]
                                                         .energy_calibrated);
                                         }
@@ -136,9 +146,9 @@ int main(int argc, char **argv) {
             //          ++i) {
             //         for (size_t n_channel_1 = 0;
             //              n_channel_1 <
-            //              detectors[n_detector_1].channels.size();
+            //              detector_setup.detectors[n_detector_1].channels.size();
             //              ++n_channel_1) {
-            //             if (detectors[n_detector_1]
+            //             if (detector_setup.detectors[n_detector_1]
             //                     .channels[n_channel_1]
             //                     .energy_calibrated > 0.) {
             //             }
