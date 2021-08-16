@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
     for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i].register_branches(tree);
+        modules[i]->register_branches(tree);
     }
 
     vector<vector<TH2D *>> energy_vs_time_histograms;

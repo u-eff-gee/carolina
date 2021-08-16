@@ -4,8 +4,13 @@
 
 using std::numeric_limits;
 
+#include <memory>
+
+using std::shared_ptr;
+
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
+#include "detector_setup.hpp"
 #include "sis3316.hpp"
 
 DetectorGroup hpge{.name = "hpge",
@@ -18,11 +23,11 @@ DetectorGroup labr{
     .energy_raw_histogram_properties = {16384, -0.03125, 1023.96875},
     .time_difference_histogram_properties = {8192, -4096. * 0.125,
                                              4096. * 0.125}};
-vector<DetectorGroup> groups = {hpge, labr};
+const vector<DetectorGroup> detector_groups = {hpge, labr};
 
-vector<SIS3316> modules = {
-    {.tdc_resolution = 0.125}, // in nanoseconds, tdc resolution in
-                               // nanoseconds per bin
+const vector<shared_ptr<Module>> modules = {
+    shared_ptr<Module>(new SIS3316(0.125)), // nanoseconds, tdc resolution in
+                                            // nanoseconds per bin
 };
 
 vector<Detector> detectors{
@@ -143,3 +148,5 @@ vector<Detector> detectors{
 
 const vector<CoincidenceMatrix> coincidence_matrices{
     {"labr1_labr2", {0}, {1}, {1024, 0., 16384.}, {1024, 0., 16384.}, true}};
+
+const DetectorSetup detector_setup(modules, detector_groups, detectors);
