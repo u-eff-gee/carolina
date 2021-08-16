@@ -22,8 +22,8 @@ CommandLineParser::CommandLineParser() {
                              "Last entry to be processed.")(
         "output_file", po::value<string>()->default_value("output.root"),
         "Output file name (default: 'output.root').")(
-        "tree", po::value<string>()->default_value("clover_array"),
-        "TTree name (default: 'clover_array')");
+        "tree", po::value<string>()->default_value(""),
+        "TTree name [default: \"\" (empty string), i.e. take the first TTree in the file]");
     p.add("input_file", -1);
 }
 

@@ -15,6 +15,7 @@ using std::endl;
 #include "command_line_parser.hpp"
 #include "histograms_1d.hpp"
 #include "progress_printer.hpp"
+#include "tfile_utilities.hpp"
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
@@ -25,7 +26,7 @@ int main(int argc, char **argv) {
     }
     po::variables_map vm = command_line_parser.get_variables_map();
 
-    TChain *tree = new TChain(vm["tree"].as<string>().c_str());
+    TChain *tree = new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0], vm["tree"].as<string>()).c_str());
     vector<string> input_files = vm["input_file"].as<vector<string>>();
     for (auto input_file : input_files) {
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
