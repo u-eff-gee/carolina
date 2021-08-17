@@ -45,9 +45,9 @@ int main(int argc, char *argv[]) {
         "output_file", po::value<string>()->default_value("default"),
         "Output file name (default: 'multitask_SCRIPT_TOOL.sh', where SCRIPT "
         "is the name of the analysis script and TOOL is the multitasking "
-        "tool).")(
-        "tree", po::value<string>()->default_value(""),
-        "TTree name [default: \"\" (empty string), i.e. take the first TTree in the file]");
+        "tool).")("tree", po::value<string>()->default_value(""),
+                  "TTree name [default: \"\" (empty string), i.e. take the "
+                  "first TTree in the file]");
     ;
     po::positional_options_description p;
     p.add("input_file", -1);
@@ -83,7 +83,10 @@ int main(int argc, char *argv[]) {
 
     const unsigned int n_tasks = vm["n_tasks"].as<unsigned int>();
 
-    TChain *chain = new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0], vm["tree"].as<string>()).c_str());
+    TChain *chain =
+        new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0],
+                                     vm["tree"].as<string>())
+                       .c_str());
     vector<string> input_files = vm["input_file"].as<vector<string>>();
     for (auto input_file : input_files) {
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;

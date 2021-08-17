@@ -23,7 +23,8 @@ CommandLineParser::CommandLineParser() {
         "output_file", po::value<string>()->default_value("output.root"),
         "Output file name (default: 'output.root').")(
         "tree", po::value<string>()->default_value(""),
-        "TTree name [default: \"\" (empty string), i.e. take the first TTree in the file]");
+        "TTree name [default: \"\" (empty string), i.e. take the first TTree "
+        "in the file]");
     p.add("input_file", -1);
 }
 
