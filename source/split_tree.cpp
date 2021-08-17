@@ -52,6 +52,14 @@ int main(int argc, char **argv) {
         vm);
     po::notify(vm);
 
+    if (vm.count("help")) {
+        cout << desc << endl;
+        return 0;
+    } else if (!vm.count("input_file")) {
+        cout << "No input file given. Aborting ..." << endl;
+        return 1;
+    }
+
     TChain *tree =
         new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0],
                                      vm["tree"].as<string>())
