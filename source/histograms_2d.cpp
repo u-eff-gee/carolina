@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
     for (size_t i = 0; i < modules.size(); ++i) {
+        modules[i]->activate_branches(tree);
         modules[i]->register_branches(tree);
     }
 

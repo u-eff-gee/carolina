@@ -36,3 +36,7 @@ target_link_libraries(histograms_2d detector module ${Boost_LIBRARIES} command_l
 
 add_executable(multitask multitask.cpp)
 target_link_libraries(multitask ${Boost_LIBRARIES} ${ROOT_LIBRARIES})
+
+add_executable(split_tree split_tree.cpp)
+target_include_directories(split_tree PUBLIC ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(split_tree detector module ${Boost_LIBRARIES} progress_printer ${ROOT_LIBRARIES} sis3316)

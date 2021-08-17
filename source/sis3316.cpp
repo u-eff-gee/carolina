@@ -4,6 +4,36 @@ using std::to_string;
 
 #include "sis3316.hpp"
 
+void SIS3316::activate_branches(TTree *tree) {
+    tree->SetBranchStatus("*", 0);
+
+    tree->SetBranchStatus("ADC1CH1MAXE1", 1);
+    tree->SetBranchStatus("ADC1CH1MAXE2", 1);
+    tree->SetBranchStatus("LABRL1T", 1);
+    tree->SetBranchStatus("ADC1CH5MAXE1", 1);
+    tree->SetBranchStatus("ADC1CH5MAXE2", 1);
+    tree->SetBranchStatus("LABRL2T", 1);
+    tree->SetBranchStatus("ADC1CH9MAXE1", 1);
+    tree->SetBranchStatus("ADC1CH9MAXE2", 1);
+    tree->SetBranchStatus("LABRL3T", 1);
+    tree->SetBranchStatus("ADC1CH13MAXE1", 1);
+    tree->SetBranchStatus("ADC1CH13MAXE2", 1);
+    tree->SetBranchStatus("LABRL4T", 1);
+
+    tree->SetBranchStatus("ADC3CH1MAXE1", 1);
+    tree->SetBranchStatus("ADC3CH1MAXE2", 1);
+    tree->SetBranchStatus("HPGEL1T", 1);
+    tree->SetBranchStatus("ADC3CH5MAXE1", 1);
+    tree->SetBranchStatus("ADC3CH5MAXE2", 1);
+    tree->SetBranchStatus("HPGEL2T", 1);
+    tree->SetBranchStatus("ADC3CH9MAXE1", 1);
+    tree->SetBranchStatus("ADC3CH9MAXE2", 1);
+    tree->SetBranchStatus("HPGEL3T", 1);
+    tree->SetBranchStatus("ADC3CH13MAXE1", 1);
+    tree->SetBranchStatus("ADC3CH13MAXE2", 1);
+    tree->SetBranchStatus("HPGEL4T", 1);
+}
+
 vector<string> SIS3316::get_branch_names(const size_t leaf) const {
     vector<string> branch_names;
     const string detector = leaf < 4 ? "LABRL" : "HPGEL";
