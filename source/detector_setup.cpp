@@ -12,9 +12,21 @@ void DetectorSetup::calibrate(const int n_entry) {
     }
 }
 
+void DetectorSetup::activate_branches(TTree *tree) {
+    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
+        detectors[n_detector].activate_branches(tree);
+    }
+}
+
 void DetectorSetup::create_branches(TTree *tree) {
     for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
         detectors[n_detector].create_branches(tree);
+    }
+}
+
+void DetectorSetup::register_branches(TTree *tree) {
+    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
+        detectors[n_detector].register_branches(tree);
     }
 }
 

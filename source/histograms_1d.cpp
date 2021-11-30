@@ -1,3 +1,7 @@
+#include <cmath>
+
+using std::isnan;
+
 #include <iostream>
 
 using std::cout;
@@ -44,14 +48,11 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
-    for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->activate_branches(tree);
-        modules[i]->register_branches(tree);
-    }
+    detector_setup.activate_branches(tree);
+    detector_setup.register_branches(tree);
 
     vector<TH1D *> addback_histograms;
     vector<vector<TH1D *>> energy_histograms;
-    vector<vector<TH1D *>> energy_raw_histograms;
     vector<vector<vector<vector<TH1D *>>>> time_difference_histograms;
     string histogram_name;
 
@@ -72,7 +73,6 @@ int main(int argc, char **argv) {
             addback_histograms.push_back(nullptr);
         }
         energy_histograms.push_back(vector<TH1D *>());
-        energy_raw_histograms.push_back(vector<TH1D *>());
         time_difference_histograms.push_back(vector<vector<vector<TH1D *>>>());
         for (size_t n_channel_1 = 0;
              n_channel_1 <
@@ -91,17 +91,7 @@ int main(int argc, char **argv) {
                          detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.minimum,
                          detector_setup.detectors[n_detector_1]
-                             .group.energy_histogram_properties.maximum));
-
-            histogram_name = histogram_name + "_raw";
-            energy_raw_histograms[n_detector_1].push_back(
-                new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         detector_setup.detectors[n_detector_1]
-                             .group.energy_raw_histogram_properties.n_bins,
-                         detector_setup.detectors[n_detector_1]
-                             .group.energy_raw_histogram_properties.minimum,
-                         detector_setup.detectors[n_detector_1]
-                             .group.energy_raw_histogram_properties.maximum));
+                             .group.energy_histogram_properties.maximum)); 
 
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < detector_setup.detectors.size();
@@ -147,27 +137,13 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
-        detector_setup.calibrate(i);
-
         for (size_t n_detector_1 = 0;
              n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
             for (size_t n_channel_1 = 0;
                  n_channel_1 <
                  detector_setup.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
-                if (detector_setup.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .get_amplitude() >
-                        detector_setup.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .amplitude_threshold &&
-                    detector_setup.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .get_time() > 0.) {
-                    energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
-                        detector_setup.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .get_amplitude());
+                if (!isnan(detector_setup.detectors[n_detector_1].channels[n_detector_1].energy_calibrated)) {
                     energy_histograms[n_detector_1][n_channel_1]->Fill(
                         detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
@@ -180,15 +156,7 @@ int main(int argc, char **argv) {
                              detector_setup.detectors[n_detector_2]
                                  .channels.size();
                              ++n_channel_2) {
-                            if (detector_setup.detectors[n_detector_2]
-                                        .channels[n_channel_2]
-                                        .get_amplitude() >
-                                    detector_setup.detectors[n_detector_2]
-                                        .channels[n_channel_2]
-                                        .amplitude_threshold &&
-                                detector_setup.detectors[n_detector_2]
-                                        .channels[n_channel_2]
-                                        .get_time() > 0.) {
+                            if (!isnan(detector_setup.detectors[n_detector_2].channels[n_detector_2].energy_calibrated)) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1]
                                     [n_detector_2 - n_detector_1 - 1]
@@ -237,7 +205,6 @@ int main(int argc, char **argv) {
              detector_setup.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
             energy_histograms[n_detector_1][n_channel_1]->Write();
-            energy_raw_histograms[n_detector_1][n_channel_1]->Write();
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < detector_setup.detectors.size();
                  ++n_detector_2) {

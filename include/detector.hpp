@@ -31,6 +31,8 @@ struct Detector {
     vector<double> addback_times;
 
     void addback();
+    void activate_branches(TTree *tree);
     void create_branches(TTree *tree);
+    void register_branches(TTree *tree);
     void reset();
 };

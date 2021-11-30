@@ -17,8 +17,10 @@ struct DetectorSetup {
     const vector<DetectorGroup> detector_groups;
     vector<Detector> detectors;
 
+    void activate_branches(TTree *tree);
     void calibrate(const int n_entry);
     void create_branches(TTree *tree);
     vector<string> get_branch_names();
+    void register_branches(TTree *tree);
     void reset();
 };

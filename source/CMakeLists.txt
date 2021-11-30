@@ -33,6 +33,10 @@ add_executable(histograms_1d histograms_1d.cpp)
 target_include_directories(histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(histograms_1d detector module ${Boost_LIBRARIES} command_line_parser detector_setup progress_printer ${ROOT_LIBRARIES} sis3316)
 
+add_executable(histograms_1d_raw histograms_1d_raw.cpp)
+target_include_directories(histograms_1d_raw PUBLIC ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(histograms_1d_raw detector module ${Boost_LIBRARIES} command_line_parser detector_setup progress_printer ${ROOT_LIBRARIES} sis3316)
+
 add_executable(histograms_1d_text histograms_1d_text.cpp)
 target_link_libraries(histograms_1d_text ${Boost_LIBRARIES} command_line_parser ${ROOT_LIBRARIES})
 
