@@ -39,22 +39,8 @@ vector<Detector> detectors{
              .leaf = 0,
              .energy_calibration_parameters =
                  {
-                     {2406208, {0.000000, 1.000000}},
-                     {2416928, {-3.455282, 1.000362}},
-                     {54652960, {-2.826526, 1.004762}},
-                     {60058656, {-5.119628, 1.004899}},
-                     {61472160, {-4.489615, 1.003895}},
-                     {146132896, {-8.011980, 1.003089}},
-                     {224601824, {-12.359262, 1.003119}},
-                     {303285952, {-0.511097, 0.994950}},
-                     {342088768, {-7.179128, 0.990396}},
-                     {423058528, {-8.752953, 0.992509}},
-                     {501463840, {73.868960, 0.992820}},
-                     {580736800, {40.202088, 0.993830}},
-                     {658717408, {-10.278469, 0.995691}},
-                     {734875840, {-11.742271, 0.998623}},
-                     {795080704, {-9.635501, 1.002810}},
-                     {871852256, {-10.435182, 0.997006}},
+                     {2406208,
+                      {45.845185751404024, 2.114188617352532 * 16}}, // Run 495
                  },
              .amplitude_threshold = 5.},
         },
@@ -66,8 +52,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 1,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {-10.124324221548868, 1.677338897840358 * 16}}, // Run 495
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -78,8 +67,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 2,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {37.24986202252936, 2.4409531823983714 * 16}}, // Run 495
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -90,8 +82,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 3,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {-7.966427805396491, 2.2238549383688917 * 16}}, // Run 495
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -102,8 +97,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 4,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {2.224801749620616, 0.6821961140000355}}, // Run 495
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -114,8 +112,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 5,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {-3.307975494417557, 0.6962769336752404}}, // Run 495
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -126,8 +127,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 6,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {1.875662214048816, 0.7308577379533665}}, // Run 495
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -138,8 +142,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 7,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration_parameters =
+                 {
+                     {2406208,
+                      {-0.47612931936339586, 0.7582054746223055}}, // Run 495
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,

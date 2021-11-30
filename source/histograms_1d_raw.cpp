@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
              detector_setup.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
 
-            histogram_name = detector_setup.detectors[n_detector_1].name +
+            histogram_name = detector_setup.detectors[n_detector_1].name + "_" +
                              detector_setup.detectors[n_detector_1]
                                  .channels[n_channel_1]
                                  .name;
