@@ -147,6 +147,8 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
+        detector_setup.calibrate(i);
+
         for (size_t n_detector_1 = 0;
              n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
             for (size_t n_channel_1 = 0;
@@ -166,9 +168,6 @@ int main(int argc, char **argv) {
                         detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_amplitude());
-                    detector_setup.detectors[n_detector_1]
-                        .channels[n_channel_1]
-                        .calibrate(i);
                     energy_histograms[n_detector_1][n_channel_1]->Fill(
                         detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
@@ -208,7 +207,6 @@ int main(int argc, char **argv) {
                 }
             }
             if (detector_setup.detectors[n_detector_1].channels.size() > 1) {
-                detector_setup.detectors[n_detector_1].addback();
                 for (size_t n_channel_1 = 0;
                      n_channel_1 <
                      detector_setup.detectors[n_detector_1].channels.size();

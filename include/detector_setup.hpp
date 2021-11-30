@@ -17,5 +17,6 @@ struct DetectorSetup {
     const vector<DetectorGroup> detector_groups;
     vector<Detector> detectors;
 
+    void calibrate(const int n_entry);
     vector<string> get_branch_names();
 };

@@ -74,17 +74,8 @@ int main(int argc, char **argv) {
         progress_printer(i - first);
 
         tree->GetEntry(i);
-        for (size_t n_detector = 0;
-             n_detector < detector_setup.detectors.size(); ++n_detector) {
-            for (size_t n_channel = 0;
-                 n_channel <
-                 detector_setup.detectors[n_detector].channels.size();
-                 ++n_channel) {
-                detector_setup.detectors[n_detector]
-                    .channels[n_channel]
-                    .calibrate(i);
-            }
-        }
+
+        detector_setup.calibrate(i);
 
         for (size_t n_matrix = 0; n_matrix < coincidence_matrices.size();
              ++n_matrix) {
@@ -143,23 +134,22 @@ int main(int argc, char **argv) {
                         }
                     }
                 }
+            } else {
+                for (size_t n_detector_1 = 0;
+                     n_detector_1 <
+                     coincidence_matrices[n_matrix].x_data.size();
+                     ++i) {
+                    for (size_t n_channel_1 = 0;
+                         n_channel_1 <
+                         detector_setup.detectors[n_detector_1].channels.size();
+                         ++n_channel_1) {
+                        if (detector_setup.detectors[n_detector_1]
+                                .channels[n_channel_1]
+                                .energy_calibrated > 0.) {
+                        }
+                    }
+                }
             }
-            // else {
-            //     for (size_t n_detector_1 = 0;
-            //          n_detector_1 <
-            //          coincidence_matrices[n_matrix].x_data.size();
-            //          ++i) {
-            //         for (size_t n_channel_1 = 0;
-            //              n_channel_1 <
-            //              detector_setup.detectors[n_detector_1].channels.size();
-            //              ++n_channel_1) {
-            //             if (detector_setup.detectors[n_detector_1]
-            //                     .channels[n_channel_1]
-            //                     .energy_calibrated > 0.) {
-            //             }
-            //         }
-            //     }
-            // }
         }
     }
 
