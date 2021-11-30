@@ -11,3 +11,15 @@ void DetectorSetup::calibrate(const int n_entry) {
         detectors[n_detector].addback();
     }
 }
+
+void DetectorSetup::create_branches(TTree *tree) {
+    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
+        detectors[n_detector].create_branches(tree);
+    }
+}
+
+void DetectorSetup::reset() {
+    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
+        detectors[n_detector].reset();
+    }
+}

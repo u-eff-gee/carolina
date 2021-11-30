@@ -48,3 +48,20 @@ void Detector::addback() {
         added_back[n_c_0] = true;
     }
 }
+
+void Detector::create_branches(TTree *tree) {
+    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
+        tree->Branch((name + channels[n_channel].name + "_e").c_str(),
+                     &channels[n_channel].energy_calibrated);
+        tree->Branch((name + channels[n_channel].name + "_t").c_str(),
+                     &channels[n_channel].time_calibrated);
+        tree->Branch((name + channels[n_channel].name + "_ts").c_str(),
+                     &channels[n_channel].timestamp_calibrated);
+    }
+}
+
+void Detector::reset() {
+    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
+        channels[n_channel].reset();
+    }
+}
