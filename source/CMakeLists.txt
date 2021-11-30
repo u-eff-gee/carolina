@@ -21,6 +21,10 @@ target_link_libraries(detector channel)
 
 add_library(detector_setup detector_setup.cpp)
 
+add_executable(calibrate_tree calibrate_tree.cpp)
+target_include_directories(calibrate_tree PUBLIC ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(calibrate_tree detector module ${Boost_LIBRARIES} command_line_parser detector_setup progress_printer ${ROOT_LIBRARIES} sis3316)
+
 add_executable(energy_vs_time energy_vs_time.cpp)
 target_include_directories(energy_vs_time PUBLIC ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(energy_vs_time detector module ${Boost_LIBRARIES} command_line_parser progress_printer ${ROOT_LIBRARIES} sis3316)
