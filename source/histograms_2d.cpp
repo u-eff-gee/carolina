@@ -75,46 +75,128 @@ int main(int argc, char **argv) {
 
         for (size_t n_matrix = 0; n_matrix < coincidence_matrices.size();
              ++n_matrix) {
-            for (size_t n_detector_1 = 0;
-                 n_detector_1 < coincidence_matrices[n_matrix].detectors.size();
-                 ++n_detector_1) {
-                for (size_t n_channel_1 = 0;
-                     n_channel_1 <
-                     detector_setup.detectors[n_detector_1].channels.size();
-                     ++n_channel_1) {
-                    if (!isnan(detector_setup.detectors[n_detector_1]
-                                   .channels[n_channel_1]
-                                   .energy_calibrated)) {
-                        for (size_t n_detector_2 = n_detector_1 + 1;
-                             n_detector_2 <
-                             coincidence_matrices[n_matrix].detectors.size();
-                             ++n_detector_2) {
-                            for (size_t n_channel_2 = 0;
-                                 n_channel_2 <
-                                 detector_setup.detectors[n_detector_2]
-                                     .channels.size();
-                                 ++n_channel_2) {
-                                if (!isnan(
-                                        detector_setup.detectors[n_detector_2]
-                                            .channels[n_channel_2]
-                                            .energy_calibrated)) {
-                                    coincidence_histograms[n_matrix]->Fill(
-                                        detector_setup.detectors[n_detector_1]
-                                            .channels[n_channel_1]
-                                            .energy_calibrated,
-                                        detector_setup.detectors[n_detector_2]
-                                            .channels[n_channel_2]
-                                            .energy_calibrated);
-                                    if (coincidence_matrices[n_matrix]
-                                            .symmetrize) {
+            if (!coincidence_matrices[n_matrix].detectors_y.size()) {
+                for (size_t n_detector_1 = 0;
+                     n_detector_1 <
+                     coincidence_matrices[n_matrix].detectors_x.size();
+                     ++n_detector_1) {
+                    for (size_t n_channel_x = 0;
+                         n_channel_x <
+                         detector_setup.detectors[n_detector_1].channels.size();
+                         ++n_channel_x) {
+                        if (!isnan(
+                                detector_setup
+                                    .detectors[coincidence_matrices[n_matrix]
+                                                   .detectors_x[n_detector_1]]
+                                    .channels[n_channel_x]
+                                    .energy_calibrated)) {
+                            for (size_t n_detector_2 = n_detector_1 + 1;
+                                 n_detector_2 < coincidence_matrices[n_matrix]
+                                                    .detectors_x.size();
+                                 ++n_detector_2) {
+                                for (size_t n_channel_y = 0;
+                                     n_channel_y <
+                                     detector_setup.detectors[n_detector_2]
+                                         .channels.size();
+                                     ++n_channel_y) {
+                                    if (!isnan(
+                                            detector_setup
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_2]]
+                                                .channels[n_channel_y]
+                                                .energy_calibrated)) {
                                         coincidence_histograms[n_matrix]->Fill(
                                             detector_setup
-                                                .detectors[n_detector_2]
-                                                .channels[n_channel_2]
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_1]]
+                                                .channels[n_channel_x]
                                                 .energy_calibrated,
                                             detector_setup
-                                                .detectors[n_detector_1]
-                                                .channels[n_channel_1]
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_2]]
+                                                .channels[n_channel_y]
+                                                .energy_calibrated);
+                                        coincidence_histograms[n_matrix]->Fill(
+                                            detector_setup
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_2]]
+                                                .channels[n_channel_y]
+                                                .energy_calibrated,
+                                            detector_setup
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_1]]
+                                                .channels[n_channel_x]
+                                                .energy_calibrated);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (size_t n_detector_x = 0;
+                     n_detector_x <
+                     coincidence_matrices[n_matrix].detectors_x.size();
+                     ++n_detector_x) {
+                    for (size_t n_channel_x = 0;
+                         n_channel_x <
+                         detector_setup.detectors[n_detector_x].channels.size();
+                         ++n_channel_x) {
+                        if (!isnan(
+                                detector_setup
+                                    .detectors[coincidence_matrices[n_matrix]
+                                                   .detectors_x[n_detector_x]]
+                                    .channels[n_channel_x]
+                                    .energy_calibrated)) {
+                            for (size_t n_detector_y = 0;
+                                 n_detector_y < coincidence_matrices[n_matrix]
+                                                    .detectors_y.size();
+                                 ++n_detector_y) {
+                                for (size_t n_channel_y = 0;
+                                     n_channel_y <
+                                     detector_setup.detectors[n_detector_y]
+                                         .channels.size();
+                                     ++n_channel_y) {
+                                    if (!isnan(
+                                            detector_setup
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_y
+                                                                 [n_detector_y]]
+                                                .channels[n_channel_y]
+                                                .energy_calibrated)) {
+                                        coincidence_histograms[n_matrix]->Fill(
+                                            detector_setup
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_x]]
+                                                .channels[n_channel_x]
+                                                .energy_calibrated,
+                                            detector_setup
+                                                .detectors
+                                                    [coincidence_matrices
+                                                         [n_matrix]
+                                                             .detectors_y
+                                                                 [n_detector_y]]
+                                                .channels[n_channel_y]
                                                 .energy_calibrated);
                                     }
                                 }

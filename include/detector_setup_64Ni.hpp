@@ -153,10 +153,14 @@ vector<Detector> detectors{
     },
 };
 
-const vector<CoincidenceMatrix> coincidence_matrices{{"labr_labr",
-                                                      {0, 1, 2, 3},
-                                                      {1024, -8., 16376.},
-                                                      {1024, -8., 16376.},
-                                                      true}};
+const vector<CoincidenceMatrix> coincidence_matrices{
+    {"labr_labr", {0, 1, 2, 3}, {}, {1024, -8., 16376.}, {1024, -8., 16376.}},
+    {"hpge_hpge", {4, 5, 6, 7}, {}, {1024, -8., 16376.}, {1024, -8., 16376.}},
+    {"labr_hpge",
+     {4, 5, 6, 7},
+     {0, 1, 2, 3},
+     {1024, -8., 16376.},
+     {1024, -8., 16376.}},
+};
 
 DetectorSetup detector_setup(modules, detector_groups, detectors);
