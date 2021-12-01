@@ -51,10 +51,8 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
-    for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->activate_branches(tree);
-        modules[i]->register_branches(tree);
-    }
+    detector_setup.activate_branches(tree);
+    detector_setup.register_branches(tree);
 
     vector<vector<TH2D *>> energy_vs_time_histograms;
     string histogram_name;
@@ -94,15 +92,9 @@ int main(int argc, char **argv) {
                  n_channel <
                  detector_setup.detectors[n_detector].channels.size();
                  ++n_channel) {
-                detector_setup.detectors[n_detector]
-                    .channels[n_channel]
-                    .calibrate(i);
-                if (detector_setup.detectors[n_detector]
-                            .channels[n_channel]
-                            .energy_calibrated > 0. &&
-                    detector_setup.detectors[n_detector]
-                            .channels[n_channel]
-                            .time_calibrated > 0.) {
+                if (!isnan(detector_setup.detectors[n_detector]
+                               .channels[n_channel]
+                               .energy_calibrated)) {
                     energy_vs_time_histograms[n_detector][n_channel]->Fill(
                         detector_setup.detectors[n_detector]
                             .channels[n_channel]
