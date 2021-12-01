@@ -23,7 +23,8 @@ void Channel::calibrate(const int n_entry) {
                 break;
             }
         }
-        time_calibrated = module->get_time(leaf) * module->tdc_resolution;
+        time_calibrated = time_calibration(energy_calibrated) *
+                          module->get_time(leaf) * module->tdc_resolution;
         timestamp_calibrated =
             module->get_timestamp(leaf) * INVERSE_VME_CLOCK_FREQUENCY;
     } else {

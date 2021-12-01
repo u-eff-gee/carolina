@@ -4,6 +4,10 @@
 
 using std::isnan;
 
+#include <functional>
+
+using std::function;
+
 #include <limits>
 
 using std::numeric_limits;
@@ -31,9 +35,11 @@ struct Channel {
     Channel(
         const string name, const shared_ptr<Module> module, const size_t leaf,
         const vector<pair<int, vector<double>>> energy_calibration_parameters,
+        const function<double(double)> time_calibration,
         const double amplitude_threshold = 0.)
         : name(name), module(module), leaf(leaf),
           energy_calibration_parameters(energy_calibration_parameters),
+          time_calibration(time_calibration),
           energy_calibrated(numeric_limits<double>::quiet_NaN()),
           time_calibrated(numeric_limits<double>::quiet_NaN()),
           timestamp_calibrated(numeric_limits<double>::quiet_NaN()),
@@ -43,6 +49,7 @@ struct Channel {
     const shared_ptr<Module> module;
     const size_t leaf;
     vector<pair<int, vector<double>>> energy_calibration_parameters;
+    const function<double(const double)> time_calibration;
 
     double energy_calibrated, time_calibrated, timestamp_calibrated;
     const double amplitude_threshold;
