@@ -13,8 +13,7 @@ using std::vector;
 struct CoincidenceMatrix {
     const string name;
 
-    const vector<size_t> x_data;
-    const vector<size_t> y_data;
+    const vector<size_t> detectors;
 
     const HistogramProperties x_axis;
     const HistogramProperties y_axis;
