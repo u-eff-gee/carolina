@@ -94,7 +94,11 @@ int main(int argc, char **argv) {
                  ++n_channel) {
                 if (!isnan(detector_setup.detectors[n_detector]
                                .channels[n_channel]
-                               .energy_calibrated)) {
+                               .energy_calibrated) && detector_setup.detectors[n_detector]
+                               .channels[n_channel]
+                               .time_vs_time_RF_gate(detector_setup.detectors[n_detector]
+                               .channels[n_channel]
+                               .time_vs_time_RF_calibrated)) {
                     energy_vs_time_histograms[n_detector][n_channel]->Fill(
                         detector_setup.detectors[n_detector]
                             .channels[n_channel]
