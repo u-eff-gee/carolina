@@ -53,6 +53,7 @@ int main(int argc, char **argv) {
 
     vector<TH1D *> addback_histograms;
     vector<vector<TH1D *>> energy_histograms;
+    vector<vector<TH1D *>> time_vs_time_RF_histograms;
     vector<vector<vector<vector<TH1D *>>>> time_difference_histograms;
     string histogram_name;
 
@@ -74,6 +75,7 @@ int main(int argc, char **argv) {
         }
         energy_histograms.push_back(vector<TH1D *>());
         time_difference_histograms.push_back(vector<vector<vector<TH1D *>>>());
+        time_vs_time_RF_histograms.push_back(vector<TH1D *>());
         for (size_t n_channel_1 = 0;
              n_channel_1 <
              detector_setup.detectors[n_detector_1].channels.size();
@@ -92,6 +94,19 @@ int main(int argc, char **argv) {
                              .group.energy_histogram_properties.minimum,
                          detector_setup.detectors[n_detector_1]
                              .group.energy_histogram_properties.maximum));
+            histogram_name = detector_setup.detectors[n_detector_1].name + "_" +
+                             detector_setup.detectors[n_detector_1]
+                                 .channels[n_channel_1]
+                                 .name +
+                             "_t_vs_RF";
+            time_vs_time_RF_histograms[n_detector_1].push_back(new TH1D(
+                histogram_name.c_str(), histogram_name.c_str(),
+                detector_setup.detectors[n_detector_1]
+                    .group.time_difference_histogram_properties.n_bins,
+                detector_setup.detectors[n_detector_1]
+                    .group.time_difference_histogram_properties.minimum,
+                detector_setup.detectors[n_detector_1]
+                    .group.time_difference_histogram_properties.maximum));
 
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < detector_setup.detectors.size();
@@ -150,6 +165,10 @@ int main(int argc, char **argv) {
                         detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .energy_calibrated);
+                    time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Fill(
+                        detector_setup.detectors[n_detector_1]
+                            .channels[n_channel_1]
+                            .time_vs_time_RF_calibrated);
                     for (size_t n_detector_2 = n_detector_1 + 1;
                          n_detector_2 < detector_setup.detectors.size();
                          ++n_detector_2) {
@@ -158,9 +177,15 @@ int main(int argc, char **argv) {
                              detector_setup.detectors[n_detector_2]
                                  .channels.size();
                              ++n_channel_2) {
-                            if (!isnan(detector_setup.detectors[n_detector_2]
-                                           .channels[n_detector_2]
-                                           .energy_calibrated) && // Ignore events where none of the two detectors triggered (time = 0)
+                            if (!isnan(
+                                    detector_setup.detectors[n_detector_2]
+                                        .channels[n_detector_2]
+                                        .energy_calibrated) && // Ignore events
+                                                               // where none of
+                                                               // the two
+                                                               // detectors
+                                                               // triggered
+                                                               // (time = 0)
                                 detector_setup.detectors[n_detector_1]
                                         .channels[n_channel_1]
                                         .time_calibrated > 0. &&
@@ -215,6 +240,7 @@ int main(int argc, char **argv) {
              detector_setup.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
             energy_histograms[n_detector_1][n_channel_1]->Write();
+            time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Write();
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < detector_setup.detectors.size();
                  ++n_detector_2) {

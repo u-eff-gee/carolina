@@ -57,6 +57,8 @@ void Detector::activate_branches(TTree *tree) {
                               1);
         tree->SetBranchStatus((name + channels[n_channel].name + "_ts").c_str(),
                               1);
+        tree->SetBranchStatus(
+            (name + channels[n_channel].name + "_t_vs_RF").c_str(), 1);
     }
 }
 
@@ -68,6 +70,8 @@ void Detector::create_branches(TTree *tree) {
                      &channels[n_channel].time_calibrated);
         tree->Branch((name + channels[n_channel].name + "_ts").c_str(),
                      &channels[n_channel].timestamp_calibrated);
+        tree->Branch((name + channels[n_channel].name + "_t_vs_RF").c_str(),
+                     &channels[n_channel].time_vs_time_RF_calibrated);
     }
 }
 
@@ -80,6 +84,9 @@ void Detector::register_branches(TTree *tree) {
         tree->SetBranchAddress(
             (name + channels[n_channel].name + "_ts").c_str(),
             &channels[n_channel].timestamp_calibrated);
+        tree->SetBranchAddress(
+            (name + channels[n_channel].name + "_t_vs_RF").c_str(),
+            &channels[n_channel].time_vs_time_RF_calibrated);
     }
 }
 

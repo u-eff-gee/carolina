@@ -32,6 +32,8 @@ void SIS3316::activate_branches(TTree *tree) {
     tree->SetBranchStatus("ADC3CH13MAXE1", 1);
     tree->SetBranchStatus("ADC3CH13MAXE2", 1);
     tree->SetBranchStatus("HPGEL4T", 1);
+
+    tree->SetBranchStatus("TRIGT11", 1);
 }
 
 vector<string> SIS3316::get_branch_names(const size_t leaf) const {
@@ -75,4 +77,6 @@ void SIS3316::register_branches(TTree *tree) {
     tree->SetBranchAddress("ADC3CH13MAXE1", &amplitude_e1.leaves[7]);
     tree->SetBranchAddress("ADC3CH13MAXE2", &amplitude_e2.leaves[7]);
     tree->SetBranchAddress("HPGEL4T", &time.leaves[7]);
+
+    tree->SetBranchAddress("TRIGT11", &time_RF.leaves[0]);
 }

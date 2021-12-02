@@ -8,12 +8,13 @@
 struct SIS3316 : public Module {
     SIS3316(const double tdc_resolution)
         : Module(tdc_resolution), amplitude_e1("e1"), amplitude_e2("e2"),
-          time("time"), timestamp("timestamp") {}
+          time("time"), time_RF("time_RF"), timestamp("timestamp") {}
     ~SIS3316() {}
 
     Branch<unsigned int, 8> amplitude_e1;
     Branch<unsigned int, 8> amplitude_e2;
     Branch<unsigned int, 8> time;
+    Branch<unsigned int, 1> time_RF;
     Branch<unsigned int, 8> timestamp;
 
     void activate_branches(TTree *tree) override final;
@@ -25,6 +26,10 @@ struct SIS3316 : public Module {
     }
     double get_time(const size_t leaf) const override final {
         return time.leaves[leaf];
+    }
+    double get_time_RF([
+        [maybe_unused]] const size_t leaf) const override final {
+        return time_RF.leaves[0];
     }
     double get_timestamp(const size_t leaf) const override final {
         return timestamp.leaves[leaf];

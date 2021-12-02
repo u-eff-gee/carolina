@@ -20,5 +20,6 @@ struct Module {
     virtual vector<string> get_branch_names(const size_t leaf) const = 0;
     virtual double get_amplitude(const size_t leaf) const = 0;
     virtual double get_time(const size_t leaf) const = 0;
+    virtual double get_time_RF(const size_t leaf) const = 0;
     virtual double get_timestamp(const size_t leaf) const = 0;
 };
