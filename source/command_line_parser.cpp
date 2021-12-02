@@ -12,6 +12,7 @@ using std::string;
 using std::vector;
 
 #include "command_line_parser.hpp"
+#include "tfile_utilities.hpp"
 
 CommandLineParser::CommandLineParser() {
     desc.add_options()("help", "Produce help message.")(
@@ -44,3 +45,30 @@ void CommandLineParser::operator()(int argc, char *argv[], int &status) {
         status = 1;
     }
 }
+
+TChain* CommandLineParser::set_up_tree(long long &first, long long &last) const {
+    TChain *tree =
+        new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0],
+                                     vm["tree"].as<string>())
+                       .c_str());
+    cout << tree->GetName() << endl;
+    vector<string> input_files = vm["input_file"].as<vector<string>>();
+    for (auto input_file : input_files) {
+        cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
+        tree->Add(input_file.c_str());
+    }
+    cout << tree->GetName() << endl;
+
+    first = vm["first"].as<int>();
+    last =
+        vm["last"].as<int>() == 0 ? tree->GetEntries() : vm["last"].as<int>();
+
+    if (first > last) {
+        cout << "Error: first entry (" << first
+             << ") is larger or equal to last entry (" << last
+             << "). Aborting ..." << endl;
+        abort();
+    }
+
+    return tree;
+};

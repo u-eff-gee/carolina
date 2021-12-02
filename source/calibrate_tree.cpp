@@ -21,28 +21,10 @@ int main(int argc, char **argv) {
     }
     po::variables_map vm = command_line_parser.get_variables_map();
 
-    const string tree_name = find_tree_in_file(
-        vm["input_file"].as<vector<string>>()[0], vm["tree"].as<string>());
-    TChain *tree = new TChain(tree_name.c_str());
-    vector<string> input_files = vm["input_file"].as<vector<string>>();
-    for (auto input_file : input_files) {
-        cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
-        tree->Add(input_file.c_str());
-    }
+    long long first, last;
+    TChain* tree = command_line_parser.set_up_tree(first, last);
 
-    const long long first = vm["first"].as<int>();
-    const long long last = vm["last"].as<long long>() == 0
-                               ? tree->GetEntries()
-                               : vm["last"].as<long long>();
-
-    if (first > last) {
-        cout << "Error: first entry (" << first
-             << ") is larger or equal to last entry (" << last
-             << "). Aborting ..." << endl;
-        return 0;
-    }
-
-    const string tree_calibrated_name = tree_name;
+    const string tree_calibrated_name = tree->GetName();
     TTree *tree_calibrated =
         new TTree(tree_calibrated_name.c_str(), tree_calibrated_name.c_str());
 

@@ -2,6 +2,8 @@
 
 #include <boost/program_options.hpp>
 
+#include "TChain.h"
+
 namespace po = boost::program_options;
 
 class CommandLineParser {
@@ -10,6 +12,7 @@ class CommandLineParser {
 
     void operator()(int argc, char *argv[], int &status);
     po::variables_map get_variables_map() const { return vm; };
+    TChain* set_up_tree(long long &first, long long &last) const;
 
     po::options_description desc;
 

@@ -28,26 +28,8 @@ int main(int argc, char **argv) {
     }
     po::variables_map vm = command_line_parser.get_variables_map();
 
-    TChain *tree =
-        new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0],
-                                     vm["tree"].as<string>())
-                       .c_str());
-    vector<string> input_files = vm["input_file"].as<vector<string>>();
-    for (auto input_file : input_files) {
-        cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
-        tree->Add(input_file.c_str());
-    }
-
-    const long long first = vm["first"].as<int>();
-    const long long last =
-        vm["last"].as<int>() == 0 ? tree->GetEntries() : vm["last"].as<int>();
-
-    if (first > last) {
-        cout << "Error: first entry (" << first
-             << ") is larger or equal to last entry (" << last
-             << "). Aborting ..." << endl;
-        return 0;
-    }
+    long long first, last;
+    TChain* tree = command_line_parser.set_up_tree(first, last);
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
