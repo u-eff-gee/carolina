@@ -39,9 +39,20 @@ vector<Detector> detectors{
              .leaf = 0,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {45.845185751404024, 2.114188617352532 * 16}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {2.685975e+02, 1.644962e+00 * 16,
+                       2.248462e-04 * 16 * 16}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             [](const double energy) {
+                 if (energy < 800. || energy > 1400.) {
+                     return 1.;
+                 } else {
+                     return 1. / (1.0 - 3.54978575e-01 *
+                                            exp(-7.30421449e-03 *
+                                                (energy - 5.96228695e+02)));
+                 }
+             },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -54,9 +65,20 @@ vector<Detector> detectors{
              .leaf = 1,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {-10.124324221548868, 1.677338897840358 * 16}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {2.018431e+02, 1.140523e+00 * 16,
+                       3.438323e-04 * 16 * 16}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             [](const double energy) {
+                 if (energy < 800. || energy > 1400.) {
+                     return 1.;
+                 } else {
+                     return 1. / (1.0 - 2.00916232e-04 *
+                                            exp(-5.01816114e-03 *
+                                                (energy - 1.95964658e+03)));
+                 }
+             },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -69,9 +91,20 @@ vector<Detector> detectors{
              .leaf = 2,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {37.24986202252936, 2.4409531823983714 * 16}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {2.137622e+02, 2.114113e+00 * 16,
+                       5.824968e-05 * 16 * 16}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             [](const double energy) {
+                 if (energy < 800. || energy > 1500.) {
+                     return 1.;
+                 } else {
+                     return 1. / (1.0 - 6.30618678e-04 *
+                                            exp(-3.96193663e-03 *
+                                                (energy - 2.02533142e+03)));
+                 }
+             },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -84,9 +117,20 @@ vector<Detector> detectors{
              .leaf = 3,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {-7.966427805396491, 2.2238549383688917 * 16}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {1.765400e+02, 1.618102e+00 * 16,
+                       4.511530e-04 * 16 * 16}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             [](const double energy) {
+                 if (energy < 800. || energy > 1600.) {
+                     return 1.;
+                 } else {
+                     return 1. / (1.0 - 9.79036424e-04 *
+                                            exp(-3.22123603e-03 *
+                                                (energy - 2.12618155e+03)));
+                 }
+             },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -99,9 +143,11 @@ vector<Detector> detectors{
              .leaf = 4,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {2.224801749620616, 0.6821961140000355}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {5.570186e+00, 6.799282e-01, 3.132755e-07}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             []([[maybe_unused]] const double energy) { return 1.; },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -114,9 +160,11 @@ vector<Detector> detectors{
              .leaf = 5,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {-3.307975494417557, 0.6962769336752404}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {-1.084339e+00, 6.977068e-01, -1.894253e-07}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             []([[maybe_unused]] const double energy) { return 1.; },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -129,9 +177,11 @@ vector<Detector> detectors{
              .leaf = 6,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {1.875662214048816, 0.7308577379533665}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {2.161040e+01, 7.134485e-01, 2.873566e-06}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             []([[maybe_unused]] const double energy) { return 1.; },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -144,9 +194,11 @@ vector<Detector> detectors{
              .leaf = 7,
              .energy_calibration_parameters =
                  {
-                     {2406208,
-                      {-0.47612931936339586, 0.7582054746223055}}, // Run 495
+                     {numeric_limits<int>::max(),
+                      {8.355447e+00, 7.510629e-01, 1.469643e-06}}, // Run 531
                  },
+             .time_calibration = // Run 528
+             []([[maybe_unused]] const double energy) { return 1.; },
              .amplitude_threshold = 20.},
         },
         hpge,

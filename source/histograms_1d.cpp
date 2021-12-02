@@ -160,7 +160,13 @@ int main(int argc, char **argv) {
                              ++n_channel_2) {
                             if (!isnan(detector_setup.detectors[n_detector_2]
                                            .channels[n_detector_2]
-                                           .energy_calibrated)) {
+                                           .energy_calibrated) && // Ignore events where none of the two detectors triggered (time = 0)
+                                detector_setup.detectors[n_detector_1]
+                                        .channels[n_channel_1]
+                                        .time_calibrated > 0. &&
+                                detector_setup.detectors[n_detector_2]
+                                        .channels[n_channel_2]
+                                        .time_calibrated > 0.) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1]
                                     [n_detector_2 - n_detector_1 - 1]
