@@ -59,7 +59,7 @@ struct Channel {
         time_vs_time_RF_calibrated;
     const double amplitude_threshold;
 
-    void calibrate(const int n_entry);
+    void calibrate(const long long n_entry);
     double get_amplitude() const { return module->get_amplitude(leaf); }
     double get_time() const { return module->get_time(leaf); }
     double get_timestamp() const { return module->get_timestamp(leaf); }

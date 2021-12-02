@@ -13,7 +13,7 @@ Channel::polynomial_calibration(double uncalibrated,
     return calibrated;
 }
 
-void Channel::calibrate(const int n_entry) {
+void Channel::calibrate(const long long n_entry) {
     energy_calibrated = 0.;
     if (!isnan(module->get_amplitude(leaf))) {
         for (auto ene_cal_par : energy_calibration_parameters) {

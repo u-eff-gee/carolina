@@ -18,7 +18,7 @@ using std::endl;
 
 #include "progress_printer.hpp"
 
-ProgressPrinter::ProgressPrinter(const long ne, const double ui)
+ProgressPrinter::ProgressPrinter(const long long ne, const double ui)
     : start_time(time(nullptr)), n_entries(ne),
       inverse_n_entries(1. / (double)ne), update_increment(ui),
       current_percentage(ui) {
@@ -26,7 +26,7 @@ ProgressPrinter::ProgressPrinter(const long ne, const double ui)
          << " entries." << endl;
 }
 
-void ProgressPrinter::operator()(const long index) {
+void ProgressPrinter::operator()(const long long index) {
     const double percentage = index * inverse_n_entries;
 
     if (percentage >= current_percentage) {

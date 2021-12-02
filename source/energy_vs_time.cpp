@@ -38,8 +38,8 @@ int main(int argc, char **argv) {
         tree->Add(input_file.c_str());
     }
 
-    const int first = vm["first"].as<int>();
-    const int last =
+    const long long first = vm["first"].as<int>();
+    const long long last =
         vm["last"].as<int>() == 0 ? tree->GetEntries() : vm["last"].as<int>();
 
     if (first > last) {
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    for (int i = first; i <= last; ++i) {
+    for (long long i = first; i <= last; ++i) {
         progress_printer(i - first);
 
         tree->GetEntry(i);
@@ -94,11 +94,13 @@ int main(int argc, char **argv) {
                  ++n_channel) {
                 if (!isnan(detector_setup.detectors[n_detector]
                                .channels[n_channel]
-                               .energy_calibrated) && detector_setup.detectors[n_detector]
-                               .channels[n_channel]
-                               .time_vs_time_RF_gate(detector_setup.detectors[n_detector]
-                               .channels[n_channel]
-                               .time_vs_time_RF_calibrated)) {
+                               .energy_calibrated) &&
+                    detector_setup.detectors[n_detector]
+                        .channels[n_channel]
+                        .time_vs_time_RF_gate(
+                            detector_setup.detectors[n_detector]
+                                .channels[n_channel]
+                                .time_vs_time_RF_calibrated)) {
                     energy_vs_time_histograms[n_detector][n_channel]->Fill(
                         detector_setup.detectors[n_detector]
                             .channels[n_channel]
