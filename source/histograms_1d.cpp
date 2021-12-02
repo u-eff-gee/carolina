@@ -160,7 +160,13 @@ int main(int argc, char **argv) {
                  ++n_channel_1) {
                 if (!isnan(detector_setup.detectors[n_detector_1]
                                .channels[n_detector_1]
-                               .energy_calibrated)) {
+                               .energy_calibrated) &&
+                    detector_setup.detectors[n_detector_1]
+                        .channels[n_channel_1]
+                        .time_vs_time_RF_gate(
+                            detector_setup.detectors[n_detector_1]
+                                .channels[n_channel_1]
+                                .time_vs_time_RF_calibrated)) {
                     energy_histograms[n_detector_1][n_channel_1]->Fill(
                         detector_setup.detectors[n_detector_1]
                             .channels[n_channel_1]
@@ -177,21 +183,15 @@ int main(int argc, char **argv) {
                              detector_setup.detectors[n_detector_2]
                                  .channels.size();
                              ++n_channel_2) {
-                            if (!isnan(
-                                    detector_setup.detectors[n_detector_2]
-                                        .channels[n_detector_2]
-                                        .energy_calibrated) && // Ignore events
-                                                               // where none of
-                                                               // the two
-                                                               // detectors
-                                                               // triggered
-                                                               // (time = 0)
-                                detector_setup.detectors[n_detector_1]
-                                        .channels[n_channel_1]
-                                        .time_calibrated > 0. &&
+                            if (!isnan(detector_setup.detectors[n_detector_2]
+                                           .channels[n_detector_2]
+                                           .energy_calibrated) &&
                                 detector_setup.detectors[n_detector_2]
-                                        .channels[n_channel_2]
-                                        .time_calibrated > 0.) {
+                                    .channels[n_channel_2]
+                                    .time_vs_time_RF_gate(
+                                        detector_setup.detectors[n_detector_2]
+                                            .channels[n_channel_2]
+                                            .time_vs_time_RF_calibrated)) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1]
                                     [n_detector_2 - n_detector_1 - 1]

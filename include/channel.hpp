@@ -36,10 +36,12 @@ struct Channel {
         const string name, const shared_ptr<Module> module, const size_t leaf,
         const vector<pair<int, vector<double>>> energy_calibration_parameters,
         const function<double(double)> time_calibration,
+        const function<bool(double)> time_vs_time_RF_gate,
         const double amplitude_threshold = 0.)
         : name(name), module(module), leaf(leaf),
           energy_calibration_parameters(energy_calibration_parameters),
           time_calibration(time_calibration),
+          time_vs_time_RF_gate(time_vs_time_RF_gate),
           energy_calibrated(numeric_limits<double>::quiet_NaN()),
           time_calibrated(numeric_limits<double>::quiet_NaN()),
           timestamp_calibrated(numeric_limits<double>::quiet_NaN()),
@@ -51,6 +53,7 @@ struct Channel {
     const size_t leaf;
     vector<pair<int, vector<double>>> energy_calibration_parameters;
     const function<double(const double)> time_calibration;
+    const function<bool(const double)> time_vs_time_RF_gate;
 
     double energy_calibrated, time_calibrated, timestamp_calibrated,
         time_vs_time_RF_calibrated;

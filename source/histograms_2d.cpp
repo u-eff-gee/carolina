@@ -80,25 +80,36 @@ int main(int argc, char **argv) {
                      n_detector_1 <
                      coincidence_matrices[n_matrix].detectors_x.size();
                      ++n_detector_1) {
-                    for (size_t n_channel_x = 0;
-                         n_channel_x <
+                    for (size_t n_channel_1 = 0;
+                         n_channel_1 <
                          detector_setup.detectors[n_detector_1].channels.size();
-                         ++n_channel_x) {
+                         ++n_channel_1) {
                         if (!isnan(
                                 detector_setup
                                     .detectors[coincidence_matrices[n_matrix]
                                                    .detectors_x[n_detector_1]]
-                                    .channels[n_channel_x]
-                                    .energy_calibrated)) {
+                                    .channels[n_channel_1]
+                                    .energy_calibrated) &&
+                            detector_setup
+                                .detectors[coincidence_matrices[n_matrix]
+                                               .detectors_x[n_detector_1]]
+                                .channels[n_channel_1]
+                                .time_vs_time_RF_gate(
+                                    detector_setup
+                                        .detectors
+                                            [coincidence_matrices[n_matrix]
+                                                 .detectors_x[n_detector_1]]
+                                        .channels[n_channel_1]
+                                        .time_vs_time_RF_calibrated)) {
                             for (size_t n_detector_2 = n_detector_1 + 1;
                                  n_detector_2 < coincidence_matrices[n_matrix]
                                                     .detectors_x.size();
                                  ++n_detector_2) {
-                                for (size_t n_channel_y = 0;
-                                     n_channel_y <
+                                for (size_t n_channel_2 = 0;
+                                     n_channel_2 <
                                      detector_setup.detectors[n_detector_2]
                                          .channels.size();
-                                     ++n_channel_y) {
+                                     ++n_channel_2) {
                                     if (!isnan(
                                             detector_setup
                                                 .detectors
@@ -106,8 +117,22 @@ int main(int argc, char **argv) {
                                                          [n_matrix]
                                                              .detectors_x
                                                                  [n_detector_2]]
-                                                .channels[n_channel_y]
-                                                .energy_calibrated)) {
+                                                .channels[n_channel_2]
+                                                .energy_calibrated) &&
+                                        detector_setup
+                                            .detectors
+                                                [coincidence_matrices[n_matrix]
+                                                     .detectors_x[n_detector_2]]
+                                            .channels[n_channel_2]
+                                            .time_vs_time_RF_gate(
+                                                detector_setup
+                                                    .detectors
+                                                        [coincidence_matrices
+                                                             [n_matrix]
+                                                                 .detectors_x
+                                                                     [n_detector_2]]
+                                                    .channels[n_channel_2]
+                                                    .time_vs_time_RF_calibrated)) {
                                         coincidence_histograms[n_matrix]->Fill(
                                             detector_setup
                                                 .detectors
@@ -115,7 +140,7 @@ int main(int argc, char **argv) {
                                                          [n_matrix]
                                                              .detectors_x
                                                                  [n_detector_1]]
-                                                .channels[n_channel_x]
+                                                .channels[n_channel_1]
                                                 .energy_calibrated,
                                             detector_setup
                                                 .detectors
@@ -123,7 +148,7 @@ int main(int argc, char **argv) {
                                                          [n_matrix]
                                                              .detectors_x
                                                                  [n_detector_2]]
-                                                .channels[n_channel_y]
+                                                .channels[n_channel_2]
                                                 .energy_calibrated);
                                         coincidence_histograms[n_matrix]->Fill(
                                             detector_setup
@@ -132,7 +157,7 @@ int main(int argc, char **argv) {
                                                          [n_matrix]
                                                              .detectors_x
                                                                  [n_detector_2]]
-                                                .channels[n_channel_y]
+                                                .channels[n_channel_2]
                                                 .energy_calibrated,
                                             detector_setup
                                                 .detectors
@@ -140,7 +165,7 @@ int main(int argc, char **argv) {
                                                          [n_matrix]
                                                              .detectors_x
                                                                  [n_detector_1]]
-                                                .channels[n_channel_x]
+                                                .channels[n_channel_1]
                                                 .energy_calibrated);
                                     }
                                 }

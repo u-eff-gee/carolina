@@ -53,6 +53,13 @@ vector<Detector> detectors{
                                                 (energy - 5.96228695e+02)));
                  }
              },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 20.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -79,6 +86,13 @@ vector<Detector> detectors{
                                                 (energy - 1.95964658e+03)));
                  }
              },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 20.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -105,6 +119,13 @@ vector<Detector> detectors{
                                                 (energy - 2.02533142e+03)));
                  }
              },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 20.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -131,6 +152,13 @@ vector<Detector> detectors{
                                                 (energy - 2.12618155e+03)));
                  }
              },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 20.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 5.},
         },
         labr,
@@ -148,6 +176,13 @@ vector<Detector> detectors{
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 150.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -165,6 +200,13 @@ vector<Detector> detectors{
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 150.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -182,6 +224,13 @@ vector<Detector> detectors{
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 150.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
@@ -199,6 +248,13 @@ vector<Detector> detectors{
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
+             .time_vs_time_RF_gate =
+                 [](const double time_vs_time_RF) {
+                     if (abs(time_vs_time_RF - 180.) < 150.) {
+                         return true;
+                     }
+                     return false;
+                 },
              .amplitude_threshold = 20.},
         },
         hpge,
