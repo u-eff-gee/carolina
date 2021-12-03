@@ -46,7 +46,8 @@ void CommandLineParser::operator()(int argc, char *argv[], int &status) {
     }
 }
 
-TChain* CommandLineParser::set_up_tree(long long &first, long long &last) const {
+TChain *CommandLineParser::set_up_tree(long long &first,
+                                       long long &last) const {
     TChain *tree =
         new TChain(find_tree_in_file(vm["input_file"].as<vector<string>>()[0],
                                      vm["tree"].as<string>())

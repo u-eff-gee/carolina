@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     po::variables_map vm = command_line_parser.get_variables_map();
 
     long long first, last;
-    TChain* tree = command_line_parser.set_up_tree(first, last);
+    TChain *tree = command_line_parser.set_up_tree(first, last);
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
