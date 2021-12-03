@@ -16,6 +16,7 @@ add_compile_options(-Wall -Wextra)
 add_subdirectory(source)
 
 configure_file(include/calibrate_tree.hpp.in include/calibrate_tree.hpp)
+configure_file(include/energy_vs_event_number.hpp.in include/energy_vs_event_number.hpp)
 configure_file(include/energy_vs_time.hpp.in include/energy_vs_time.hpp)
 configure_file(include/histograms_1d.hpp.in include/histograms_1d.hpp)
 configure_file(include/histograms_1d_raw.hpp.in include/histograms_1d_raw.hpp)
