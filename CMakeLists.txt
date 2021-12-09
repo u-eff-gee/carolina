@@ -9,7 +9,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(ROOT REQUIRED)
 include(${ROOT_USE_FILE})
 
-set(DETECTOR_SETUP "analysis.hpp" CACHE STRING "Set name of header file in ${CMAKE_SOURCE_DIR}/include/ that contains the analysis configuration. Default: 'analysis.hpp'.")
+set(ANALYSIS "analysis.hpp" CACHE STRING "Set name of header file in ${CMAKE_SOURCE_DIR}/include/ that contains the analysis configuration. Default: 'analysis.hpp'.")
 
 add_compile_options(-Wall -Wextra)
 
