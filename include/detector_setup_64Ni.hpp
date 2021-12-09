@@ -271,4 +271,4 @@ const vector<CoincidenceMatrix> coincidence_matrices{
      {1024, -8., 16376.}},
 };
 
-DetectorSetup detector_setup(modules, detector_groups, detectors);
+DetectorSetup detector_setup(modules, detector_groups, detectors, coincidence_matrices);
