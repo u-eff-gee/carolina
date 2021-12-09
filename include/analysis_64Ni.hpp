@@ -10,7 +10,7 @@ using std::shared_ptr;
 
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
-#include "detector_setup.hpp"
+#include "analysis.hpp"
 #include "sis3316.hpp"
 
 DetectorGroup hpge{.name = "hpge",
@@ -271,4 +271,5 @@ const vector<CoincidenceMatrix> coincidence_matrices{
      {1024, -8., 16376.}},
 };
 
-DetectorSetup detector_setup(modules, detector_groups, detectors, coincidence_matrices);
+Analysis analysis(modules, detector_groups, detectors,
+                             coincidence_matrices);

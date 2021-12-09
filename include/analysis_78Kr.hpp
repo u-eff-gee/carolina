@@ -6,7 +6,7 @@ using std::numeric_limits;
 
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
-#include "detector_setup.hpp"
+#include "analysis.hpp"
 #include "mdpp16.hpp"
 
 DetectorGroup clover{.name = "clover",
@@ -463,4 +463,5 @@ vector<Detector> detectors{
 
 const vector<CoincidenceMatrix> coincidence_matrices{};
 
-DetectorSetup detector_setup(modules, detector_groups, detectors, coincidence_matrices);
+Analysis analysis(modules, detector_groups, detectors,
+                             coincidence_matrices);

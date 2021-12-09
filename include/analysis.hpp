@@ -9,8 +9,8 @@ using std::vector;
 #include "detector_group.hpp"
 #include "module.hpp"
 
-struct DetectorSetup {
-    DetectorSetup(vector<shared_ptr<Module>> modules,
+struct Analysis {
+    Analysis(vector<shared_ptr<Module>> modules,
                   const vector<DetectorGroup> detector_groups,
                   vector<Detector> detectors,
                   const vector<CoincidenceMatrix> coincidence_matrices)

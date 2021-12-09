@@ -33,32 +33,32 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
-    detector_setup.activate_branches(tree);
-    detector_setup.register_branches(tree);
+    analysis.activate_branches(tree);
+    analysis.register_branches(tree);
 
     vector<vector<TH2D *>> energy_vs_time_histograms;
     string histogram_name;
 
-    for (size_t n_detector = 0; n_detector < detector_setup.detectors.size();
+    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
         energy_vs_time_histograms.push_back(vector<TH2D *>());
-        for (auto channel : detector_setup.detectors[n_detector].channels) {
+        for (auto channel : analysis.detectors[n_detector].channels) {
             histogram_name =
-                detector_setup.detectors[n_detector].name + "_" + channel.name;
+                analysis.detectors[n_detector].name + "_" + channel.name;
             energy_vs_time_histograms[n_detector].push_back(new TH2D(
                 histogram_name.c_str(), histogram_name.c_str(),
-                detector_setup.detectors[n_detector]
+                analysis.detectors[n_detector]
                         .group.energy_histogram_properties.n_bins /
                     8,
-                detector_setup.detectors[n_detector]
+                analysis.detectors[n_detector]
                     .group.energy_histogram_properties.minimum,
-                detector_setup.detectors[n_detector]
+                analysis.detectors[n_detector]
                     .group.energy_histogram_properties.maximum,
-                detector_setup.detectors[n_detector]
+                analysis.detectors[n_detector]
                     .group.time_difference_histogram_properties.n_bins,
-                detector_setup.detectors[n_detector]
+                analysis.detectors[n_detector]
                     .group.time_difference_histogram_properties.minimum,
-                detector_setup.detectors[n_detector]
+                analysis.detectors[n_detector]
                     .group.time_difference_histogram_properties.maximum));
         }
     }
@@ -69,25 +69,25 @@ int main(int argc, char **argv) {
         tree->GetEntry(i);
 
         for (size_t n_detector = 0;
-             n_detector < detector_setup.detectors.size(); ++n_detector) {
+             n_detector < analysis.detectors.size(); ++n_detector) {
             for (size_t n_channel = 0;
                  n_channel <
-                 detector_setup.detectors[n_detector].channels.size();
+                 analysis.detectors[n_detector].channels.size();
                  ++n_channel) {
-                if (!isnan(detector_setup.detectors[n_detector]
+                if (!isnan(analysis.detectors[n_detector]
                                .channels[n_channel]
                                .energy_calibrated) &&
-                    detector_setup.detectors[n_detector]
+                    analysis.detectors[n_detector]
                         .channels[n_channel]
                         .time_vs_time_RF_gate(
-                            detector_setup.detectors[n_detector]
+                            analysis.detectors[n_detector]
                                 .channels[n_channel]
                                 .time_vs_time_RF_calibrated)) {
                     energy_vs_time_histograms[n_detector][n_channel]->Fill(
-                        detector_setup.detectors[n_detector]
+                        analysis.detectors[n_detector]
                             .channels[n_channel]
                             .energy_calibrated,
-                        detector_setup.detectors[n_detector]
+                        analysis.detectors[n_detector]
                             .channels[n_channel]
                             .time_calibrated);
                 }
@@ -97,10 +97,10 @@ int main(int argc, char **argv) {
 
     TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
 
-    for (size_t n_detector = 0; n_detector < detector_setup.detectors.size();
+    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
         for (size_t n_channel = 0;
-             n_channel < detector_setup.detectors[n_detector].channels.size();
+             n_channel < analysis.detectors[n_detector].channels.size();
              ++n_channel) {
             energy_vs_time_histograms[n_detector][n_channel]->Write();
         }

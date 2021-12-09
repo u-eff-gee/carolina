@@ -31,23 +31,23 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
-    detector_setup.activate_branches(tree);
-    detector_setup.register_branches(tree);
+    analysis.activate_branches(tree);
+    analysis.register_branches(tree);
 
     vector<TH2D *> coincidence_histograms;
     string histogram_name;
 
-    for (size_t n_matrix = 0; n_matrix < detector_setup.coincidence_matrices.size();
-         ++n_matrix) {
-        coincidence_histograms.push_back(
-            new TH2D(detector_setup.coincidence_matrices[n_matrix].name.c_str(),
-                     detector_setup.coincidence_matrices[n_matrix].name.c_str(),
-                     detector_setup.coincidence_matrices[n_matrix].x_axis.n_bins,
-                     detector_setup.coincidence_matrices[n_matrix].x_axis.minimum,
-                     detector_setup.coincidence_matrices[n_matrix].x_axis.maximum,
-                     detector_setup.coincidence_matrices[n_matrix].y_axis.n_bins,
-                     detector_setup.coincidence_matrices[n_matrix].y_axis.minimum,
-                     detector_setup.coincidence_matrices[n_matrix].y_axis.maximum));
+    for (size_t n_matrix = 0;
+         n_matrix < analysis.coincidence_matrices.size(); ++n_matrix) {
+        coincidence_histograms.push_back(new TH2D(
+            analysis.coincidence_matrices[n_matrix].name.c_str(),
+            analysis.coincidence_matrices[n_matrix].name.c_str(),
+            analysis.coincidence_matrices[n_matrix].x_axis.n_bins,
+            analysis.coincidence_matrices[n_matrix].x_axis.minimum,
+            analysis.coincidence_matrices[n_matrix].x_axis.maximum,
+            analysis.coincidence_matrices[n_matrix].y_axis.n_bins,
+            analysis.coincidence_matrices[n_matrix].y_axis.minimum,
+            analysis.coincidence_matrices[n_matrix].y_axis.maximum));
     }
 
     for (long long i = first; i <= last; ++i) {
@@ -55,98 +55,113 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
-        for (size_t n_matrix = 0; n_matrix < detector_setup.coincidence_matrices.size();
+        for (size_t n_matrix = 0;
+             n_matrix < analysis.coincidence_matrices.size();
              ++n_matrix) {
-            if (!detector_setup.coincidence_matrices[n_matrix].detectors_y.size()) {
+            if (!analysis.coincidence_matrices[n_matrix]
+                     .detectors_y.size()) {
                 for (size_t n_detector_1 = 0;
                      n_detector_1 <
-                     detector_setup.coincidence_matrices[n_matrix].detectors_x.size();
+                     analysis.coincidence_matrices[n_matrix]
+                         .detectors_x.size();
                      ++n_detector_1) {
                     for (size_t n_channel_1 = 0;
                          n_channel_1 <
-                         detector_setup.detectors[n_detector_1].channels.size();
+                         analysis.detectors[n_detector_1].channels.size();
                          ++n_channel_1) {
-                        if (!isnan(
-                                detector_setup
-                                    .detectors[detector_setup.coincidence_matrices[n_matrix]
-                                                   .detectors_x[n_detector_1]]
-                                    .channels[n_channel_1]
-                                    .energy_calibrated) &&
-                            detector_setup
-                                .detectors[detector_setup.coincidence_matrices[n_matrix]
+                        if (!isnan(analysis
+                                       .detectors
+                                           [analysis
+                                                .coincidence_matrices[n_matrix]
+                                                .detectors_x[n_detector_1]]
+                                       .channels[n_channel_1]
+                                       .energy_calibrated) &&
+                            analysis
+                                .detectors[analysis
+                                               .coincidence_matrices[n_matrix]
                                                .detectors_x[n_detector_1]]
                                 .channels[n_channel_1]
                                 .time_vs_time_RF_gate(
-                                    detector_setup
+                                    analysis
                                         .detectors
-                                            [detector_setup.coincidence_matrices[n_matrix]
+                                            [analysis
+                                                 .coincidence_matrices[n_matrix]
                                                  .detectors_x[n_detector_1]]
                                         .channels[n_channel_1]
                                         .time_vs_time_RF_calibrated)) {
                             for (size_t n_detector_2 = n_detector_1 + 1;
-                                 n_detector_2 < detector_setup.coincidence_matrices[n_matrix]
-                                                    .detectors_x.size();
+                                 n_detector_2 <
+                                 analysis.coincidence_matrices[n_matrix]
+                                     .detectors_x.size();
                                  ++n_detector_2) {
                                 for (size_t n_channel_2 = 0;
                                      n_channel_2 <
-                                     detector_setup.detectors[n_detector_2]
+                                     analysis.detectors[n_detector_2]
                                          .channels.size();
                                      ++n_channel_2) {
                                     if (!isnan(
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_2]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_x
+                                                             [n_detector_2]]
                                                 .channels[n_channel_2]
                                                 .energy_calibrated) &&
-                                        detector_setup
+                                        analysis
                                             .detectors
-                                                [detector_setup.coincidence_matrices[n_matrix]
+                                                [analysis
+                                                     .coincidence_matrices
+                                                         [n_matrix]
                                                      .detectors_x[n_detector_2]]
                                             .channels[n_channel_2]
                                             .time_vs_time_RF_gate(
-                                                detector_setup
+                                                analysis
                                                     .detectors
-                                                        [detector_setup.coincidence_matrices
-                                                             [n_matrix]
-                                                                 .detectors_x
-                                                                     [n_detector_2]]
+                                                        [analysis
+                                                             .coincidence_matrices
+                                                                 [n_matrix]
+                                                             .detectors_x
+                                                                 [n_detector_2]]
                                                     .channels[n_channel_2]
                                                     .time_vs_time_RF_calibrated)) {
                                         coincidence_histograms[n_matrix]->Fill(
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_1]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_x
+                                                             [n_detector_1]]
                                                 .channels[n_channel_1]
                                                 .energy_calibrated,
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_2]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_x
+                                                             [n_detector_2]]
                                                 .channels[n_channel_2]
                                                 .energy_calibrated);
                                         coincidence_histograms[n_matrix]->Fill(
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_2]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_x
+                                                             [n_detector_2]]
                                                 .channels[n_channel_2]
                                                 .energy_calibrated,
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_1]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_x
+                                                             [n_detector_1]]
                                                 .channels[n_channel_1]
                                                 .energy_calibrated);
                                     }
@@ -158,51 +173,57 @@ int main(int argc, char **argv) {
             } else {
                 for (size_t n_detector_x = 0;
                      n_detector_x <
-                     detector_setup.coincidence_matrices[n_matrix].detectors_x.size();
+                     analysis.coincidence_matrices[n_matrix]
+                         .detectors_x.size();
                      ++n_detector_x) {
                     for (size_t n_channel_x = 0;
                          n_channel_x <
-                         detector_setup.detectors[n_detector_x].channels.size();
+                         analysis.detectors[n_detector_x].channels.size();
                          ++n_channel_x) {
-                        if (!isnan(
-                                detector_setup
-                                    .detectors[detector_setup.coincidence_matrices[n_matrix]
-                                                   .detectors_x[n_detector_x]]
-                                    .channels[n_channel_x]
-                                    .energy_calibrated)) {
+                        if (!isnan(analysis
+                                       .detectors
+                                           [analysis
+                                                .coincidence_matrices[n_matrix]
+                                                .detectors_x[n_detector_x]]
+                                       .channels[n_channel_x]
+                                       .energy_calibrated)) {
                             for (size_t n_detector_y = 0;
-                                 n_detector_y < detector_setup.coincidence_matrices[n_matrix]
-                                                    .detectors_y.size();
+                                 n_detector_y <
+                                 analysis.coincidence_matrices[n_matrix]
+                                     .detectors_y.size();
                                  ++n_detector_y) {
                                 for (size_t n_channel_y = 0;
                                      n_channel_y <
-                                     detector_setup.detectors[n_detector_y]
+                                     analysis.detectors[n_detector_y]
                                          .channels.size();
                                      ++n_channel_y) {
                                     if (!isnan(
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_y
-                                                                 [n_detector_y]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_y
+                                                             [n_detector_y]]
                                                 .channels[n_channel_y]
                                                 .energy_calibrated)) {
                                         coincidence_histograms[n_matrix]->Fill(
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_x]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_x
+                                                             [n_detector_x]]
                                                 .channels[n_channel_x]
                                                 .energy_calibrated,
-                                            detector_setup
+                                            analysis
                                                 .detectors
-                                                    [detector_setup.coincidence_matrices
-                                                         [n_matrix]
-                                                             .detectors_y
-                                                                 [n_detector_y]]
+                                                    [analysis
+                                                         .coincidence_matrices
+                                                             [n_matrix]
+                                                         .detectors_y
+                                                             [n_detector_y]]
                                                 .channels[n_channel_y]
                                                 .energy_calibrated);
                                     }

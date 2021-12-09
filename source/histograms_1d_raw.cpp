@@ -35,24 +35,24 @@ int main(int argc, char **argv) {
     string histogram_name;
 
     for (size_t n_detector_1 = 0;
-         n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
+         n_detector_1 < analysis.detectors.size(); ++n_detector_1) {
         energy_raw_histograms.push_back(vector<TH1D *>());
         for (size_t n_channel_1 = 0;
              n_channel_1 <
-             detector_setup.detectors[n_detector_1].channels.size();
+             analysis.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
 
-            histogram_name = detector_setup.detectors[n_detector_1].name + "_" +
-                             detector_setup.detectors[n_detector_1]
+            histogram_name = analysis.detectors[n_detector_1].name + "_" +
+                             analysis.detectors[n_detector_1]
                                  .channels[n_channel_1]
                                  .name;
             energy_raw_histograms[n_detector_1].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         detector_setup.detectors[n_detector_1]
+                         analysis.detectors[n_detector_1]
                              .group.energy_raw_histogram_properties.n_bins,
-                         detector_setup.detectors[n_detector_1]
+                         analysis.detectors[n_detector_1]
                              .group.energy_raw_histogram_properties.minimum,
-                         detector_setup.detectors[n_detector_1]
+                         analysis.detectors[n_detector_1]
                              .group.energy_raw_histogram_properties.maximum));
         }
     }
@@ -63,22 +63,22 @@ int main(int argc, char **argv) {
         tree->GetEntry(i);
 
         for (size_t n_detector_1 = 0;
-             n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
+             n_detector_1 < analysis.detectors.size(); ++n_detector_1) {
             for (size_t n_channel_1 = 0;
                  n_channel_1 <
-                 detector_setup.detectors[n_detector_1].channels.size();
+                 analysis.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
-                if (detector_setup.detectors[n_detector_1]
+                if (analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_amplitude() >
-                        detector_setup.detectors[n_detector_1]
+                        analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .amplitude_threshold &&
-                    detector_setup.detectors[n_detector_1]
+                    analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_time() > 0.) {
                     energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
-                        detector_setup.detectors[n_detector_1]
+                        analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_amplitude());
                 }
@@ -89,10 +89,10 @@ int main(int argc, char **argv) {
     TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
 
     for (size_t n_detector_1 = 0;
-         n_detector_1 < detector_setup.detectors.size(); ++n_detector_1) {
+         n_detector_1 < analysis.detectors.size(); ++n_detector_1) {
         for (size_t n_channel_1 = 0;
              n_channel_1 <
-             detector_setup.detectors[n_detector_1].channels.size();
+             analysis.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
             energy_raw_histograms[n_detector_1][n_channel_1]->Write();
         }

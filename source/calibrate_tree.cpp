@@ -35,15 +35,15 @@ int main(int argc, char **argv) {
         modules[i]->register_branches(tree);
     }
 
-    detector_setup.create_branches(tree_calibrated);
+    analysis.create_branches(tree_calibrated);
 
     for (long long i = first; i <= last; ++i) {
         progress_printer(i - first);
 
         tree->GetEntry(i);
-        detector_setup.calibrate(i);
+        analysis.calibrate(i);
         tree_calibrated->Fill();
-        detector_setup.reset();
+        analysis.reset();
     }
 
     TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
