@@ -15,6 +15,7 @@ struct MDPP16 : public Module {
     Branch<double, 16> time;
     Branch<double, 16> timestamp;
 
+    void activate_branches(TTree *tree) override final;
     void register_branches(TTree *tree) override final;
     vector<string> get_branch_names(const size_t leaf) const override final;
     double get_amplitude(const size_t leaf) const override final {
@@ -23,6 +24,10 @@ struct MDPP16 : public Module {
     double get_time(const size_t leaf) const override final {
         return time.leaves[leaf];
     }
+    double get_time_RF([
+        [maybe_unused]] const size_t leaf) const override final {
+        return 0.;
+    };
     double get_timestamp(const size_t leaf) const override final {
         return timestamp.leaves[leaf];
     }

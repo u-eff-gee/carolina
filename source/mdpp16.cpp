@@ -4,6 +4,12 @@ using std::to_string;
 
 #include "mdpp16.hpp"
 
+void MDPP16::activate_branches(TTree *tree) {
+    tree->SetBranchStatus(amplitude.name.c_str(), 1);
+    tree->SetBranchStatus(time.name.c_str(), 1);
+    tree->SetBranchStatus(timestamp.name.c_str(), 1);
+}
+
 vector<string> MDPP16::get_branch_names(const size_t leaf) const {
     vector<string> branch_names;
 
