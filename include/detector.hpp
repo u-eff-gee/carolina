@@ -17,18 +17,23 @@ using std::vector;
 
 struct Detector {
     Detector(const string name, const vector<Channel> channels,
-             const DetectorGroup group,
-             const double addback_coincidence_window =
-                 numeric_limits<double>::max());
+             const DetectorGroup group);
+    Detector(
+        const string name, const vector<Channel> channels,
+        const DetectorGroup group,
+        const vector<vector<pair<double, double>>> addback_coincidence_windows);
 
     const string name;
     vector<Channel> channels;
     const DetectorGroup group;
-    const double addback_coincidence_window;
+    vector<vector<pair<double, double>>> addback_coincidence_windows;
 
-    vector<bool> added_back;
+    vector<bool> skip_channel;
     vector<double> addback_energies;
     vector<double> addback_times;
+
+    double addback_energy;
+    double addback_time;
 
     void addback();
     void activate_branches(TTree *tree);
