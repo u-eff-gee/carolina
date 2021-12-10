@@ -8,9 +8,9 @@ using std::numeric_limits;
 
 using std::shared_ptr;
 
+#include "analysis.hpp"
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
-#include "analysis.hpp"
 #include "sis3316.hpp"
 
 DetectorGroup hpge{.name = "hpge",
@@ -37,11 +37,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 0,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {2.685975e+02, 1.644962e+00 * 16,
-                       2.248462e-04 * 16 * 16}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 2.685975e+02 + 1.644962e+00 * 16 * amplitude +
+                            2.248462e-04 * 16 * 16 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              [](const double energy) {
@@ -70,11 +70,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 1,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {2.018431e+02, 1.140523e+00 * 16,
-                       3.438323e-04 * 16 * 16}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 2.018431e+02 + 1.140523e+00 * 16 * amplitude +
+                            3.438323e-04 * 16 * 16 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              [](const double energy) {
@@ -103,11 +103,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 2,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {2.137622e+02, 2.114113e+00 * 16,
-                       5.824968e-05 * 16 * 16}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 2.137622e+02 + 2.114113e+00 * 16 * amplitude +
+                            5.824968e-05 * 16 * 16 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              [](const double energy) {
@@ -136,11 +136,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 3,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {1.765400e+02, 1.618102e+00 * 16,
-                       4.511530e-04 * 16 * 16}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 1.765400e+02 + 1.618102e+00 * 16 * amplitude +
+                            4.511530e-04 * 16 * 16 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              [](const double energy) {
@@ -169,10 +169,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 4,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {5.570186e+00, 6.799282e-01, 3.132755e-07}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 5.570186e+00 + 6.799282e-01 * amplitude +
+                            3.132755e-07 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
@@ -193,10 +194,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 5,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {-1.084339e+00, 6.977068e-01, -1.894253e-07}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return -1.084339e+00 + 6.977068e-01 * amplitude +
+                            -1.894253e-07 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
@@ -217,10 +219,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 6,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {2.161040e+01, 7.134485e-01, 2.873566e-06}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 2.161040e+01 + 7.134485e-01 * amplitude +
+                            2.873566e-06 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
@@ -241,10 +244,11 @@ vector<Detector> detectors{
             {.name = "E",
              .module = modules[0],
              .leaf = 7,
-             .energy_calibration_parameters =
-                 {
-                     {numeric_limits<int>::max(),
-                      {8.355447e+00, 7.510629e-01, 1.469643e-06}}, // Run 531
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) {
+                     return 8.355447e+00 + 7.510629e-01 * amplitude +
+                            1.469643e-06 * amplitude * amplitude;
                  },
              .time_calibration = // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
@@ -271,5 +275,4 @@ const vector<CoincidenceMatrix> coincidence_matrices{
      {1024, -8., 16376.}},
 };
 
-Analysis analysis(modules, detector_groups, detectors,
-                             coincidence_matrices);
+Analysis analysis(modules, detector_groups, detectors, coincidence_matrices);

@@ -68,11 +68,10 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
-        for (size_t n_detector = 0;
-             n_detector < analysis.detectors.size(); ++n_detector) {
+        for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+             ++n_detector) {
             for (size_t n_channel = 0;
-                 n_channel <
-                 analysis.detectors[n_detector].channels.size();
+                 n_channel < analysis.detectors[n_detector].channels.size();
                  ++n_channel) {
                 if (!isnan(analysis.detectors[n_detector]
                                .channels[n_channel]

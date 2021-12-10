@@ -34,18 +34,16 @@ int main(int argc, char **argv) {
     vector<vector<TH1D *>> energy_raw_histograms;
     string histogram_name;
 
-    for (size_t n_detector_1 = 0;
-         n_detector_1 < analysis.detectors.size(); ++n_detector_1) {
+    for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
+         ++n_detector_1) {
         energy_raw_histograms.push_back(vector<TH1D *>());
         for (size_t n_channel_1 = 0;
-             n_channel_1 <
-             analysis.detectors[n_detector_1].channels.size();
+             n_channel_1 < analysis.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
 
-            histogram_name = analysis.detectors[n_detector_1].name + "_" +
-                             analysis.detectors[n_detector_1]
-                                 .channels[n_channel_1]
-                                 .name;
+            histogram_name =
+                analysis.detectors[n_detector_1].name + "_" +
+                analysis.detectors[n_detector_1].channels[n_channel_1].name;
             energy_raw_histograms[n_detector_1].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
                          analysis.detectors[n_detector_1]
@@ -62,18 +60,16 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
-        for (size_t n_detector_1 = 0;
-             n_detector_1 < analysis.detectors.size(); ++n_detector_1) {
+        for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
+             ++n_detector_1) {
             for (size_t n_channel_1 = 0;
-                 n_channel_1 <
-                 analysis.detectors[n_detector_1].channels.size();
+                 n_channel_1 < analysis.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
                 if (analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
-                            .get_amplitude() >
-                        analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .amplitude_threshold &&
+                            .get_amplitude() > analysis.detectors[n_detector_1]
+                                                   .channels[n_channel_1]
+                                                   .amplitude_threshold &&
                     analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .get_time() > 0.) {
@@ -88,11 +84,10 @@ int main(int argc, char **argv) {
 
     TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
 
-    for (size_t n_detector_1 = 0;
-         n_detector_1 < analysis.detectors.size(); ++n_detector_1) {
+    for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
+         ++n_detector_1) {
         for (size_t n_channel_1 = 0;
-             n_channel_1 <
-             analysis.detectors[n_detector_1].channels.size();
+             n_channel_1 < analysis.detectors[n_detector_1].channels.size();
              ++n_channel_1) {
             energy_raw_histograms[n_detector_1][n_channel_1]->Write();
         }

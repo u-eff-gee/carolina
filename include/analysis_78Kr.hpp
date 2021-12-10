@@ -4,9 +4,9 @@
 
 using std::numeric_limits;
 
+#include "analysis.hpp"
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
-#include "analysis.hpp"
 #include "mdpp16.hpp"
 
 DetectorGroup clover{.name = "clover",
@@ -33,8 +33,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[0],
              .leaf = 0,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -45,8 +46,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[0],
              .leaf = 1,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -57,8 +59,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[0],
              .leaf = 2,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -69,8 +72,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[0],
              .leaf = 3,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -87,8 +91,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[0],
              .leaf = 4,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -99,8 +104,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[0],
              .leaf = 5,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -111,8 +117,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[0],
              .leaf = 6,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -123,8 +130,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[0],
              .leaf = 7,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -141,8 +149,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[0],
              .leaf = 8,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -153,8 +162,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[0],
              .leaf = 9,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -165,8 +175,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[0],
              .leaf = 10,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -177,8 +188,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[0],
              .leaf = 11,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -195,8 +207,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[0],
              .leaf = 12,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -207,8 +220,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[0],
              .leaf = 13,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -219,8 +233,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[0],
              .leaf = 14,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -231,8 +246,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[0],
              .leaf = 15,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -249,8 +265,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[1],
              .leaf = 0,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -261,8 +278,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[1],
              .leaf = 1,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -273,8 +291,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[1],
              .leaf = 2,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -285,8 +304,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[1],
              .leaf = 3,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -303,8 +323,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[1],
              .leaf = 4,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -315,8 +336,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[1],
              .leaf = 5,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -327,8 +349,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[1],
              .leaf = 6,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -339,8 +362,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[1],
              .leaf = 7,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -357,8 +381,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[1],
              .leaf = 8,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -369,8 +394,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[1],
              .leaf = 9,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -381,8 +407,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[1],
              .leaf = 10,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -393,8 +420,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[1],
              .leaf = 11,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -411,8 +439,9 @@ vector<Detector> detectors{
             {.name = "E1",
              .module = modules[1],
              .leaf = 12,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -423,8 +452,9 @@ vector<Detector> detectors{
             {.name = "E2",
              .module = modules[1],
              .leaf = 13,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -435,8 +465,9 @@ vector<Detector> detectors{
             {.name = "E3",
              .module = modules[1],
              .leaf = 14,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -447,8 +478,9 @@ vector<Detector> detectors{
             {.name = "E4",
              .module = modules[1],
              .leaf = 15,
-             .energy_calibration_parameters = {{numeric_limits<int>::max(),
-                                                {0., 1.}}},
+             .energy_calibration =
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
              .time_calibration =
                  []([[maybe_unused]] const double energy) { return 1.; },
              .time_vs_time_RF_gate =
@@ -463,5 +495,4 @@ vector<Detector> detectors{
 
 const vector<CoincidenceMatrix> coincidence_matrices{};
 
-Analysis analysis(modules, detector_groups, detectors,
-                             coincidence_matrices);
+Analysis analysis(modules, detector_groups, detectors, coincidence_matrices);

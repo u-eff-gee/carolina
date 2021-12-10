@@ -37,17 +37,17 @@ int main(int argc, char **argv) {
     vector<TH2D *> coincidence_histograms;
     string histogram_name;
 
-    for (size_t n_matrix = 0;
-         n_matrix < analysis.coincidence_matrices.size(); ++n_matrix) {
-        coincidence_histograms.push_back(new TH2D(
-            analysis.coincidence_matrices[n_matrix].name.c_str(),
-            analysis.coincidence_matrices[n_matrix].name.c_str(),
-            analysis.coincidence_matrices[n_matrix].x_axis.n_bins,
-            analysis.coincidence_matrices[n_matrix].x_axis.minimum,
-            analysis.coincidence_matrices[n_matrix].x_axis.maximum,
-            analysis.coincidence_matrices[n_matrix].y_axis.n_bins,
-            analysis.coincidence_matrices[n_matrix].y_axis.minimum,
-            analysis.coincidence_matrices[n_matrix].y_axis.maximum));
+    for (size_t n_matrix = 0; n_matrix < analysis.coincidence_matrices.size();
+         ++n_matrix) {
+        coincidence_histograms.push_back(
+            new TH2D(analysis.coincidence_matrices[n_matrix].name.c_str(),
+                     analysis.coincidence_matrices[n_matrix].name.c_str(),
+                     analysis.coincidence_matrices[n_matrix].x_axis.n_bins,
+                     analysis.coincidence_matrices[n_matrix].x_axis.minimum,
+                     analysis.coincidence_matrices[n_matrix].x_axis.maximum,
+                     analysis.coincidence_matrices[n_matrix].y_axis.n_bins,
+                     analysis.coincidence_matrices[n_matrix].y_axis.minimum,
+                     analysis.coincidence_matrices[n_matrix].y_axis.maximum));
     }
 
     for (long long i = first; i <= last; ++i) {
@@ -56,26 +56,23 @@ int main(int argc, char **argv) {
         tree->GetEntry(i);
 
         for (size_t n_matrix = 0;
-             n_matrix < analysis.coincidence_matrices.size();
-             ++n_matrix) {
-            if (!analysis.coincidence_matrices[n_matrix]
-                     .detectors_y.size()) {
+             n_matrix < analysis.coincidence_matrices.size(); ++n_matrix) {
+            if (!analysis.coincidence_matrices[n_matrix].detectors_y.size()) {
                 for (size_t n_detector_1 = 0;
                      n_detector_1 <
-                     analysis.coincidence_matrices[n_matrix]
-                         .detectors_x.size();
+                     analysis.coincidence_matrices[n_matrix].detectors_x.size();
                      ++n_detector_1) {
                     for (size_t n_channel_1 = 0;
                          n_channel_1 <
                          analysis.detectors[n_detector_1].channels.size();
                          ++n_channel_1) {
-                        if (!isnan(analysis
-                                       .detectors
-                                           [analysis
-                                                .coincidence_matrices[n_matrix]
-                                                .detectors_x[n_detector_1]]
-                                       .channels[n_channel_1]
-                                       .energy_calibrated) &&
+                        if (!isnan(
+                                analysis
+                                    .detectors
+                                        [analysis.coincidence_matrices[n_matrix]
+                                             .detectors_x[n_detector_1]]
+                                    .channels[n_channel_1]
+                                    .energy_calibrated) &&
                             analysis
                                 .detectors[analysis
                                                .coincidence_matrices[n_matrix]
@@ -173,20 +170,19 @@ int main(int argc, char **argv) {
             } else {
                 for (size_t n_detector_x = 0;
                      n_detector_x <
-                     analysis.coincidence_matrices[n_matrix]
-                         .detectors_x.size();
+                     analysis.coincidence_matrices[n_matrix].detectors_x.size();
                      ++n_detector_x) {
                     for (size_t n_channel_x = 0;
                          n_channel_x <
                          analysis.detectors[n_detector_x].channels.size();
                          ++n_channel_x) {
-                        if (!isnan(analysis
-                                       .detectors
-                                           [analysis
-                                                .coincidence_matrices[n_matrix]
-                                                .detectors_x[n_detector_x]]
-                                       .channels[n_channel_x]
-                                       .energy_calibrated)) {
+                        if (!isnan(
+                                analysis
+                                    .detectors
+                                        [analysis.coincidence_matrices[n_matrix]
+                                             .detectors_x[n_detector_x]]
+                                    .channels[n_channel_x]
+                                    .energy_calibrated)) {
                             for (size_t n_detector_y = 0;
                                  n_detector_y <
                                  analysis.coincidence_matrices[n_matrix]

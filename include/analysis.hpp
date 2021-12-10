@@ -11,9 +11,9 @@ using std::vector;
 
 struct Analysis {
     Analysis(vector<shared_ptr<Module>> modules,
-                  const vector<DetectorGroup> detector_groups,
-                  vector<Detector> detectors,
-                  const vector<CoincidenceMatrix> coincidence_matrices)
+             const vector<DetectorGroup> detector_groups,
+             vector<Detector> detectors,
+             const vector<CoincidenceMatrix> coincidence_matrices)
         : modules(modules), detector_groups(detector_groups),
           detectors(detectors), coincidence_matrices(coincidence_matrices) {}
 

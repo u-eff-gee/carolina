@@ -32,14 +32,14 @@ using std::vector;
 #include "vme.hpp"
 
 struct Channel {
-    Channel(
-        const string name, const shared_ptr<Module> module, const size_t leaf,
-        const vector<pair<int, vector<double>>> energy_calibration_parameters,
-        const function<double(const double)> time_calibration,
-        const function<bool(const double)> time_vs_time_RF_gate,
-        const double amplitude_threshold = 0.)
+    Channel(const string name, const shared_ptr<Module> module,
+            const size_t leaf,
+            const function<double(const int, const double)> energy_calibration,
+            const function<double(const double)> time_calibration,
+            const function<bool(const double)> time_vs_time_RF_gate,
+            const double amplitude_threshold = 0.)
         : name(name), module(module), leaf(leaf),
-          energy_calibration_parameters(energy_calibration_parameters),
+          energy_calibration(energy_calibration),
           time_calibration(time_calibration),
           time_vs_time_RF_gate(time_vs_time_RF_gate),
           energy_calibrated(numeric_limits<double>::quiet_NaN()),
@@ -51,7 +51,7 @@ struct Channel {
     const string name;
     const shared_ptr<Module> module;
     const size_t leaf;
-    vector<pair<int, vector<double>>> energy_calibration_parameters;
+    const function<double(const int, const double)> energy_calibration;
     const function<double(const double)> time_calibration;
     const function<bool(const double)> time_vs_time_RF_gate;
 
@@ -65,7 +65,5 @@ struct Channel {
     double get_timestamp() const { return module->get_timestamp(leaf); }
     double get_time_RF() const { return module->get_time_RF(leaf); }
 
-    double polynomial_calibration(double uncalibrated,
-                                  vector<double> calibration_parameters) const;
     void reset();
 };
