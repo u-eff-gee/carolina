@@ -5,7 +5,7 @@
 #include "branch.hpp"
 #include "module.hpp"
 
-struct MDPP16 : public Module {
+struct MDPP16 final : public Module {
     MDPP16(const string amplitude_branch_name, const string time_branch_name,
            const string timestamp_branch_name, const double tdc_resolution)
         : Module(tdc_resolution), amplitude(amplitude_branch_name),

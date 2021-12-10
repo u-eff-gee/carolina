@@ -28,466 +28,370 @@ const vector<shared_ptr<Module>> modules = {
 
 vector<Detector> detectors{
     {
-        .name = "clover_1",
+        "clover_1",
         {
-            {.name = "E1",
-             .module = modules[0],
-             .leaf = 0,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[0],
-             .leaf = 1,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[0],
-             .leaf = 2,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[0],
-             .leaf = 3,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[0], 0,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[0], 1,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[0], 2,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[0], 3,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_3",
+        "clover_3",
         {
-            {.name = "E1",
-             .module = modules[0],
-             .leaf = 4,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[0],
-             .leaf = 5,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[0],
-             .leaf = 6,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[0],
-             .leaf = 7,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[0], 4,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[0], 5,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[0], 6,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[0], 7,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_5",
+        "clover_5",
         {
-            {.name = "E1",
-             .module = modules[0],
-             .leaf = 8,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[0],
-             .leaf = 9,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[0],
-             .leaf = 10,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[0],
-             .leaf = 11,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[0], 8,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[0], 9,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[0], 10,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[0], 11,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_7",
+        "clover_7",
         {
-            {.name = "E1",
-             .module = modules[0],
-             .leaf = 12,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[0],
-             .leaf = 13,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[0],
-             .leaf = 14,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[0],
-             .leaf = 15,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[0], 12,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[0], 13,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[0], 14,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[0], 15,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_B1",
+        "clover_B1",
         {
-            {.name = "E1",
-             .module = modules[1],
-             .leaf = 0,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[1],
-             .leaf = 1,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[1],
-             .leaf = 2,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[1],
-             .leaf = 3,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[1], 0,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[1], 1,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[1], 2,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[1], 3,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_B2",
+        "clover_B2",
         {
-            {.name = "E1",
-             .module = modules[1],
-             .leaf = 4,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[1],
-             .leaf = 5,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[1],
-             .leaf = 6,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[1],
-             .leaf = 7,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[1], 4,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[1], 5,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[1], 6,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[1], 7,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_B4",
+        "clover_B4",
         {
-            {.name = "E1",
-             .module = modules[1],
-             .leaf = 8,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[1],
-             .leaf = 9,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[1],
-             .leaf = 10,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[1],
-             .leaf = 11,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[1], 8,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[1], 9,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[1], 10,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[1], 11,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },
     {
-        .name = "clover_B5",
+        "clover_B5",
         {
-            {.name = "E1",
-             .module = modules[1],
-             .leaf = 12,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E2",
-             .module = modules[1],
-             .leaf = 13,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E3",
-             .module = modules[1],
-             .leaf = 14,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
-            {.name = "E4",
-             .module = modules[1],
-             .leaf = 15,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) { return amplitude; },
-             .time_calibration =
-                 []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 []([[maybe_unused]] const double time_vs_time_RF) {
-                     return true;
-                 },
-             .amplitude_threshold = 5.},
+            {"E1", modules[1], 12,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E2", modules[1], 13,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E3", modules[1], 14,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+            {"E4", modules[1], 15,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
         },
         clover,
     },

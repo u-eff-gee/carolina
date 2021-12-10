@@ -5,7 +5,7 @@
 #include "branch.hpp"
 #include "module.hpp"
 
-struct SIS3316 : public Module {
+struct SIS3316 final : public Module {
     SIS3316(const double tdc_resolution)
         : Module(tdc_resolution), amplitude_e1("e1"), amplitude_e2("e2"),
           time("time"), time_RF("time_RF"), timestamp("timestamp") {}

@@ -19,7 +19,8 @@ DetectorGroup hpge{.name = "hpge",
                    .time_difference_histogram_properties = {
                        8192, -4096. * 0.125, 4096. * 0.125}};
 DetectorGroup labr{
-    "labr", .energy_histogram_properties = {16384, -0.5, 16383.5},
+    .name = "labr",
+    .energy_histogram_properties = {16384, -0.5, 16383.5},
     .energy_raw_histogram_properties = {16384, -0.03125, 1023.96875},
     .time_difference_histogram_properties = {8192, -4096. * 0.125,
                                              4096. * 0.125}};
@@ -32,18 +33,15 @@ const vector<shared_ptr<Module>> modules = {
 
 vector<Detector> detectors{
     {
-        .name = "labr_1",
+        "labr_1",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 0,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 2.685975e+02 + 1.644962e+00 * 16 * amplitude +
-                            2.248462e-04 * 16 * 16 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 0,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 2.685975e+02 + 1.644962e+00 * 16 * amplitude +
+                        2.248462e-04 * 16 * 16 * amplitude * amplitude;
+             },
+             // Run 528
              [](const double energy) {
                  if (energy < 800. || energy > 1400.) {
                      return 1.;
@@ -53,30 +51,27 @@ vector<Detector> detectors{
                                                 (energy - 5.96228695e+02)));
                  }
              },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 20.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 5.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 20.) {
+                     return true;
+                 }
+                 return false;
+             },
+             5.},
         },
         labr,
     },
     {
-        .name = "labr_2",
+        "labr_2",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 1,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 2.018431e+02 + 1.140523e+00 * 16 * amplitude +
-                            3.438323e-04 * 16 * 16 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 1,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 2.018431e+02 + 1.140523e+00 * 16 * amplitude +
+                        3.438323e-04 * 16 * 16 * amplitude * amplitude;
+             },
+             // Run 528
              [](const double energy) {
                  if (energy < 800. || energy > 1400.) {
                      return 1.;
@@ -86,30 +81,27 @@ vector<Detector> detectors{
                                                 (energy - 1.95964658e+03)));
                  }
              },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 20.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 5.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 20.) {
+                     return true;
+                 }
+                 return false;
+             },
+             5.},
         },
         labr,
     },
     {
-        .name = "labr_3",
+        "labr_3",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 2,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 2.137622e+02 + 2.114113e+00 * 16 * amplitude +
-                            5.824968e-05 * 16 * 16 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 2,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 2.137622e+02 + 2.114113e+00 * 16 * amplitude +
+                        5.824968e-05 * 16 * 16 * amplitude * amplitude;
+             },
+             // Run 528
              [](const double energy) {
                  if (energy < 800. || energy > 1500.) {
                      return 1.;
@@ -119,30 +111,27 @@ vector<Detector> detectors{
                                                 (energy - 2.02533142e+03)));
                  }
              },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 20.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 5.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 20.) {
+                     return true;
+                 }
+                 return false;
+             },
+             5.},
         },
         labr,
     },
     {
-        .name = "labr_4",
+        "labr_4",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 3,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 1.765400e+02 + 1.618102e+00 * 16 * amplitude +
-                            4.511530e-04 * 16 * 16 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 3,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 1.765400e+02 + 1.618102e+00 * 16 * amplitude +
+                        4.511530e-04 * 16 * 16 * amplitude * amplitude;
+             },
+             // Run 528
              [](const double energy) {
                  if (energy < 800. || energy > 1600.) {
                      return 1.;
@@ -152,114 +141,102 @@ vector<Detector> detectors{
                                                 (energy - 2.12618155e+03)));
                  }
              },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 20.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 5.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 20.) {
+                     return true;
+                 }
+                 return false;
+             },
+             5.},
         },
         labr,
     },
     {
-        .name = "hpge_1",
+        "hpge_1",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 4,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 5.570186e+00 + 6.799282e-01 * amplitude +
-                            3.132755e-07 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 4,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 5.570186e+00 + 6.799282e-01 * amplitude +
+                        3.132755e-07 * amplitude * amplitude;
+             },
+             // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 150.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 20.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 150.) {
+                     return true;
+                 }
+                 return false;
+             },
+             20.},
         },
         hpge,
     },
     {
-        .name = "hpge_2",
+        "hpge_2",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 5,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return -1.084339e+00 + 6.977068e-01 * amplitude +
-                            -1.894253e-07 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 5,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return -1.084339e+00 + 6.977068e-01 * amplitude +
+                        -1.894253e-07 * amplitude * amplitude;
+             },
+             // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 150.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 20.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 150.) {
+                     return true;
+                 }
+                 return false;
+             },
+             20.},
         },
         hpge,
     },
     {
-        .name = "hpge_3",
+        "hpge_3",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 6,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 2.161040e+01 + 7.134485e-01 * amplitude +
-                            2.873566e-06 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 6,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 2.161040e+01 + 7.134485e-01 * amplitude +
+                        2.873566e-06 * amplitude * amplitude;
+             },
+             // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 150.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 20.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 150.) {
+                     return true;
+                 }
+                 return false;
+             },
+             20.},
         },
         hpge,
     },
     {
-        .name = "hpge_4",
+        "hpge_4",
         {
-            {.name = "E",
-             .module = modules[0],
-             .leaf = 7,
-             .energy_calibration =
-                 []([[maybe_unused]] const int n_entry,
-                    const double amplitude) {
-                     return 8.355447e+00 + 7.510629e-01 * amplitude +
-                            1.469643e-06 * amplitude * amplitude;
-                 },
-             .time_calibration = // Run 528
+            {"E", modules[0], 7,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return 8.355447e+00 + 7.510629e-01 * amplitude +
+                        1.469643e-06 * amplitude * amplitude;
+             },
+             // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
-             .time_vs_time_RF_gate =
-                 [](const double time_vs_time_RF) {
-                     if (abs(time_vs_time_RF - 180.) < 150.) {
-                         return true;
-                     }
-                     return false;
-                 },
-             .amplitude_threshold = 20.},
+
+             [](const double time_vs_time_RF) {
+                 if (abs(time_vs_time_RF - 180.) < 150.) {
+                     return true;
+                 }
+                 return false;
+             },
+             20.},
         },
         hpge,
     },
