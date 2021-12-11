@@ -14,7 +14,12 @@ DetectorGroup clover{.name = "clover",
                      .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
                      .time_difference_histogram_properties = {
                          8192, -4096. * 0.125, 4096. * 0.125}};
-const vector<DetectorGroup> detector_groups = {clover};
+DetectorGroup coaxial{.name = "coaxial",
+                     .energy_histogram_properties = {65536, -0.125, 16383.875},
+                     .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+                     .time_difference_histogram_properties = {
+                         8192, -4096. * 0.125, 4096. * 0.125}};
+const vector<DetectorGroup> detector_groups = {clover, coaxial};
 
 const double tdc_resolution =
     0.024; // in nanoseconds, tdc resolution in nanoseconds per bin
@@ -260,37 +265,7 @@ vector<Detector> detectors{
     {
         "clover_B2",
         {
-            {"E1", modules[1], 4,
-
-             []([[maybe_unused]] const int n_entry, const double amplitude) {
-                 return amplitude;
-             },
-
-             []([[maybe_unused]] const double energy) { return 1.; },
-
-             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
-             5.},
-            {"E2", modules[1], 5,
-
-             []([[maybe_unused]] const int n_entry, const double amplitude) {
-                 return amplitude;
-             },
-
-             []([[maybe_unused]] const double energy) { return 1.; },
-
-             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
-             5.},
-            {"E3", modules[1], 6,
-
-             []([[maybe_unused]] const int n_entry, const double amplitude) {
-                 return amplitude;
-             },
-
-             []([[maybe_unused]] const double energy) { return 1.; },
-
-             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
-             5.},
-            {"E4", modules[1], 7,
+            {"E", modules[1], 4,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -301,42 +276,12 @@ vector<Detector> detectors{
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
         },
-        clover,
+        coaxial,
     },
     {
         "clover_B4",
         {
-            {"E1", modules[1], 8,
-
-             []([[maybe_unused]] const int n_entry, const double amplitude) {
-                 return amplitude;
-             },
-
-             []([[maybe_unused]] const double energy) { return 1.; },
-
-             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
-             5.},
-            {"E2", modules[1], 9,
-
-             []([[maybe_unused]] const int n_entry, const double amplitude) {
-                 return amplitude;
-             },
-
-             []([[maybe_unused]] const double energy) { return 1.; },
-
-             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
-             5.},
-            {"E3", modules[1], 10,
-
-             []([[maybe_unused]] const int n_entry, const double amplitude) {
-                 return amplitude;
-             },
-
-             []([[maybe_unused]] const double energy) { return 1.; },
-
-             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
-             5.},
-            {"E4", modules[1], 11,
+            {"E", modules[1], 8,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -347,7 +292,7 @@ vector<Detector> detectors{
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
         },
-        clover,
+        coaxial,
     },
     {
         "clover_B5",
