@@ -100,14 +100,14 @@ void Detector::addback() {
         skip_channel[n_c_0] = true;
     }
 
-    for(size_t n_channel = 0; n_channel < channels.size(); ++n_channel){
-        if(addback_energies[n_channel] > 0.){
-            if(isnan(addback_energy)){
+    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
+        if (addback_energies[n_channel] > 0.) {
+            if (isnan(addback_energy)) {
                 addback_energy = addback_energies[n_channel];
                 addback_time = addback_times[n_channel];
-            } else if(addback_energies[n_channel] > addback_energy){
+            } else if (addback_energies[n_channel] > addback_energy) {
                 addback_energy = addback_energies[n_channel];
-                addback_time = addback_times[n_channel];                
+                addback_time = addback_times[n_channel];
             }
         }
     }

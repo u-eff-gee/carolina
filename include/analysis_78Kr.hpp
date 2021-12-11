@@ -15,10 +15,10 @@ DetectorGroup clover{.name = "clover",
                      .time_difference_histogram_properties = {
                          8192, -4096. * 0.125, 4096. * 0.125}};
 DetectorGroup coaxial{.name = "coaxial",
-                     .energy_histogram_properties = {65536, -0.125, 16383.875},
-                     .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
-                     .time_difference_histogram_properties = {
-                         8192, -4096. * 0.125, 4096. * 0.125}};
+                      .energy_histogram_properties = {65536, -0.125, 16383.875},
+                      .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+                      .time_difference_histogram_properties = {
+                          8192, -4096. * 0.125, 4096. * 0.125}};
 const vector<DetectorGroup> detector_groups = {clover, coaxial};
 
 const double tdc_resolution =
