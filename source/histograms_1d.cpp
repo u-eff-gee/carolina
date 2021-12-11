@@ -182,19 +182,9 @@ int main(int argc, char **argv) {
                 }
             }
             if (analysis.detectors[n_detector_1].channels.size() > 1) {
-                for (size_t n_channel_1 = 0;
-                     n_channel_1 <
-                     analysis.detectors[n_detector_1].channels.size();
-                     ++n_channel_1) {
-                    if (analysis.detectors[n_detector_1]
-                            .addback_energies[n_channel_1] >
-                        analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .amplitude_threshold) {
-                        addback_histograms[n_detector_1]->Fill(
-                            analysis.detectors[n_detector_1]
-                                .addback_energies[n_channel_1]);
-                    }
+                if (!isnan(analysis.detectors[n_detector_1].addback_energy)) {
+                    addback_histograms[n_detector_1]->Fill(
+                        analysis.detectors[n_detector_1].addback_energy);
                 }
             }
         }
