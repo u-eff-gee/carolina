@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
                  n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                 for (size_t n_channel_2 = 0;
                      n_channel_2 <
-                     analysis.detectors[n_detector_1].channels.size();
+                     analysis.detectors[n_detector_2].channels.size();
                      ++n_channel_2) {
                     time_difference_histograms[n_detector_1][n_channel_1]
                                               [n_detector_2 - n_detector_1 - 1]
