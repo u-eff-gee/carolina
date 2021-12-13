@@ -86,6 +86,33 @@ int main(int argc, char **argv) {
                 analysis.detectors[n_detector_1]
                     .group.time_difference_histogram_properties.maximum));
 
+            time_difference_histograms[n_detector_1][n_channel_1].push_back(
+                vector<TH1D *>());
+            for (size_t n_channel_2 = n_channel_1 + 1;
+                 n_channel_2 < analysis.detectors[n_detector_1].channels.size();
+                 ++n_channel_2) {
+                histogram_name = analysis.detectors[n_detector_1].name + "_" +
+                                 analysis.detectors[n_detector_1]
+                                     .channels[n_channel_1]
+                                     .name +
+                                 "_" + analysis.detectors[n_detector_1].name +
+                                 "_" +
+                                 analysis.detectors[n_detector_1]
+                                     .channels[n_channel_2]
+                                     .name +
+                                 "_tdiff";
+                time_difference_histograms[n_detector_1][n_channel_1][0]
+                    .push_back(new TH1D(
+                        histogram_name.c_str(), histogram_name.c_str(),
+                        analysis.detectors[n_detector_1]
+                            .group.time_difference_histogram_properties.n_bins,
+                        analysis.detectors[n_detector_1]
+                            .group.time_difference_histogram_properties.minimum,
+                        analysis.detectors[n_detector_1]
+                            .group.time_difference_histogram_properties
+                            .maximum));
+            }
+
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                 time_difference_histograms[n_detector_1][n_channel_1].push_back(
@@ -105,8 +132,7 @@ int main(int argc, char **argv) {
                             .name +
                         "_tdiff";
                     time_difference_histograms
-                        [n_detector_1][n_channel_1]
-                        [n_detector_2 - n_detector_1 - 1]
+                        [n_detector_1][n_channel_1][n_detector_2 - n_detector_1]
                             .push_back(new TH1D(
                                 histogram_name.c_str(), histogram_name.c_str(),
                                 analysis.detectors[n_detector_1]
@@ -150,6 +176,32 @@ int main(int argc, char **argv) {
                         analysis.detectors[n_detector_1]
                             .channels[n_channel_1]
                             .time_vs_time_RF_calibrated);
+
+                    for (size_t n_channel_2 = n_channel_1 + 1;
+                         n_channel_2 <
+                         analysis.detectors[n_detector_1].channels.size();
+                         ++n_channel_2) {
+                        if (!isnan(analysis.detectors[n_detector_1]
+                                       .channels[n_channel_2]
+                                       .energy_calibrated) &&
+                            analysis.detectors[n_detector_1]
+                                .channels[n_channel_2]
+                                .time_vs_time_RF_gate(
+                                    analysis.detectors[n_detector_1]
+                                        .channels[n_channel_2]
+                                        .time_vs_time_RF_calibrated)) {
+                            time_difference_histograms
+                                [n_detector_1][n_channel_1][0]
+                                [n_channel_2 - n_channel_1 - 1]
+                                    ->Fill(analysis.detectors[n_detector_1]
+                                               .channels[n_channel_1]
+                                               .time_calibrated -
+                                           analysis.detectors[n_detector_1]
+                                               .channels[n_channel_2]
+                                               .time_calibrated);
+                        }
+                    }
+
                     for (size_t n_detector_2 = n_detector_1 + 1;
                          n_detector_2 < analysis.detectors.size();
                          ++n_detector_2) {
@@ -168,8 +220,7 @@ int main(int argc, char **argv) {
                                             .time_vs_time_RF_calibrated)) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1]
-                                    [n_detector_2 - n_detector_1 - 1]
-                                    [n_channel_2]
+                                    [n_detector_2 - n_detector_1][n_channel_2]
                                         ->Fill(analysis.detectors[n_detector_1]
                                                    .channels[n_channel_1]
                                                    .time_calibrated -
@@ -202,6 +253,15 @@ int main(int argc, char **argv) {
              ++n_channel_1) {
             energy_histograms[n_detector_1][n_channel_1]->Write();
             time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Write();
+
+            for (size_t n_channel_2 = n_channel_1 + 1;
+                 n_channel_2 < analysis.detectors[n_detector_1].channels.size();
+                 ++n_channel_2) {
+                time_difference_histograms[n_detector_1][n_channel_1][0]
+                                          [n_channel_2 - n_channel_1 - 1]
+                                              ->Write();
+            }
+
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                 for (size_t n_channel_2 = 0;
@@ -209,7 +269,7 @@ int main(int argc, char **argv) {
                      analysis.detectors[n_detector_2].channels.size();
                      ++n_channel_2) {
                     time_difference_histograms[n_detector_1][n_channel_1]
-                                              [n_detector_2 - n_detector_1 - 1]
+                                              [n_detector_2 - n_detector_1]
                                               [n_channel_2]
                                                   ->Write();
                 }
