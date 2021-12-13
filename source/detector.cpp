@@ -10,7 +10,28 @@ using std::to_string;
 
 Detector::Detector(const string name, const vector<Channel> channels,
                    const DetectorGroup group)
-    : name(name), channels(channels), group(group) {
+    : name(name), channels(channels), group(group),
+      addback_energy_thresholds(vector<double>(channels.size(), 0.)) {
+
+    for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
+        addback_coincidence_windows.push_back(vector<pair<double, double>>());
+        for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); n_c_1++) {
+            addback_coincidence_windows[n_c_0].push_back(
+                {-numeric_limits<double>::max(),
+                 numeric_limits<double>::max()});
+        }
+    }
+
+    skip_channel = vector<bool>(channels.size(), false);
+    addback_energies = vector<double>(channels.size(), 0.);
+    addback_times = vector<double>(channels.size(), 0.);
+}
+
+Detector::Detector(const string name, const vector<Channel> channels,
+                   const DetectorGroup group,
+                   const vector<double> addback_energy_thresholds)
+    : name(name), channels(channels), group(group),
+      addback_energy_thresholds(addback_energy_thresholds) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
         addback_coincidence_windows.push_back(vector<pair<double, double>>());
@@ -28,9 +49,10 @@ Detector::Detector(const string name, const vector<Channel> channels,
 
 Detector::Detector(
     const string name, const vector<Channel> channels,
-    const DetectorGroup group,
+    const DetectorGroup group, const vector<double> addback_energy_thresholds,
     const vector<vector<pair<double, double>>> addback_coincidence_windows)
     : name(name), channels(channels), group(group),
+      addback_energy_thresholds(addback_energy_thresholds),
       addback_coincidence_windows(addback_coincidence_windows),
       addback_energy(numeric_limits<double>::quiet_NaN()),
       addback_time(numeric_limits<double>::quiet_NaN()) {
@@ -68,13 +90,16 @@ void Detector::addback() {
     size_t maximum_energy_deposition_index = 0;
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
-        if (channels[n_c_0].energy_calibrated != 0. && !skip_channel[n_c_0]) {
+        if (channels[n_c_0].energy_calibrated >
+                addback_energy_thresholds[n_c_0] &&
+            !skip_channel[n_c_0]) {
             addback_energies[n_c_0] = channels[n_c_0].energy_calibrated;
             addback_times[n_c_0] = channels[n_c_0].time_calibrated;
             maximum_energy_deposition_index = n_c_0;
 
             for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); ++n_c_1) {
-                if (channels[n_c_1].energy_calibrated > 0.) {
+                if (channels[n_c_1].energy_calibrated >
+                    addback_energy_thresholds[n_c_1]) {
                     if (!skip_channel[n_c_1] &&
                         addback_coincidence_windows[n_c_0][n_c_1].first <=
                             channels[n_c_0].time_calibrated -
@@ -101,7 +126,8 @@ void Detector::addback() {
     }
 
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        if (addback_energies[n_channel] > 0.) {
+        if (addback_energies[n_channel] >
+            addback_energy_thresholds[n_channel]) {
             if (isnan(addback_energy)) {
                 addback_energy = addback_energies[n_channel];
                 addback_time = addback_times[n_channel];

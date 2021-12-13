@@ -18,14 +18,19 @@ using std::vector;
 struct Detector {
     Detector(const string name, const vector<Channel> channels,
              const DetectorGroup group);
+    Detector(const string name, const vector<Channel> channels,
+             const DetectorGroup group,
+             const vector<double> addback_energy_thresholds);
     Detector(
         const string name, const vector<Channel> channels,
         const DetectorGroup group,
+        const vector<double> addback_energy_thresholds,
         const vector<vector<pair<double, double>>> addback_coincidence_windows);
 
     const string name;
     vector<Channel> channels;
     const DetectorGroup group;
+    vector<double> addback_energy_thresholds;
     vector<vector<pair<double, double>>> addback_coincidence_windows;
 
     vector<bool> skip_channel;
