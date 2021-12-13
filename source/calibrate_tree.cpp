@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
         }
 
         output_file_name =
-            add_index_to_file_name(vm["output_file"].as<string>(), n_block);
+            add_index_to_file_name(vm["output"].as<string>(), n_block);
         TFile output_file(output_file_name.c_str(), "RECREATE");
         tree_calibrated->Write();
         output_file.Close();

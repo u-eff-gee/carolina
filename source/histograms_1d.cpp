@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
                  n_channel_1 < analysis.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
                 if (!isnan(analysis.detectors[n_detector_1]
-                               .channels[n_detector_1]
+                               .channels[n_channel_1]
                                .energy_calibrated) &&
                     analysis.detectors[n_detector_1]
                         .channels[n_channel_1]
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
                              analysis.detectors[n_detector_2].channels.size();
                              ++n_channel_2) {
                             if (!isnan(analysis.detectors[n_detector_2]
-                                           .channels[n_detector_2]
+                                           .channels[n_channel_2]
                                            .energy_calibrated) &&
                                 analysis.detectors[n_detector_2]
                                     .channels[n_channel_2]
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
+    TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
@@ -218,6 +218,6 @@ int main(int argc, char **argv) {
     }
 
     output_file.Close();
-    cout << "Created output file '" << vm["output_file"].as<string>() << "'."
+    cout << "Created output file '" << vm["output"].as<string>() << "'."
          << endl;
 }

@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    TFile output_file(vm["output_file"].as<string>().c_str(), "RECREATE");
+    TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
@@ -94,6 +94,6 @@ int main(int argc, char **argv) {
     }
 
     output_file.Close();
-    cout << "Created output file '" << vm["output_file"].as<string>() << "'."
+    cout << "Created output file '" << vm["output"].as<string>() << "'."
          << endl;
 }

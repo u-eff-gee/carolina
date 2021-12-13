@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     const int increment = entries / n_tasks;
     const int modulo = entries % n_tasks;
 
-    string output_file_name = vm["output_file"].as<string>();
+    string output_file_name = vm["output"].as<string>();
     if (output_file_name == "default") {
         output_file_name =
             "multitask_" + vm["script"].as<string>() + "_" + tool + ".sh";
