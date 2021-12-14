@@ -19,7 +19,20 @@ DetectorGroup coaxial{.name = "coaxial",
                       .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
                       .time_difference_histogram_properties = {
                           8192, -4096. * 0.125, 4096. * 0.125}};
-const vector<DetectorGroup> detector_groups = {clover, coaxial};
+DetectorGroup nai{
+    .name = "nai",
+    .energy_histogram_properties = {16384, -0.5, 16383.5},
+    .energy_raw_histogram_properties = {16384, -0.03125, 1023.96875},
+    .time_difference_histogram_properties = {8192, -4096. * 0.125,
+                                             4096. * 0.125}};
+DetectorGroup fission_chamber{
+    .name = "fission_chamber",
+    .energy_histogram_properties = {65536, -0.125, 16383.875},
+    .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+    .time_difference_histogram_properties = {8192, -4096. * 0.125,
+                                             4096. * 0.125}};
+const vector<DetectorGroup> detector_groups = {clover, coaxial, nai,
+                                               fission_chamber};
 
 const double tdc_resolution =
     0.024; // in nanoseconds, tdc resolution in nanoseconds per bin
@@ -29,6 +42,10 @@ const vector<shared_ptr<Module>> modules = {
                                   "module_timestamp_cross", tdc_resolution)),
     shared_ptr<Module>(new MDPP16("amplitude_back", "channel_time_back",
                                   "module_timestamp_back", tdc_resolution)),
+    shared_ptr<Module>(new MDPP16("amplitude_beam", "channel_time_beam",
+                                  "module_timestamp_beam", tdc_resolution)),
+    shared_ptr<Module>(new MDPP16("integration_long_qdc", "channel_time_qdc",
+                                  "module_timestamp_qdc", tdc_resolution)),
 };
 
 vector<Detector> detectors{
@@ -263,7 +280,7 @@ vector<Detector> detectors{
         clover,
     },
     {
-        "clover_B2",
+        "coaxial_B2",
         {
             {"E", modules[1], 4,
 
@@ -279,7 +296,7 @@ vector<Detector> detectors{
         coaxial,
     },
     {
-        "clover_B4",
+        "coaxial_B4",
         {
             {"E", modules[1], 8,
 
@@ -339,6 +356,70 @@ vector<Detector> detectors{
              5.},
         },
         clover,
+    },
+    {
+        "fission_chamber_1",
+        {
+            {"E", modules[2], 12,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+        },
+        fission_chamber,
+    },
+    {
+        "fission_chamber_2",
+        {
+            {"E", modules[2], 13,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+        },
+        fission_chamber,
+    },
+    {
+        "zero_degree",
+        {
+            {"E", modules[2], 15,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+        },
+        coaxial,
+    },
+    {
+        "molly",
+        {
+            {"E", modules[3], 15,
+
+             []([[maybe_unused]] const int n_entry, const double amplitude) {
+                 return amplitude;
+             },
+
+             []([[maybe_unused]] const double energy) { return 1.; },
+
+             []([[maybe_unused]] const double time_vs_time_RF) { return true; },
+             5.},
+        },
+        nai,
     },
 };
 
