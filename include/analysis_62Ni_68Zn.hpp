@@ -26,7 +26,7 @@ DetectorGroup coaxial{.name = "coaxial",
                           8192, -4096. * 0.125, 4096. * 0.125}};
 DetectorGroup labr{.name = "labr",
                    .energy_histogram_properties = {16384, -0.5, 16383.5},
-                      .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+                   .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
                    .time_difference_histogram_properties = {
                        8192, -4096. * 0.125, 4096. * 0.125}};
 const vector<DetectorGroup> detector_groups = {clover, cebr, labr};
@@ -34,15 +34,18 @@ const vector<DetectorGroup> detector_groups = {clover, cebr, labr};
 const double tdc_resolution =
     0.098; // in nanoseconds, tdc resolution in nanoseconds per bin
 
-const vector<shared_ptr<Module>> modules = {
-    shared_ptr<Module>(new MDPP16("amplitude_clover_90", "time_clover_90",
-                                  "timestamp_clover_90", tdc_resolution)),
-    shared_ptr<Module>(new MDPP16("amplitude_clover_135", "time_clover_135",
-                                  "timestamp_clover_135", tdc_resolution)),
-    shared_ptr<Module>(new MDPP16("integration_long", "channel_time",
-                                  "timestamp_cebr", tdc_resolution)),
-    shared_ptr<Module>(new MDPP16("amplitude_beam_monitor", "time_beam_monitor",
-                                  "timestamp_beam_monitor", tdc_resolution)),
+const vector<shared_ptr<DigitizerModule>> modules = {
+    shared_ptr<DigitizerModule>(
+        new MDPP16("amplitude_clover_90", "time_clover_90",
+                   "timestamp_clover_90", tdc_resolution)),
+    shared_ptr<DigitizerModule>(
+        new MDPP16("amplitude_clover_135", "time_clover_135",
+                   "timestamp_clover_135", tdc_resolution)),
+    shared_ptr<DigitizerModule>(new MDPP16("integration_long", "channel_time",
+                                           "timestamp_cebr", tdc_resolution)),
+    shared_ptr<DigitizerModule>(
+        new MDPP16("amplitude_beam_monitor", "time_beam_monitor",
+                   "timestamp_beam_monitor", tdc_resolution)),
 };
 
 vector<Detector> detectors{

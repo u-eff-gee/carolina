@@ -8,14 +8,14 @@ target_link_libraries(command_line_parser ${Boost_LIBRARIES} ${ROOT_LIBRARIES})
 
 add_library(progress_printer progress_printer.cpp)
 
-add_library(module module.cpp)
-target_link_libraries(module ${ROOT_LIBRARIES})
+add_library(digitizer_module digitizer_module.cpp)
+target_link_libraries(digitizer_module ${ROOT_LIBRARIES})
 
 add_library(mdpp16 mdpp16.cpp)
-target_link_libraries(mdpp16 module ${ROOT_LIBRARIES})
+target_link_libraries(mdpp16 digitizer_module ${ROOT_LIBRARIES})
 
 add_library(sis3316 sis3316.cpp)
-target_link_libraries(sis3316 module ${ROOT_LIBRARIES})
+target_link_libraries(sis3316 digitizer_module ${ROOT_LIBRARIES})
 
 add_library(channel channel.cpp)
 

@@ -3,12 +3,12 @@
 #include "TTree.h"
 
 #include "branch.hpp"
-#include "module.hpp"
+#include "digitizer_module.hpp"
 
-struct MDPP16 final : public Module {
+struct MDPP16 final : public DigitizerModule {
     MDPP16(const string amplitude_branch_name, const string time_branch_name,
            const string timestamp_branch_name, const double tdc_resolution)
-        : Module(tdc_resolution), amplitude(amplitude_branch_name),
+        : DigitizerModule(tdc_resolution), amplitude(amplitude_branch_name),
           time(time_branch_name), timestamp(timestamp_branch_name) {}
 
     Branch<double, 16> amplitude;
@@ -17,7 +17,7 @@ struct MDPP16 final : public Module {
 
     void activate_branches(TTree *tree) override final;
     void register_branches(TTree *tree) override final;
-    vector<string> get_branch_names(const size_t leaf) const override final;
+    // vector<string> get_branch_names(const size_t leaf) const override final;
     double get_amplitude(const size_t leaf) const override final {
         return amplitude.leaves[leaf];
     }

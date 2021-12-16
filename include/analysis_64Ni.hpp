@@ -26,9 +26,10 @@ DetectorGroup labr{
                                              4096. * 0.125}};
 const vector<DetectorGroup> detector_groups = {hpge, labr};
 
-const vector<shared_ptr<Module>> modules = {
-    shared_ptr<Module>(new SIS3316(0.125)), // nanoseconds, tdc resolution in
-                                            // nanoseconds per bin
+const vector<shared_ptr<DigitizerModule>> modules = {
+    shared_ptr<DigitizerModule>(
+        new SIS3316(0.125)), // nanoseconds, tdc resolution in
+                             // nanoseconds per bin
 };
 
 vector<Detector> detectors{

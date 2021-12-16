@@ -37,15 +37,19 @@ const vector<DetectorGroup> detector_groups = {clover, coaxial, nai,
 const double tdc_resolution =
     0.024; // in nanoseconds, tdc resolution in nanoseconds per bin
 
-const vector<shared_ptr<Module>> modules = {
-    shared_ptr<Module>(new MDPP16("amplitude_cross", "channel_time_cross",
-                                  "module_timestamp_cross", tdc_resolution)),
-    shared_ptr<Module>(new MDPP16("amplitude_back", "channel_time_back",
-                                  "module_timestamp_back", tdc_resolution)),
-    shared_ptr<Module>(new MDPP16("amplitude_beam", "channel_time_beam",
-                                  "module_timestamp_beam", tdc_resolution)),
-    shared_ptr<Module>(new MDPP16("integration_long_qdc", "channel_time_qdc",
-                                  "module_timestamp_qdc", tdc_resolution)),
+const vector<shared_ptr<DigitizerModule>> modules = {
+    shared_ptr<DigitizerModule>(
+        new MDPP16("amplitude_cross", "channel_time_cross",
+                   "module_timestamp_cross", tdc_resolution)),
+    shared_ptr<DigitizerModule>(
+        new MDPP16("amplitude_back", "channel_time_back",
+                   "module_timestamp_back", tdc_resolution)),
+    shared_ptr<DigitizerModule>(
+        new MDPP16("amplitude_beam", "channel_time_beam",
+                   "module_timestamp_beam", tdc_resolution)),
+    shared_ptr<DigitizerModule>(
+        new MDPP16("integration_long_qdc", "channel_time_qdc",
+                   "module_timestamp_qdc", tdc_resolution)),
 };
 
 vector<Detector> detectors{

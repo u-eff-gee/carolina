@@ -28,11 +28,11 @@ using std::pair;
 
 using std::vector;
 
-#include "module.hpp"
+#include "digitizer_module.hpp"
 #include "vme.hpp"
 
 struct Channel {
-    Channel(const string name, const shared_ptr<Module> module,
+    Channel(const string name, const shared_ptr<DigitizerModule> module,
             const size_t leaf,
             const function<double(const int, const double)> energy_calibration,
             const function<double(const double)> time_calibration,
@@ -49,7 +49,7 @@ struct Channel {
           amplitude_threshold(amplitude_threshold) {}
 
     const string name;
-    const shared_ptr<Module> module;
+    const shared_ptr<DigitizerModule> module;
     const size_t leaf;
     const function<double(const int, const double)> energy_calibration;
     const function<double(const double)> time_calibration;
