@@ -17,6 +17,12 @@ target_link_libraries(mdpp16 digitizer_module ${ROOT_LIBRARIES})
 add_library(sis3316 sis3316.cpp)
 target_link_libraries(sis3316 digitizer_module ${ROOT_LIBRARIES})
 
+add_library(scaler_module scaler_module.cpp)
+target_link_libraries(scaler_module ${ROOT_LIBRARIES})
+
+add_library(v830 v830.cpp)
+target_link_libraries(v830 scaler_module ${ROOT_LIBRARIES})
+
 add_library(channel channel.cpp)
 
 add_library(detector detector.cpp)
