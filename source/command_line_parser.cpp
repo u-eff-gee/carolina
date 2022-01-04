@@ -57,7 +57,6 @@ TChain *CommandLineParser::set_up_tree(long long &first,
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
         tree->Add(input_file.c_str());
     }
-    cout << tree->GetName() << endl;
 
     first = vm["first"].as<int>();
     last =
