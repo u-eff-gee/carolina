@@ -52,7 +52,6 @@ TChain *CommandLineParser::set_up_tree(long long &first,
         new TChain(find_tree_in_file(vm["input"].as<vector<string>>()[0],
                                      vm["tree"].as<string>())
                        .c_str());
-    cout << tree->GetName() << endl;
     vector<string> input_files = vm["input"].as<vector<string>>();
     for (auto input_file : input_files) {
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;

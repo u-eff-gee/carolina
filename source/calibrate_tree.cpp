@@ -37,10 +37,8 @@ int main(int argc, char **argv) {
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {
         TChain *tree = command_line_parser.set_up_tree(first, last);
-        for (size_t i = 0; i < modules.size(); ++i) {
-            modules[i]->activate_branches(tree);
-            modules[i]->register_branches(tree);
-        }
+        analysis.activate_branches(tree);
+        analysis.register_branches(tree);
         TTree *tree_calibrated = new TTree(tree_calibrated_name.c_str(),
                                            tree_calibrated_name.c_str());
 

@@ -8,6 +8,7 @@ using std::numeric_limits;
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
 #include "mdpp16.hpp"
+#include "v830.hpp"
 
 DetectorGroup clover{.name = "clover",
                      .energy_histogram_properties = {65536, -0.125, 16383.875},
@@ -37,7 +38,7 @@ const vector<DetectorGroup> detector_groups = {clover, coaxial, nai,
 const double tdc_resolution =
     0.024; // in nanoseconds, tdc resolution in nanoseconds per bin
 
-const vector<shared_ptr<DigitizerModule>> modules = {
+const vector<shared_ptr<DigitizerModule>> digitizer_modules = {
     shared_ptr<DigitizerModule>(
         new MDPP16("amplitude_cross", "channel_time_cross",
                    "module_timestamp_cross", tdc_resolution)),
@@ -52,11 +53,15 @@ const vector<shared_ptr<DigitizerModule>> modules = {
                    "module_timestamp_qdc", tdc_resolution)),
 };
 
+const vector<shared_ptr<ScalerModule>> scaler_modules = {
+    shared_ptr<ScalerModule>(new V830(5.)),
+};
+
 vector<Detector> detectors{
     {
         "clover_1",
         {
-            {"E1", modules[0], 0,
+            {"E1", digitizer_modules[0], 0,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -66,7 +71,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E2", modules[0], 1,
+            {"E2", digitizer_modules[0], 1,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -76,7 +81,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E3", modules[0], 2,
+            {"E3", digitizer_modules[0], 2,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -86,7 +91,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E4", modules[0], 3,
+            {"E4", digitizer_modules[0], 3,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -102,7 +107,7 @@ vector<Detector> detectors{
     {
         "clover_3",
         {
-            {"E1", modules[0], 4,
+            {"E1", digitizer_modules[0], 4,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -112,7 +117,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E2", modules[0], 5,
+            {"E2", digitizer_modules[0], 5,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -122,7 +127,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E3", modules[0], 6,
+            {"E3", digitizer_modules[0], 6,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -132,7 +137,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E4", modules[0], 7,
+            {"E4", digitizer_modules[0], 7,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -148,7 +153,7 @@ vector<Detector> detectors{
     {
         "clover_5",
         {
-            {"E1", modules[0], 8,
+            {"E1", digitizer_modules[0], 8,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -158,7 +163,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E2", modules[0], 9,
+            {"E2", digitizer_modules[0], 9,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -168,7 +173,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E3", modules[0], 10,
+            {"E3", digitizer_modules[0], 10,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -178,7 +183,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E4", modules[0], 11,
+            {"E4", digitizer_modules[0], 11,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -194,7 +199,7 @@ vector<Detector> detectors{
     {
         "clover_7",
         {
-            {"E1", modules[0], 12,
+            {"E1", digitizer_modules[0], 12,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -204,7 +209,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E2", modules[0], 13,
+            {"E2", digitizer_modules[0], 13,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -214,7 +219,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E3", modules[0], 14,
+            {"E3", digitizer_modules[0], 14,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -224,7 +229,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E4", modules[0], 15,
+            {"E4", digitizer_modules[0], 15,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -240,7 +245,7 @@ vector<Detector> detectors{
     {
         "clover_B1",
         {
-            {"E1", modules[1], 0,
+            {"E1", digitizer_modules[1], 0,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -250,7 +255,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E2", modules[1], 1,
+            {"E2", digitizer_modules[1], 1,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -260,7 +265,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E3", modules[1], 2,
+            {"E3", digitizer_modules[1], 2,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -270,7 +275,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E4", modules[1], 3,
+            {"E4", digitizer_modules[1], 3,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -286,7 +291,7 @@ vector<Detector> detectors{
     {
         "coaxial_B2",
         {
-            {"E", modules[1], 4,
+            {"E", digitizer_modules[1], 4,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -302,7 +307,7 @@ vector<Detector> detectors{
     {
         "coaxial_B4",
         {
-            {"E", modules[1], 8,
+            {"E", digitizer_modules[1], 8,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -318,7 +323,7 @@ vector<Detector> detectors{
     {
         "clover_B5",
         {
-            {"E1", modules[1], 12,
+            {"E1", digitizer_modules[1], 12,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -328,7 +333,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E2", modules[1], 13,
+            {"E2", digitizer_modules[1], 13,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -338,7 +343,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E3", modules[1], 14,
+            {"E3", digitizer_modules[1], 14,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -348,7 +353,7 @@ vector<Detector> detectors{
 
              []([[maybe_unused]] const double time_vs_time_RF) { return true; },
              5.},
-            {"E4", modules[1], 15,
+            {"E4", digitizer_modules[1], 15,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -364,7 +369,7 @@ vector<Detector> detectors{
     {
         "fission_chamber_1",
         {
-            {"E", modules[2], 12,
+            {"E", digitizer_modules[2], 12,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -380,7 +385,7 @@ vector<Detector> detectors{
     {
         "fission_chamber_2",
         {
-            {"E", modules[2], 13,
+            {"E", digitizer_modules[2], 13,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -396,7 +401,7 @@ vector<Detector> detectors{
     {
         "zero_degree",
         {
-            {"E", modules[2], 15,
+            {"E", digitizer_modules[2], 15,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -412,7 +417,7 @@ vector<Detector> detectors{
     {
         "molly",
         {
-            {"E", modules[3], 15,
+            {"E", digitizer_modules[3], 15,
 
              []([[maybe_unused]] const int n_entry, const double amplitude) {
                  return amplitude;
@@ -429,4 +434,5 @@ vector<Detector> detectors{
 
 const vector<CoincidenceMatrix> coincidence_matrices{};
 
-Analysis analysis(modules, detector_groups, detectors, coincidence_matrices);
+Analysis analysis(digitizer_modules, scaler_modules, detector_groups, detectors,
+                  coincidence_matrices);
