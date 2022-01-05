@@ -31,8 +31,7 @@ struct EnergySensitiveDetectorChannel final : public Channel {
           time_calibrated(numeric_limits<double>::quiet_NaN()),
           timestamp_calibrated(numeric_limits<double>::quiet_NaN()),
           time_vs_time_RF_calibrated(numeric_limits<double>::quiet_NaN()),
-          amplitude_threshold(amplitude_threshold), previous_counts(0),
-          counts(0) {}
+          amplitude_threshold(amplitude_threshold) {}
 
     const function<double(const int, const double)> energy_calibration;
     const function<double(const double)> time_calibration;
@@ -41,7 +40,6 @@ struct EnergySensitiveDetectorChannel final : public Channel {
     double energy_calibrated, time_calibrated, timestamp_calibrated,
         time_vs_time_RF_calibrated;
     const double amplitude_threshold;
-    long long previous_counts, counts;
 
     void reset() override final;
 };

@@ -12,6 +12,7 @@ using std::dynamic_pointer_cast;
 #include "TH1D.h"
 
 #include "command_line_parser.hpp"
+#include "counter_detector_channel.hpp"
 #include "energy_sensitive_detector_channel.hpp"
 #include "histograms_1d.hpp"
 #include "progress_printer.hpp"

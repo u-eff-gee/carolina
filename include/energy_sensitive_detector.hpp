@@ -17,7 +17,6 @@ using std::pair;
 using std::vector;
 
 #include "detector.hpp"
-#include "energy_sensitive_detector_channel.hpp"
 
 struct EnergySensitiveDetector final : public Detector {
     EnergySensitiveDetector(const string name,

@@ -15,6 +15,7 @@ using std::invalid_argument;
 using std::to_string;
 
 #include "energy_sensitive_detector.hpp"
+#include "energy_sensitive_detector_channel.hpp"
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels)
