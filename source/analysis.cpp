@@ -9,7 +9,13 @@ Analysis::Analysis(vector<shared_ptr<DigitizerModule>> digitizer_modules,
       detector_groups(detector_groups), detectors(detectors),
       coincidence_matrices(coincidence_matrices) {}
 
+void Analysis::activate_and_register_branches(TTree *tree) {
+    activate_branches(tree);
+    register_branches(tree);
+}
+
 void Analysis::activate_branches(TTree *tree) {
+    tree->SetBranchStatus("*", 0);
     for (size_t i = 0; i < digitizer_modules.size(); ++i) {
         digitizer_modules[i]->activate_branches(tree);
     }

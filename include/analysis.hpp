@@ -33,6 +33,7 @@ struct Analysis {
     double get_time_RF(const size_t n_detector, const size_t n_channel) const;
     double get_timestamp(const size_t n_detector, const size_t n_channel) const;
 
+    void activate_and_register_branches(TTree *tree);
     void activate_branches(TTree *tree);
     void activate_calibrated_branches(TTree *tree);
     void calibrate(const int n_entry);

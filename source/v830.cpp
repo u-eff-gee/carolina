@@ -1,8 +1,6 @@
 #include "v830.hpp"
 
 void V830::activate_branches(TTree *tree) {
-    tree->SetBranchStatus("*", 0);
-
     tree->SetBranchStatus(counter_values.name.c_str(), 1);
 }
 

@@ -26,8 +26,7 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
-    analysis.activate_branches(tree);
-    analysis.register_branches(tree);
+    analysis.activate_and_register_branches(tree);
 
     vector<vector<TH1D *>> energy_raw_histograms;
     string histogram_name;
