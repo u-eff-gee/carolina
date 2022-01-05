@@ -5,7 +5,7 @@
 using std::vector;
 
 #include "coincidence_matrix.hpp"
-#include "detector.hpp"
+#include "energy_sensitive_detector.hpp"
 #include "detector_group.hpp"
 #include "digitizer_module.hpp"
 #include "scaler_module.hpp"
@@ -13,12 +13,12 @@ using std::vector;
 struct Analysis {
     Analysis(vector<shared_ptr<Module>> modules,
              const vector<DetectorGroup> detector_groups,
-             vector<Detector> detectors,
+             vector<EnergySensitiveDetector> detectors,
              const vector<CoincidenceMatrix> coincidence_matrices);
 
     vector<shared_ptr<Module>> modules;
     const vector<DetectorGroup> detector_groups;
-    vector<Detector> detectors;
+    vector<EnergySensitiveDetector> detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
 
     void calibrate(const size_t n_detector, const size_t n_channel,

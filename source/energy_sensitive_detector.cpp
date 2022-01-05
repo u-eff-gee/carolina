@@ -6,9 +6,9 @@ using std::invalid_argument;
 
 using std::to_string;
 
-#include "detector.hpp"
+#include "energy_sensitive_detector.hpp"
 
-Detector::Detector(const string name, const vector<Channel> channels)
+EnergySensitiveDetector::EnergySensitiveDetector(const string name, const vector<Channel> channels)
     : name(name), channels(channels),
       addback_energy_thresholds(vector<double>(channels.size(), 0.)) {
 
@@ -26,7 +26,7 @@ Detector::Detector(const string name, const vector<Channel> channels)
     addback_times = vector<double>(channels.size(), 0.);
 }
 
-Detector::Detector(const string name, const vector<Channel> channels,
+EnergySensitiveDetector::EnergySensitiveDetector(const string name, const vector<Channel> channels,
                    const vector<double> addback_energy_thresholds)
     : name(name), channels(channels),
       addback_energy_thresholds(addback_energy_thresholds) {
@@ -45,7 +45,7 @@ Detector::Detector(const string name, const vector<Channel> channels,
     addback_times = vector<double>(channels.size(), 0.);
 }
 
-Detector::Detector(
+EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<Channel> channels,
     const vector<double> addback_energy_thresholds,
     const vector<vector<pair<double, double>>> addback_coincidence_windows)
@@ -79,7 +79,7 @@ Detector::Detector(
     addback_times = vector<double>(channels.size(), 0.);
 }
 
-void Detector::addback() {
+void EnergySensitiveDetector::addback() {
     for (size_t n_c = 0; n_c < channels.size(); ++n_c) {
         skip_channel[n_c] = false;
         addback_energies[n_c] = 0.;
@@ -137,7 +137,7 @@ void Detector::addback() {
     }
 }
 
-void Detector::activate_branches(TTree *tree) {
+void EnergySensitiveDetector::activate_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->SetBranchStatus(
             (name + "_" + channels[n_channel].name + "_e").c_str(), 1);
@@ -152,7 +152,7 @@ void Detector::activate_branches(TTree *tree) {
     tree->SetBranchStatus((name + "_addback_time").c_str(), 1);
 }
 
-void Detector::create_branches(TTree *tree) {
+void EnergySensitiveDetector::create_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->Branch((name + "_" + channels[n_channel].name + "_e").c_str(),
                      &channels[n_channel].energy_calibrated);
@@ -169,7 +169,7 @@ void Detector::create_branches(TTree *tree) {
     tree->Branch((name + "_addback_time").c_str(), &addback_time);
 }
 
-void Detector::register_branches(TTree *tree) {
+void EnergySensitiveDetector::register_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->SetBranchAddress(
             (name + "_" + channels[n_channel].name + "_e").c_str(),
@@ -189,7 +189,7 @@ void Detector::register_branches(TTree *tree) {
     tree->SetBranchAddress((name + "_addback_time").c_str(), &addback_time);
 }
 
-void Detector::reset() {
+void EnergySensitiveDetector::reset() {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         channels[n_channel].reset();
     }

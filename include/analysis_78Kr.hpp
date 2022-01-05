@@ -2,7 +2,7 @@
 
 #include "analysis.hpp"
 #include "coincidence_matrix.hpp"
-#include "detector.hpp"
+#include "energy_sensitive_detector.hpp"
 #include "event_counter.hpp"
 #include "mdpp16.hpp"
 #include "v830.hpp"
@@ -30,6 +30,18 @@ DetectorGroup fission_chamber{
     .time_difference_histogram_properties = {8192, -4096. * 0.125,
                                              4096. * 0.125}};
 
+DetectorGroup paddle{
+    .name = "paddle",
+    .energy_histogram_properties = {1, 0., 1.},
+    .energy_raw_histogram_properties = {1, 0., 1.},
+    .time_difference_histogram_properties = {1, 0., 1.}};
+
+DetectorGroup pulser{
+    .name = "pulser",
+    .energy_histogram_properties = {1, 0., 1.},
+    .energy_raw_histogram_properties = {1, 0., 1.},
+    .time_difference_histogram_properties = {1, 0., 1.}};
+
 const double tdc_resolution =
     0.024; // in nanoseconds, tdc resolution in nanoseconds per bin
 
@@ -51,7 +63,7 @@ Analysis analysis(
         shared_ptr<ScalerModule>(new V830(5.)),
     },
     {clover, clover, clover, clover, clover, coaxial, coaxial, clover,
-     fission_chamber, fission_chamber, coaxial, nai},
+     fission_chamber, fission_chamber, coaxial, nai, paddle, paddle, paddle, pulser},
     {
         {
             "clover_1",
@@ -431,6 +443,70 @@ Analysis analysis(
             "molly",
             {
                 {"E", 4, 15, 0, 29,
+
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
+
+                 []([[maybe_unused]] const double energy) { return 1.; },
+
+                 []([[maybe_unused]] const double time_vs_time_RF) {
+                     return true;
+                 },
+                 5.},
+            },
+        },
+        {
+            "mpad",
+            {
+                {"E", 4, 15, 5, 12,
+
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
+
+                 []([[maybe_unused]] const double energy) { return 1.; },
+
+                 []([[maybe_unused]] const double time_vs_time_RF) {
+                     return true;
+                 },
+                 5.},
+            },
+        },
+        {
+            "spad",
+            {
+                {"E", 4, 15, 5, 13,
+
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
+
+                 []([[maybe_unused]] const double energy) { return 1.; },
+
+                 []([[maybe_unused]] const double time_vs_time_RF) {
+                     return true;
+                 },
+                 5.},
+            },
+        },
+        {
+            "cpad",
+            {
+                {"E", 4, 15, 5, 14,
+
+                 []([[maybe_unused]] const int n_entry,
+                    const double amplitude) { return amplitude; },
+
+                 []([[maybe_unused]] const double energy) { return 1.; },
+
+                 []([[maybe_unused]] const double time_vs_time_RF) {
+                     return true;
+                 },
+                 5.},
+            },
+        },
+        {
+            "pulser",
+            {
+                {"E", 4, 15, 5, 15,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },

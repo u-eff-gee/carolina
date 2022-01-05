@@ -6,7 +6,7 @@ using std::numeric_limits;
 
 #include "analysis.hpp"
 #include "coincidence_matrix.hpp"
-#include "detector.hpp"
+#include "energy_sensitive_detector.hpp"
 #include "mdpp16.hpp"
 
 DetectorGroup clover{.name = "clover",
@@ -48,7 +48,7 @@ const vector<shared_ptr<DigitizerModule>> modules = {
                    "timestamp_beam_monitor", tdc_resolution)),
 };
 
-vector<Detector> detectors{
+vector<EnergySensitiveDetector> detectors{
     {
         "clover_1",
         {

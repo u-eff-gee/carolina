@@ -15,11 +15,11 @@ using std::vector;
 #include "channel.hpp"
 #include "detector_group.hpp"
 
-struct Detector {
-    Detector(const string name, const vector<Channel> channels);
-    Detector(const string name, const vector<Channel> channels,
+struct EnergySensitiveDetector {
+    EnergySensitiveDetector(const string name, const vector<Channel> channels);
+    EnergySensitiveDetector(const string name, const vector<Channel> channels,
              const vector<double> addback_energy_thresholds);
-    Detector(
+    EnergySensitiveDetector(
         const string name, const vector<Channel> channels,
         const vector<double> addback_energy_thresholds,
         const vector<vector<pair<double, double>>> addback_coincidence_windows);

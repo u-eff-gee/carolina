@@ -10,7 +10,7 @@ using std::shared_ptr;
 
 #include "analysis.hpp"
 #include "coincidence_matrix.hpp"
-#include "detector.hpp"
+#include "energy_sensitive_detector.hpp"
 #include "sis3316.hpp"
 
 DetectorGroup hpge{.name = "hpge",
@@ -32,7 +32,7 @@ const vector<shared_ptr<DigitizerModule>> modules = {
                              // nanoseconds per bin
 };
 
-vector<Detector> detectors{
+vector<EnergySensitiveDetector> detectors{
     {
         "labr_1",
         {
