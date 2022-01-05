@@ -44,12 +44,12 @@ int main(int argc, char **argv) {
                 analysis.detectors[n_detector_1].channels[n_channel_1].name;
             energy_raw_histograms[n_detector_1].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         analysis.detectors[n_detector_1]
-                             .group.energy_raw_histogram_properties.n_bins,
-                         analysis.detectors[n_detector_1]
-                             .group.energy_raw_histogram_properties.minimum,
-                         analysis.detectors[n_detector_1]
-                             .group.energy_raw_histogram_properties.maximum));
+                         analysis.get_group(n_detector_1)
+                             .energy_raw_histogram_properties.n_bins,
+                         analysis.get_group(n_detector_1)
+                             .energy_raw_histogram_properties.minimum,
+                         analysis.get_group(n_detector_1)
+                             .energy_raw_histogram_properties.maximum));
         }
     }
 
@@ -63,9 +63,10 @@ int main(int argc, char **argv) {
             for (size_t n_channel_1 = 0;
                  n_channel_1 < analysis.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
-                if (analysis.get_amplitude(n_detector_1, n_channel_1) > analysis.detectors[n_detector_1]
-                                                   .channels[n_channel_1]
-                                                   .amplitude_threshold &&
+                if (analysis.get_amplitude(n_detector_1, n_channel_1) >
+                        analysis.detectors[n_detector_1]
+                            .channels[n_channel_1]
+                            .amplitude_threshold &&
                     analysis.get_time(n_detector_1, n_channel_1) > 0.) {
                     energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
                         analysis.get_amplitude(n_detector_1, n_channel_1));

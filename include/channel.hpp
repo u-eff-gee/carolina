@@ -32,8 +32,7 @@ using std::vector;
 #include "vme.hpp"
 
 struct Channel {
-    Channel(const string name, const size_t module,
-            const size_t leaf,
+    Channel(const string name, const size_t module, const size_t leaf,
             const function<double(const int, const double)> energy_calibration,
             const function<double(const double)> time_calibration,
             const function<bool(const double)> time_vs_time_RF_gate,

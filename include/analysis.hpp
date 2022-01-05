@@ -23,9 +23,12 @@ struct Analysis {
     vector<Detector> detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
 
-    void calibrate(const size_t n_detector, const size_t n_channel, const long long n_entry);
+    void calibrate(const size_t n_detector, const size_t n_channel,
+                   const long long n_entry);
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;
-    double get_tdc_resolution(const size_t n_detector, const size_t n_channel) const;
+    DetectorGroup get_group(const size_t n_detector) const;
+    double get_tdc_resolution(const size_t n_detector,
+                              const size_t n_channel) const;
     double get_time(const size_t n_detector, const size_t n_channel) const;
     double get_time_RF(const size_t n_detector, const size_t n_channel) const;
     double get_timestamp(const size_t n_detector, const size_t n_channel) const;

@@ -8,9 +8,8 @@ using std::to_string;
 
 #include "detector.hpp"
 
-Detector::Detector(const string name, const vector<Channel> channels,
-                   const DetectorGroup group)
-    : name(name), channels(channels), group(group),
+Detector::Detector(const string name, const vector<Channel> channels)
+    : name(name), channels(channels),
       addback_energy_thresholds(vector<double>(channels.size(), 0.)) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
@@ -28,9 +27,8 @@ Detector::Detector(const string name, const vector<Channel> channels,
 }
 
 Detector::Detector(const string name, const vector<Channel> channels,
-                   const DetectorGroup group,
                    const vector<double> addback_energy_thresholds)
-    : name(name), channels(channels), group(group),
+    : name(name), channels(channels),
       addback_energy_thresholds(addback_energy_thresholds) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
@@ -49,9 +47,9 @@ Detector::Detector(const string name, const vector<Channel> channels,
 
 Detector::Detector(
     const string name, const vector<Channel> channels,
-    const DetectorGroup group, const vector<double> addback_energy_thresholds,
+    const vector<double> addback_energy_thresholds,
     const vector<vector<pair<double, double>>> addback_coincidence_windows)
-    : name(name), channels(channels), group(group),
+    : name(name), channels(channels),
       addback_energy_thresholds(addback_energy_thresholds),
       addback_coincidence_windows(addback_coincidence_windows),
       addback_energy(numeric_limits<double>::quiet_NaN()),

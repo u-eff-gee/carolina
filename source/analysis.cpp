@@ -30,40 +30,67 @@ void Analysis::create_branches(TTree *tree) {
     }
 }
 
-double Analysis::get_amplitude(const size_t n_detector, const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]->get_amplitude(detectors[n_detector].channels[n_channel].leaf);
+double Analysis::get_amplitude(const size_t n_detector,
+                               const size_t n_channel) const {
+    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
+        ->get_amplitude(detectors[n_detector].channels[n_channel].leaf);
 }
 
-double Analysis::get_tdc_resolution(const size_t n_detector, const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]->tdc_resolution;
+DetectorGroup Analysis::get_group(const size_t n_detector) const {
+    return detector_groups[n_detector];
 }
 
-double Analysis::get_time(const size_t n_detector, const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]->get_time(detectors[n_detector].channels[n_channel].leaf);
+double Analysis::get_tdc_resolution(const size_t n_detector,
+                                    const size_t n_channel) const {
+    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
+        ->tdc_resolution;
 }
 
-double Analysis::get_time_RF(const size_t n_detector, const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]->get_time_RF(detectors[n_detector].channels[n_channel].leaf);
+double Analysis::get_time(const size_t n_detector,
+                          const size_t n_channel) const {
+    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
+        ->get_time(detectors[n_detector].channels[n_channel].leaf);
 }
 
-double Analysis::get_timestamp(const size_t n_detector, const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]->get_timestamp(detectors[n_detector].channels[n_channel].leaf);
+double Analysis::get_time_RF(const size_t n_detector,
+                             const size_t n_channel) const {
+    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
+        ->get_time_RF(detectors[n_detector].channels[n_channel].leaf);
 }
 
-void Analysis::calibrate(const size_t n_detector, const size_t n_channel, const long long n_entry) {
+double Analysis::get_timestamp(const size_t n_detector,
+                               const size_t n_channel) const {
+    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
+        ->get_timestamp(detectors[n_detector].channels[n_channel].leaf);
+}
+
+void Analysis::calibrate(const size_t n_detector, const size_t n_channel,
+                         const long long n_entry) {
     detectors[n_detector].channels[n_channel].energy_calibrated = 0.;
     if (!isnan(get_amplitude(n_detector, n_channel))) {
         detectors[n_detector].channels[n_channel].energy_calibrated =
-            detectors[n_detector].channels[n_channel].energy_calibration(n_entry, get_amplitude(n_detector, n_channel));
-        detectors[n_detector].channels[n_channel].time_calibrated = detectors[n_detector].channels[n_channel].time_calibration(detectors[n_detector].channels[n_channel].energy_calibrated) * get_time(n_detector, n_channel) * get_tdc_resolution(n_detector, n_channel);
-        detectors[n_detector].channels[n_channel].time_vs_time_RF_calibrated = detectors[n_detector].channels[n_channel].time_calibrated - get_time_RF(n_detector, n_channel) * get_tdc_resolution(n_detector, n_channel);
+            detectors[n_detector].channels[n_channel].energy_calibration(
+                n_entry, get_amplitude(n_detector, n_channel));
+        detectors[n_detector].channels[n_channel].time_calibrated =
+            detectors[n_detector].channels[n_channel].time_calibration(
+                detectors[n_detector].channels[n_channel].energy_calibrated) *
+            get_time(n_detector, n_channel) *
+            get_tdc_resolution(n_detector, n_channel);
+        detectors[n_detector].channels[n_channel].time_vs_time_RF_calibrated =
+            detectors[n_detector].channels[n_channel].time_calibrated -
+            get_time_RF(n_detector, n_channel) *
+                get_tdc_resolution(n_detector, n_channel);
         detectors[n_detector].channels[n_channel].timestamp_calibrated =
             get_timestamp(n_detector, n_channel) * INVERSE_VME_CLOCK_FREQUENCY;
     } else {
-        detectors[n_detector].channels[n_channel].energy_calibrated = numeric_limits<double>::quiet_NaN();
-        detectors[n_detector].channels[n_channel].time_calibrated = numeric_limits<double>::quiet_NaN();
-        detectors[n_detector].channels[n_channel].time_vs_time_RF_calibrated = numeric_limits<double>::quiet_NaN();
-        detectors[n_detector].channels[n_channel].timestamp_calibrated = numeric_limits<double>::quiet_NaN();
+        detectors[n_detector].channels[n_channel].energy_calibrated =
+            numeric_limits<double>::quiet_NaN();
+        detectors[n_detector].channels[n_channel].time_calibrated =
+            numeric_limits<double>::quiet_NaN();
+        detectors[n_detector].channels[n_channel].time_vs_time_RF_calibrated =
+            numeric_limits<double>::quiet_NaN();
+        detectors[n_detector].channels[n_channel].timestamp_calibrated =
+            numeric_limits<double>::quiet_NaN();
     }
 }
 
