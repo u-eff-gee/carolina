@@ -63,18 +63,12 @@ int main(int argc, char **argv) {
             for (size_t n_channel_1 = 0;
                  n_channel_1 < analysis.detectors[n_detector_1].channels.size();
                  ++n_channel_1) {
-                if (analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .get_amplitude() > analysis.detectors[n_detector_1]
+                if (analysis.get_amplitude(n_detector_1, n_channel_1) > analysis.detectors[n_detector_1]
                                                    .channels[n_channel_1]
                                                    .amplitude_threshold &&
-                    analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .get_time() > 0.) {
+                    analysis.get_time(n_detector_1, n_channel_1) > 0.) {
                     energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
-                        analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .get_amplitude());
+                        analysis.get_amplitude(n_detector_1, n_channel_1));
                 }
             }
         }
