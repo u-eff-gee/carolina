@@ -3,6 +3,7 @@
 #include "analysis.hpp"
 #include "coincidence_matrix.hpp"
 #include "detector.hpp"
+#include "event_counter.hpp"
 #include "mdpp16.hpp"
 #include "v830.hpp"
 
@@ -34,6 +35,7 @@ const double tdc_resolution =
 
 Analysis analysis(
     {
+        shared_ptr<ScalerModule>(new EventCounter<30>()),
         shared_ptr<DigitizerModule>(
             new MDPP16("amplitude_cross", "channel_time_cross",
                        "module_timestamp_cross", tdc_resolution)),
@@ -46,8 +48,6 @@ Analysis analysis(
         shared_ptr<DigitizerModule>(
             new MDPP16("integration_long_qdc", "channel_time_qdc",
                        "module_timestamp_qdc", tdc_resolution)),
-    },
-    {
         shared_ptr<ScalerModule>(new V830(5.)),
     },
     {clover, clover, clover, clover, clover, coaxial, coaxial, clover,
@@ -56,7 +56,7 @@ Analysis analysis(
         {
             "clover_1",
             {
-                {"E1", 0, 0,
+                {"E1", 1, 0, 0, 0,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -67,7 +67,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E2", 0, 1,
+                {"E2", 1, 1, 0, 1,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -78,7 +78,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E3", 0, 2,
+                {"E3", 1, 2, 0, 2,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -89,7 +89,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E4", 0, 3,
+                {"E4", 1, 3, 0, 3,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -105,7 +105,7 @@ Analysis analysis(
         {
             "clover_3",
             {
-                {"E1", 0, 4,
+                {"E1", 1, 4, 0, 4,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -116,7 +116,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E2", 0, 5,
+                {"E2", 1, 5, 0, 5,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -127,7 +127,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E3", 0, 6,
+                {"E3", 1, 6, 0, 6,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -138,7 +138,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E4", 0, 7,
+                {"E4", 1, 7, 0, 7,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -154,7 +154,7 @@ Analysis analysis(
         {
             "clover_5",
             {
-                {"E1", 0, 8,
+                {"E1", 1, 8, 0, 8,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -165,7 +165,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E2", 0, 9,
+                {"E2", 1, 9, 0, 9,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -176,7 +176,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E3", 0, 10,
+                {"E3", 1, 10, 0, 10,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -187,7 +187,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E4", 0, 11,
+                {"E4", 1, 11, 0, 11,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -203,7 +203,7 @@ Analysis analysis(
         {
             "clover_7",
             {
-                {"E1", 0, 12,
+                {"E1", 1, 12, 0, 12,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -214,7 +214,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E2", 0, 13,
+                {"E2", 1, 13, 0, 13,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -225,7 +225,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E3", 0, 14,
+                {"E3", 1, 14, 0, 14,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -236,7 +236,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E4", 0, 15,
+                {"E4", 1, 15, 0, 15,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -252,7 +252,7 @@ Analysis analysis(
         {
             "clover_B1",
             {
-                {"E1", 1, 0,
+                {"E1", 2, 0, 0, 16,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -263,7 +263,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E2", 1, 1,
+                {"E2", 2, 1, 0, 17,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -274,7 +274,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E3", 1, 2,
+                {"E3", 2, 2, 0, 18,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -285,7 +285,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E4", 1, 3,
+                {"E4", 2, 3, 0, 19,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -301,7 +301,7 @@ Analysis analysis(
         {
             "coaxial_B2",
             {
-                {"E", 1, 4,
+                {"E", 2, 4, 0, 20,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -317,7 +317,7 @@ Analysis analysis(
         {
             "coaxial_B4",
             {
-                {"E", 1, 8,
+                {"E", 2, 8, 0, 21,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -333,7 +333,7 @@ Analysis analysis(
         {
             "clover_B5",
             {
-                {"E1", 1, 12,
+                {"E1", 2, 12, 0, 22,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -344,7 +344,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E2", 1, 13,
+                {"E2", 2, 13, 0, 23,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -355,7 +355,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E3", 1, 14,
+                {"E3", 2, 14, 0, 24,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -366,7 +366,7 @@ Analysis analysis(
                      return true;
                  },
                  5.},
-                {"E4", 1, 15,
+                {"E4", 2, 15, 0, 25,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -382,7 +382,7 @@ Analysis analysis(
         {
             "fission_chamber_1",
             {
-                {"E", 2, 12,
+                {"E", 3, 12, 0, 26,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -398,7 +398,7 @@ Analysis analysis(
         {
             "fission_chamber_2",
             {
-                {"E", 2, 13,
+                {"E", 3, 13, 0, 27,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -414,7 +414,7 @@ Analysis analysis(
         {
             "zero_degree",
             {
-                {"E", 2, 15,
+                {"E", 3, 15, 0, 28,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },
@@ -430,7 +430,7 @@ Analysis analysis(
         {
             "molly",
             {
-                {"E", 3, 15,
+                {"E", 4, 15, 0, 29,
 
                  []([[maybe_unused]] const int n_entry,
                     const double amplitude) { return amplitude; },

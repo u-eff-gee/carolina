@@ -32,12 +32,16 @@ using std::vector;
 #include "vme.hpp"
 
 struct Channel {
-    Channel(const string name, const size_t module, const size_t leaf,
+    Channel(const string name, const size_t digitizer_module,
+            const size_t digitizer_channel, const size_t scaler_module,
+            const size_t scaler_channel,
             const function<double(const int, const double)> energy_calibration,
             const function<double(const double)> time_calibration,
             const function<bool(const double)> time_vs_time_RF_gate,
             const double amplitude_threshold = 0.)
-        : name(name), module(module), leaf(leaf),
+        : name(name), digitizer_module(digitizer_module),
+          digitizer_channel(digitizer_channel), scaler_module(scaler_module),
+          scaler_channel(scaler_channel),
           energy_calibration(energy_calibration),
           time_calibration(time_calibration),
           time_vs_time_RF_gate(time_vs_time_RF_gate),
@@ -48,8 +52,8 @@ struct Channel {
           amplitude_threshold(amplitude_threshold) {}
 
     const string name;
-    const size_t module;
-    const size_t leaf;
+    const size_t digitizer_module, digitizer_channel, scaler_module,
+        scaler_channel;
     const function<double(const int, const double)> energy_calibration;
     const function<double(const double)> time_calibration;
     const function<bool(const double)> time_vs_time_RF_gate;

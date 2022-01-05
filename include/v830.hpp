@@ -5,8 +5,11 @@
 
 struct V830 final : public ScalerModule {
     V830(const double trigger_frequency)
-        : ScalerModule(trigger_frequency), counter_values("counter_values") {}
+        : trigger_frequency(trigger_frequency),
+          counter_values("counter_values") {}
     ~V830() {}
+
+    const double trigger_frequency;
 
     Branch<double, 32> counter_values;
 

@@ -1,12 +1,14 @@
+#include <memory>
+
+using std::dynamic_pointer_cast;
+
 #include "analysis.hpp"
 
-Analysis::Analysis(vector<shared_ptr<DigitizerModule>> digitizer_modules,
-                   vector<shared_ptr<ScalerModule>> scaler_modules,
+Analysis::Analysis(vector<shared_ptr<Module>> modules,
                    const vector<DetectorGroup> detector_groups,
                    vector<Detector> detectors,
                    const vector<CoincidenceMatrix> coincidence_matrices)
-    : digitizer_modules(digitizer_modules), scaler_modules(scaler_modules),
-      detector_groups(detector_groups), detectors(detectors),
+    : modules(modules), detector_groups(detector_groups), detectors(detectors),
       coincidence_matrices(coincidence_matrices) {}
 
 void Analysis::activate_and_register_branches(TTree *tree) {
@@ -16,11 +18,8 @@ void Analysis::activate_and_register_branches(TTree *tree) {
 
 void Analysis::activate_branches(TTree *tree) {
     tree->SetBranchStatus("*", 0);
-    for (size_t i = 0; i < digitizer_modules.size(); ++i) {
-        digitizer_modules[i]->activate_branches(tree);
-    }
-    for (size_t i = 0; i < scaler_modules.size(); ++i) {
-        scaler_modules[i]->activate_branches(tree);
+    for (size_t i = 0; i < modules.size(); ++i) {
+        modules[i]->activate_branches(tree);
     }
 }
 
@@ -38,8 +37,11 @@ void Analysis::create_branches(TTree *tree) {
 
 double Analysis::get_amplitude(const size_t n_detector,
                                const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
-        ->get_amplitude(detectors[n_detector].channels[n_channel].leaf);
+    return dynamic_pointer_cast<DigitizerModule>(
+               modules
+                   [detectors[n_detector].channels[n_channel].digitizer_module])
+        ->get_amplitude(
+            detectors[n_detector].channels[n_channel].digitizer_channel);
 }
 
 DetectorGroup Analysis::get_group(const size_t n_detector) const {
@@ -48,26 +50,36 @@ DetectorGroup Analysis::get_group(const size_t n_detector) const {
 
 double Analysis::get_tdc_resolution(const size_t n_detector,
                                     const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
+    return dynamic_pointer_cast<DigitizerModule>(
+               modules
+                   [detectors[n_detector].channels[n_channel].digitizer_module])
         ->tdc_resolution;
 }
 
 double Analysis::get_time(const size_t n_detector,
                           const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
-        ->get_time(detectors[n_detector].channels[n_channel].leaf);
+    return dynamic_pointer_cast<DigitizerModule>(
+               modules
+                   [detectors[n_detector].channels[n_channel].digitizer_module])
+        ->get_time(detectors[n_detector].channels[n_channel].digitizer_channel);
 }
 
 double Analysis::get_time_RF(const size_t n_detector,
                              const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
-        ->get_time_RF(detectors[n_detector].channels[n_channel].leaf);
+    return dynamic_pointer_cast<DigitizerModule>(
+               modules
+                   [detectors[n_detector].channels[n_channel].digitizer_module])
+        ->get_time_RF(
+            detectors[n_detector].channels[n_channel].digitizer_channel);
 }
 
 double Analysis::get_timestamp(const size_t n_detector,
                                const size_t n_channel) const {
-    return digitizer_modules[detectors[n_detector].channels[n_channel].module]
-        ->get_timestamp(detectors[n_detector].channels[n_channel].leaf);
+    return dynamic_pointer_cast<DigitizerModule>(
+               modules
+                   [detectors[n_detector].channels[n_channel].digitizer_module])
+        ->get_timestamp(
+            detectors[n_detector].channels[n_channel].digitizer_channel);
 }
 
 void Analysis::calibrate(const size_t n_detector, const size_t n_channel,
@@ -102,11 +114,8 @@ void Analysis::calibrate(const size_t n_detector, const size_t n_channel,
 
 void Analysis::register_branches(TTree *tree) {
 
-    for (size_t i = 0; i < digitizer_modules.size(); ++i) {
-        digitizer_modules[i]->register_branches(tree);
-    }
-    for (size_t i = 0; i < scaler_modules.size(); ++i) {
-        scaler_modules[i]->register_branches(tree);
+    for (size_t i = 0; i < modules.size(); ++i) {
+        modules[i]->register_branches(tree);
     }
 }
 

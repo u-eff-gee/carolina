@@ -11,14 +11,12 @@ using std::vector;
 #include "scaler_module.hpp"
 
 struct Analysis {
-    Analysis(vector<shared_ptr<DigitizerModule>> digitizer_modules,
-             vector<shared_ptr<ScalerModule>> scaler_modules,
+    Analysis(vector<shared_ptr<Module>> modules,
              const vector<DetectorGroup> detector_groups,
              vector<Detector> detectors,
              const vector<CoincidenceMatrix> coincidence_matrices);
 
-    vector<shared_ptr<DigitizerModule>> digitizer_modules;
-    vector<shared_ptr<ScalerModule>> scaler_modules;
+    vector<shared_ptr<Module>> modules;
     const vector<DetectorGroup> detector_groups;
     vector<Detector> detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
