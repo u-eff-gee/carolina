@@ -29,26 +29,36 @@ int main(int argc, char **argv) {
     analysis.activate_and_register_branches(tree);
 
     vector<vector<TH1D *>> energy_raw_histograms;
+    vector<vector<TH1D *>> scaler_raw_histograms;
     string histogram_name;
 
-    for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
-         ++n_detector_1) {
+    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+         ++n_detector) {
         energy_raw_histograms.push_back(vector<TH1D *>());
-        for (size_t n_channel_1 = 0;
-             n_channel_1 < analysis.detectors[n_detector_1].channels.size();
-             ++n_channel_1) {
+        scaler_raw_histograms.push_back(vector<TH1D *>());
+        for (size_t n_channel = 0;
+             n_channel < analysis.detectors[n_detector].channels.size();
+             ++n_channel) {
 
             histogram_name =
-                analysis.detectors[n_detector_1].name + "_" +
-                analysis.detectors[n_detector_1].channels[n_channel_1].name;
-            energy_raw_histograms[n_detector_1].push_back(
+                analysis.detectors[n_detector].name + "_" +
+                analysis.detectors[n_detector].channels[n_channel].name;
+            energy_raw_histograms[n_detector].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         analysis.get_group(n_detector_1)
+                         analysis.get_group(n_detector)
                              .energy_raw_histogram_properties.n_bins,
-                         analysis.get_group(n_detector_1)
+                         analysis.get_group(n_detector)
                              .energy_raw_histogram_properties.minimum,
-                         analysis.get_group(n_detector_1)
+                         analysis.get_group(n_detector)
                              .energy_raw_histogram_properties.maximum));
+
+            histogram_name =
+                analysis.detectors[n_detector].name + "_" +
+                analysis.detectors[n_detector].channels[n_channel].name +
+                "_scaler";
+            scaler_raw_histograms[n_detector].push_back(
+                new TH1D(histogram_name.c_str(), histogram_name.c_str(), 65536,
+                         0., 2147483648.));
         }
     }
 
@@ -57,31 +67,35 @@ int main(int argc, char **argv) {
 
         tree->GetEntry(i);
 
-        for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
-             ++n_detector_1) {
-            for (size_t n_channel_1 = 0;
-                 n_channel_1 < analysis.detectors[n_detector_1].channels.size();
-                 ++n_channel_1) {
-                if (analysis.get_amplitude(n_detector_1, n_channel_1) >
-                        analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
+        for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+             ++n_detector) {
+            for (size_t n_channel = 0;
+                 n_channel < analysis.detectors[n_detector].channels.size();
+                 ++n_channel) {
+                if (analysis.get_amplitude(n_detector, n_channel) >
+                        analysis.detectors[n_detector]
+                            .channels[n_channel]
                             .amplitude_threshold &&
-                    analysis.get_time(n_detector_1, n_channel_1) > 0.) {
-                    energy_raw_histograms[n_detector_1][n_channel_1]->Fill(
-                        analysis.get_amplitude(n_detector_1, n_channel_1));
+                    analysis.get_time(n_detector, n_channel) > 0.) {
+                    energy_raw_histograms[n_detector][n_channel]->Fill(
+                        analysis.get_amplitude(n_detector, n_channel));
                 }
+
+                scaler_raw_histograms[n_detector][n_channel]->Fill(
+                    analysis.get_counts(n_detector, n_channel));
             }
         }
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
 
-    for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
-         ++n_detector_1) {
-        for (size_t n_channel_1 = 0;
-             n_channel_1 < analysis.detectors[n_detector_1].channels.size();
-             ++n_channel_1) {
-            energy_raw_histograms[n_detector_1][n_channel_1]->Write();
+    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+         ++n_detector) {
+        for (size_t n_channel = 0;
+             n_channel < analysis.detectors[n_detector].channels.size();
+             ++n_channel) {
+            energy_raw_histograms[n_detector][n_channel]->Write();
+            scaler_raw_histograms[n_detector][n_channel]->Write();
         }
     }
 

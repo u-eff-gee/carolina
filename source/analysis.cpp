@@ -44,6 +44,14 @@ double Analysis::get_amplitude(const size_t n_detector,
             detectors[n_detector].channels[n_channel].digitizer_channel);
 }
 
+long long Analysis::get_counts(const size_t n_detector,
+                               const size_t n_channel) const {
+    return dynamic_pointer_cast<ScalerModule>(
+               modules
+                   [detectors[n_detector].channels[n_channel].scaler_module])
+        ->get_counts(detectors[n_detector].channels[n_channel].scaler_channel);
+}
+
 DetectorGroup Analysis::get_group(const size_t n_detector) const {
     return detector_groups[n_detector];
 }

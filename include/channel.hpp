@@ -49,7 +49,8 @@ struct Channel {
           time_calibrated(numeric_limits<double>::quiet_NaN()),
           timestamp_calibrated(numeric_limits<double>::quiet_NaN()),
           time_vs_time_RF_calibrated(numeric_limits<double>::quiet_NaN()),
-          amplitude_threshold(amplitude_threshold) {}
+          amplitude_threshold(amplitude_threshold), previous_counts(0),
+          counts(0) {}
 
     const string name;
     const size_t digitizer_module, digitizer_channel, scaler_module,
@@ -61,6 +62,7 @@ struct Channel {
     double energy_calibrated, time_calibrated, timestamp_calibrated,
         time_vs_time_RF_calibrated;
     const double amplitude_threshold;
+    long long previous_counts, counts;
 
     void reset();
 };
