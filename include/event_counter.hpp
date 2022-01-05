@@ -5,7 +5,7 @@
 
 template <size_t n_leaves> struct EventCounter final : public ScalerModule {
     EventCounter() : counter_values("counter_values") {
-        for(size_t leaf = 0; leaf < n_leaves; ++leaf){
+        for (size_t leaf = 0; leaf < n_leaves; ++leaf) {
             counter_values.leaves[leaf] = 0;
         }
     }

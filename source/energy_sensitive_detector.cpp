@@ -8,8 +8,9 @@ using std::to_string;
 
 #include "energy_sensitive_detector.hpp"
 
-EnergySensitiveDetector::EnergySensitiveDetector(const string name, const vector<Channel> channels)
-    : name(name), channels(channels),
+EnergySensitiveDetector::EnergySensitiveDetector(const string name,
+                                                 const vector<Channel> channels)
+    : Detector(name, channels),
       addback_energy_thresholds(vector<double>(channels.size(), 0.)) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
@@ -26,9 +27,10 @@ EnergySensitiveDetector::EnergySensitiveDetector(const string name, const vector
     addback_times = vector<double>(channels.size(), 0.);
 }
 
-EnergySensitiveDetector::EnergySensitiveDetector(const string name, const vector<Channel> channels,
-                   const vector<double> addback_energy_thresholds)
-    : name(name), channels(channels),
+EnergySensitiveDetector::EnergySensitiveDetector(
+    const string name, const vector<Channel> channels,
+    const vector<double> addback_energy_thresholds)
+    : Detector(name, channels),
       addback_energy_thresholds(addback_energy_thresholds) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
@@ -49,7 +51,7 @@ EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<Channel> channels,
     const vector<double> addback_energy_thresholds,
     const vector<vector<pair<double, double>>> addback_coincidence_windows)
-    : name(name), channels(channels),
+    : Detector(name, channels),
       addback_energy_thresholds(addback_energy_thresholds),
       addback_coincidence_windows(addback_coincidence_windows),
       addback_energy(numeric_limits<double>::quiet_NaN()),

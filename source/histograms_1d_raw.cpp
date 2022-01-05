@@ -37,12 +37,12 @@ int main(int argc, char **argv) {
         energy_raw_histograms.push_back(vector<TH1D *>());
         scaler_raw_histograms.push_back(vector<TH1D *>());
         for (size_t n_channel = 0;
-             n_channel < analysis.detectors[n_detector].channels.size();
+             n_channel < analysis.detectors[n_detector]->channels.size();
              ++n_channel) {
 
             histogram_name =
-                analysis.detectors[n_detector].name + "_" +
-                analysis.detectors[n_detector].channels[n_channel].name;
+                analysis.detectors[n_detector]->name + "_" +
+                analysis.detectors[n_detector]->channels[n_channel].name;
             energy_raw_histograms[n_detector].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
                          analysis.get_group(n_detector)
@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
                              .energy_raw_histogram_properties.maximum));
 
             histogram_name =
-                analysis.detectors[n_detector].name + "_" +
-                analysis.detectors[n_detector].channels[n_channel].name +
+                analysis.detectors[n_detector]->name + "_" +
+                analysis.detectors[n_detector]->channels[n_channel].name +
                 "_scaler";
             scaler_raw_histograms[n_detector].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(), 65536,
@@ -70,11 +70,11 @@ int main(int argc, char **argv) {
         for (size_t n_detector = 0; n_detector < analysis.detectors.size();
              ++n_detector) {
             for (size_t n_channel = 0;
-                 n_channel < analysis.detectors[n_detector].channels.size();
+                 n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {
                 if (analysis.get_amplitude(n_detector, n_channel) >
                         analysis.detectors[n_detector]
-                            .channels[n_channel]
+                            ->channels[n_channel]
                             .amplitude_threshold &&
                     analysis.get_time(n_detector, n_channel) > 0.) {
                     energy_raw_histograms[n_detector][n_channel]->Fill(
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
     for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
         for (size_t n_channel = 0;
-             n_channel < analysis.detectors[n_detector].channels.size();
+             n_channel < analysis.detectors[n_detector]->channels.size();
              ++n_channel) {
             energy_raw_histograms[n_detector][n_channel]->Write();
             scaler_raw_histograms[n_detector][n_channel]->Write();
