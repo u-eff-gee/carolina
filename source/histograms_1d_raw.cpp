@@ -79,13 +79,7 @@ int main(int argc, char **argv) {
                  n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {
                 if (analysis.detectors[n_detector]->type == energy_sensitive) {
-                    if (analysis.get_amplitude(n_detector, n_channel) >
-                            dynamic_pointer_cast<
-                                EnergySensitiveDetectorChannel>(
-                                analysis.detectors[n_detector]
-                                    ->channels[n_channel])
-                                ->amplitude_threshold &&
-                        analysis.get_time(n_detector, n_channel) > 0.) {
+                    if (analysis.get_time(n_detector, n_channel) > 0.) {
                         histograms[n_detector][n_channel]->Fill(
                             analysis.get_amplitude(n_detector, n_channel));
                     }
