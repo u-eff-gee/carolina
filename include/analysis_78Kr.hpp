@@ -29,12 +29,12 @@ DetectorGroup fission_chamber{
 
 DetectorGroup paddle{
     .name = "paddle",
-    .histogram_properties = {1, 0., 1.},
+    .histogram_properties = {10000, 0, 1e6},
     .raw_histogram_properties = {65536, 0, numeric_limits<int>::max()}};
 
 DetectorGroup pulser{
     .name = "pulser",
-    .histogram_properties = {1, 0., 1.},
+    .histogram_properties = {10000, 0., 1e6},
     .raw_histogram_properties = {65536, 0, numeric_limits<int>::max()}};
 
 const double tdc_resolution =

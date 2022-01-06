@@ -16,7 +16,7 @@ void CounterDetector::set_up_calibrated_branches_for_reading(TTree *tree) {
         tree->SetBranchAddress(
             (name + "_" + channels[n_channel]->name).c_str(),
             &dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
-                 ->counts);
+                 ->count_rate);
     }
 }
 
@@ -25,7 +25,7 @@ void CounterDetector::set_up_calibrated_branches_for_writing(TTree *tree) {
         tree->Branch(
             (name + "_" + channels[n_channel]->name).c_str(),
             &dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
-                 ->counts);
+                 ->count_rate);
     }
 }
 

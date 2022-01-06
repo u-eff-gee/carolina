@@ -9,4 +9,5 @@ struct CounterDetectorChannel final : public Channel {
     void reset_calibrated_leaves() override final;
 
     long long counts, previous_counts;
+    double count_rate;
 };

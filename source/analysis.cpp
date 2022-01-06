@@ -7,6 +7,7 @@ using std::isnan;
 using std::dynamic_pointer_cast;
 
 #include "analysis.hpp"
+#include "counter_detector_channel.hpp"
 #include "energy_sensitive_detector_channel.hpp"
 
 Analysis::Analysis(vector<shared_ptr<Module>> modules,
@@ -145,6 +146,34 @@ void Analysis::calibrate(const long long n_entry) {
                         detectors[n_detector]->channels[n_channel])
                         ->timestamp_calibrated =
                         numeric_limits<double>::quiet_NaN();
+                }
+            } else {
+                if (n_entry > 1) {
+                    dynamic_pointer_cast<CounterDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->count_rate =
+                        (get_counts(n_detector, n_channel) -
+                         dynamic_pointer_cast<CounterDetectorChannel>(
+                             detectors[n_detector]->channels[n_channel])
+                             ->previous_counts) *
+                        dynamic_pointer_cast<ScalerModule>(
+                            modules[detectors[n_detector]
+                                        ->channels[n_channel]
+                                        ->module])
+                            ->trigger_frequency;
+                    dynamic_pointer_cast<CounterDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->previous_counts =
+                        dynamic_pointer_cast<CounterDetectorChannel>(
+                            detectors[n_detector]->channels[n_channel])
+                            ->counts;
+                } else {
+                    dynamic_pointer_cast<CounterDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->counts = 0;
+                    dynamic_pointer_cast<CounterDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->previous_counts = 0;
                 }
             }
         }
