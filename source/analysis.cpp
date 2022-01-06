@@ -20,8 +20,7 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
 void Analysis::set_up_raw_branches(TTree *tree) {
     tree->SetBranchStatus("*", 0);
     for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->activate_branches(tree);
-        modules[i]->register_branches(tree);
+        modules[i]->set_up_raw_branches(tree);
     }
 }
 

@@ -15,8 +15,7 @@ struct MDPP16 final : public DigitizerModule {
     Branch<double, 16> time;
     Branch<double, 16> timestamp;
 
-    void activate_branches(TTree *tree) override final;
-    void register_branches(TTree *tree) override final;
+    void set_up_raw_branches(TTree *tree) override final;
     double get_amplitude(const size_t leaf) const override final {
         return amplitude.leaves[leaf];
     }

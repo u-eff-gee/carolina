@@ -18,8 +18,7 @@ struct SIS3316 final : public DigitizerModule {
     Branch<unsigned int, 1> time_RF;
     Branch<unsigned int, 8> timestamp;
 
-    void activate_branches(TTree *tree) override final;
-    void register_branches(TTree *tree) override final;
+    void set_up_raw_branches(TTree *tree) override final;
     double get_amplitude(const size_t leaf) const override final {
         return amplitude_conversion *
                (amplitude_e2.leaves[leaf] - amplitude_e1.leaves[leaf]);

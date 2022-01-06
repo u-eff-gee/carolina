@@ -3,6 +3,5 @@
 #include "TTree.h"
 
 struct Module {
-    virtual void activate_branches(TTree *tree) = 0;
-    virtual void register_branches(TTree *tree) = 0;
+    virtual void set_up_raw_branches(TTree *tree) = 0;
 };

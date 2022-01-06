@@ -14,8 +14,7 @@ struct V830 final : public ScalerModule {
 
     Branch<double, 32> counter_values;
 
-    void activate_branches(TTree *tree) override final;
-    void register_branches(TTree *tree) override final;
+    void set_up_raw_branches(TTree *tree) override final;
 
     long long get_counts(const size_t leaf) override final {
         return counter_values.leaves[leaf];

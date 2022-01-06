@@ -4,8 +4,7 @@ using std::to_string;
 
 #include "sis3316.hpp"
 
-void SIS3316::activate_branches(TTree *tree) {
-    tree->SetBranchStatus("*", 0);
+void SIS3316::set_up_raw_branches(TTree *tree) {
 
     tree->SetBranchStatus("ADC1CH1MAXE1", 1);
     tree->SetBranchStatus("ADC1CH1MAXE2", 1);
@@ -34,9 +33,6 @@ void SIS3316::activate_branches(TTree *tree) {
     tree->SetBranchStatus("HPGEL4T", 1);
 
     tree->SetBranchStatus("TRIGT11", 1);
-}
-
-void SIS3316::register_branches(TTree *tree) {
 
     tree->SetBranchAddress("ADC1CH1MAXE1", &amplitude_e1.leaves[0]);
     tree->SetBranchAddress("ADC1CH1MAXE2", &amplitude_e2.leaves[0]);
