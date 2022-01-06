@@ -147,7 +147,12 @@ void Analysis::calibrate(const long long n_entry) {
                         numeric_limits<double>::quiet_NaN();
                 }
             } else {
-                if (n_entry > 1) {
+                if (n_entry > 1 && !isnan(get_counts(n_detector, n_channel)) &&
+                    get_counts(n_detector, n_channel) > 0 &&
+                    get_counts(n_detector, n_channel) !=
+                        dynamic_pointer_cast<CounterDetectorChannel>(
+                            detectors[n_detector]->channels[n_channel])
+                            ->previous_counts) {
                     dynamic_pointer_cast<CounterDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
                         ->count_rate =
@@ -162,17 +167,11 @@ void Analysis::calibrate(const long long n_entry) {
                             ->trigger_frequency;
                     dynamic_pointer_cast<CounterDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
-                        ->previous_counts =
-                        dynamic_pointer_cast<CounterDetectorChannel>(
-                            detectors[n_detector]->channels[n_channel])
-                            ->counts;
+                        ->previous_counts = get_counts(n_detector, n_channel);
                 } else {
                     dynamic_pointer_cast<CounterDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
-                        ->counts = 0;
-                    dynamic_pointer_cast<CounterDetectorChannel>(
-                        detectors[n_detector]->channels[n_channel])
-                        ->previous_counts = 0;
+                        ->count_rate = numeric_limits<double>::quiet_NaN();
                 }
             }
         }
