@@ -11,38 +11,31 @@ CounterDetector::CounterDetector(const string name,
 
 void CounterDetector::activate_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        tree->SetBranchStatus(
-            (name + "_" +
-             dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
-                 ->name)
-                .c_str(),
-            1);
+        tree->SetBranchStatus((name + "_" + channels[n_channel]->name).c_str(),
+                              1);
     }
 }
+
 void CounterDetector::create_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->Branch(
-            (name + "_" +
-             dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
-                 ->name)
-                .c_str(),
+            (name + "_" + channels[n_channel]->name).c_str(),
             &dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
                  ->counts);
     }
 }
+
 void CounterDetector::register_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->SetBranchAddress(
-            (name + "_" +
-             dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
-                 ->name)
-                .c_str(),
+            (name + "_" + channels[n_channel]->name).c_str(),
             &dynamic_pointer_cast<CounterDetectorChannel>(channels[n_channel])
                  ->counts);
     }
 }
+
 void CounterDetector::reset() {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        channels[n_channel].reset();
+        channels[n_channel]->reset();
     }
 }

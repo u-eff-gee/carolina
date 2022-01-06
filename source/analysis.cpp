@@ -92,55 +92,66 @@ double Analysis::get_timestamp(const size_t n_detector,
                             ->channel);
 }
 
-void Analysis::calibrate(const size_t n_detector, const size_t n_channel,
-                         const long long n_entry) {
-    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-        detectors[n_detector]->channels[n_channel])
-        ->energy_calibrated = 0.;
-    if (!isnan(get_amplitude(n_detector, n_channel))) {
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->energy_calibrated =
-            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                detectors[n_detector]->channels[n_channel])
-                ->energy_calibration(n_entry,
-                                     get_amplitude(n_detector, n_channel));
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->time_calibrated =
-            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                detectors[n_detector]->channels[n_channel])
-                ->time_calibration(
-                    get_time(n_detector, n_channel),
+void Analysis::calibrate(const long long n_entry) {
+    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
+        for (size_t n_channel = 0;
+             n_channel < detectors[n_detector]->channels.size(); ++n_channel) {
+            if (detectors[n_detector]->type == energy_sensitive) {
+                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                    detectors[n_detector]->channels[n_channel])
+                    ->energy_calibrated = 0.;
+                if (!isnan(get_amplitude(n_detector, n_channel))) {
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
-                        ->energy_calibrated) *
-            get_tdc_resolution(n_detector, n_channel);
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->time_vs_time_RF_calibrated =
-            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                detectors[n_detector]->channels[n_channel])
-                ->time_calibrated -
-            get_time_RF(n_detector, n_channel) *
-                get_tdc_resolution(n_detector, n_channel);
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->timestamp_calibrated =
-            get_timestamp(n_detector, n_channel) * INVERSE_VME_CLOCK_FREQUENCY;
-    } else {
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->energy_calibrated = numeric_limits<double>::quiet_NaN();
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->time_calibrated = numeric_limits<double>::quiet_NaN();
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->time_vs_time_RF_calibrated = numeric_limits<double>::quiet_NaN();
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->timestamp_calibrated = numeric_limits<double>::quiet_NaN();
+                        ->energy_calibrated =
+                        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                            detectors[n_detector]->channels[n_channel])
+                            ->energy_calibration(
+                                n_entry, get_amplitude(n_detector, n_channel));
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->time_calibrated =
+                        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                            detectors[n_detector]->channels[n_channel])
+                            ->time_calibration(
+                                get_time(n_detector, n_channel),
+                                dynamic_pointer_cast<
+                                    EnergySensitiveDetectorChannel>(
+                                    detectors[n_detector]->channels[n_channel])
+                                    ->energy_calibrated) *
+                        get_tdc_resolution(n_detector, n_channel);
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->time_vs_time_RF_calibrated =
+                        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                            detectors[n_detector]->channels[n_channel])
+                            ->time_calibrated -
+                        get_time_RF(n_detector, n_channel) *
+                            get_tdc_resolution(n_detector, n_channel);
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->timestamp_calibrated =
+                        get_timestamp(n_detector, n_channel) *
+                        INVERSE_VME_CLOCK_FREQUENCY;
+                } else {
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->energy_calibrated =
+                        numeric_limits<double>::quiet_NaN();
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->time_calibrated = numeric_limits<double>::quiet_NaN();
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->time_vs_time_RF_calibrated =
+                        numeric_limits<double>::quiet_NaN();
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        detectors[n_detector]->channels[n_channel])
+                        ->timestamp_calibrated =
+                        numeric_limits<double>::quiet_NaN();
+                }
+            }
+        }
     }
 }
 

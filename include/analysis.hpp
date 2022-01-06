@@ -21,8 +21,7 @@ struct Analysis {
     vector<shared_ptr<Detector>> detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
 
-    void calibrate(const size_t n_detector, const size_t n_channel,
-                   const long long n_entry);
+    void calibrate(const long long n_entry);
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;
     long long get_counts(const size_t n_detector, const size_t n_channel) const;
     long long get_previous_counts(const size_t n_detector,

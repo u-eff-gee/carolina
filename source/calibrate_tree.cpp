@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     command_line_parser.desc.add_options()(
         "block_size", po::value<long long>()->default_value(1000000),
         "Number of data entries that are processed before the data are written "
-        "to file (default: 10^5).");
+        "to file (default: 10^6).");
     int command_line_parser_status;
     command_line_parser(argc, argv, command_line_parser_status);
     if (command_line_parser_status) {
@@ -36,9 +36,13 @@ int main(int argc, char **argv) {
     string output_file_name;
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {
+        for(auto detector: analysis.detectors){
+            for(auto channel: detector->channels){
+                cout << detector->name << "_" << channel->name << endl;
+            }
+        }
         TChain *tree = command_line_parser.set_up_tree(first, last);
-        analysis.activate_branches(tree);
-        analysis.register_branches(tree);
+        analysis.activate_and_register_branches(tree);
         TTree *tree_calibrated = new TTree(tree_calibrated_name.c_str(),
                                            tree_calibrated_name.c_str());
 
