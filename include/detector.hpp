@@ -12,10 +12,14 @@ using std::vector;
 
 #include "TTree.h"
 
+enum DetectorType { energy_sensitive, counter };
+
 struct Detector {
-    Detector(const string name, const vector<shared_ptr<Channel>> channels);
+    Detector(const string name, const DetectorType type,
+             const vector<shared_ptr<Channel>> channels);
 
     const string name;
+    const DetectorType type;
     vector<shared_ptr<Channel>> channels;
 
     virtual void activate_branches(TTree *tree) = 0;

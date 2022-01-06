@@ -10,23 +10,23 @@ using std::numeric_limits;
 #include "mdpp16.hpp"
 
 DetectorGroup clover{.name = "clover",
-                     .energy_histogram_properties = {65536, -0.125, 16383.875},
-                     .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+                     .histogram_properties = {65536, -0.125, 16383.875},
+                     .raw_histogram_properties = {65536, -0.5, 65535.5},
                      .time_difference_histogram_properties = {
                          8192, -4096. * 0.125, 4096. * 0.125}};
 DetectorGroup cebr{.name = "cebr",
-                   .energy_histogram_properties = {16384, -0.5, 16383.5},
-                   .energy_raw_histogram_properties = {16384, -0.125, 4095.875},
+                   .histogram_properties = {16384, -0.5, 16383.5},
+                   .raw_histogram_properties = {16384, -0.125, 4095.875},
                    .time_difference_histogram_properties = {
                        8192, -4096. * 0.125, 4096. * 0.125}};
 DetectorGroup coaxial{.name = "coaxial",
-                      .energy_histogram_properties = {65536, -0.125, 16383.875},
-                      .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+                      .histogram_properties = {65536, -0.125, 16383.875},
+                      .raw_histogram_properties = {65536, -0.5, 65535.5},
                       .time_difference_histogram_properties = {
                           8192, -4096. * 0.125, 4096. * 0.125}};
 DetectorGroup labr{.name = "labr",
-                   .energy_histogram_properties = {16384, -0.5, 16383.5},
-                   .energy_raw_histogram_properties = {65536, -0.5, 65535.5},
+                   .histogram_properties = {16384, -0.5, 16383.5},
+                   .raw_histogram_properties = {65536, -0.5, 65535.5},
                    .time_difference_histogram_properties = {
                        8192, -4096. * 0.125, 4096. * 0.125}};
 const vector<DetectorGroup> detector_groups = {clover, cebr, labr};

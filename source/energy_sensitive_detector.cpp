@@ -19,7 +19,7 @@ using std::to_string;
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels)
-    : Detector(name, channels),
+    : Detector(name, energy_sensitive, channels),
       addback_energy_thresholds(vector<double>(channels.size(), 0.)) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
@@ -39,7 +39,7 @@ EnergySensitiveDetector::EnergySensitiveDetector(
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels,
     const vector<double> addback_energy_thresholds)
-    : Detector(name, channels),
+    : Detector(name, energy_sensitive, channels),
       addback_energy_thresholds(addback_energy_thresholds) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
@@ -60,7 +60,7 @@ EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels,
     const vector<double> addback_energy_thresholds,
     const vector<vector<pair<double, double>>> addback_coincidence_windows)
-    : Detector(name, channels),
+    : Detector(name, energy_sensitive, channels),
       addback_energy_thresholds(addback_energy_thresholds),
       addback_coincidence_windows(addback_coincidence_windows),
       addback_energy(numeric_limits<double>::quiet_NaN()),

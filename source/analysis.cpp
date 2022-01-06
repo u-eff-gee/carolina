@@ -44,20 +44,14 @@ double Analysis::get_amplitude(const size_t n_detector,
                                const size_t n_channel) const {
     return dynamic_pointer_cast<DigitizerModule>(
                modules[detectors[n_detector]->channels[n_channel]->module])
-        ->get_amplitude(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                            detectors[n_detector]->channels[n_channel])
-                            ->channel);
+        ->get_amplitude(detectors[n_detector]->channels[n_channel]->channel);
 }
 
 long long Analysis::get_counts(const size_t n_detector,
                                const size_t n_channel) const {
     return dynamic_pointer_cast<ScalerModule>(
-               modules[dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                           detectors[n_detector]->channels[n_channel])
-                           ->module])
-        ->get_counts(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                         detectors[n_detector]->channels[n_channel])
-                         ->channel);
+               modules[detectors[n_detector]->channels[n_channel]->module])
+        ->get_counts(detectors[n_detector]->channels[n_channel]->channel);
 }
 
 DetectorGroup Analysis::get_group(const size_t n_detector) const {
@@ -117,10 +111,10 @@ void Analysis::calibrate(const size_t n_detector, const size_t n_channel,
             dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                 detectors[n_detector]->channels[n_channel])
                 ->time_calibration(
+                    get_time(n_detector, n_channel),
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
                         ->energy_calibrated) *
-            get_time(n_detector, n_channel) *
             get_tdc_resolution(n_detector, n_channel);
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
             detectors[n_detector]->channels[n_channel])

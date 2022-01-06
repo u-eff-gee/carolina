@@ -46,11 +46,11 @@ int main(int argc, char **argv) {
             addback_histograms.push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
                          analysis.detectors[n_detector_1]
-                             .group.energy_histogram_properties.n_bins,
+                             .group.histogram_properties.n_bins,
                          analysis.detectors[n_detector_1]
-                             .group.energy_histogram_properties.minimum,
+                             .group.histogram_properties.minimum,
                          analysis.detectors[n_detector_1]
-                             .group.energy_histogram_properties.maximum));
+                             .group.histogram_properties.maximum));
         } else {
             addback_histograms.push_back(nullptr);
         }
@@ -68,11 +68,11 @@ int main(int argc, char **argv) {
             energy_histograms[n_detector_1].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
                          analysis.detectors[n_detector_1]
-                             .group.energy_histogram_properties.n_bins,
+                             .group.histogram_properties.n_bins,
                          analysis.detectors[n_detector_1]
-                             .group.energy_histogram_properties.minimum,
+                             .group.histogram_properties.minimum,
                          analysis.detectors[n_detector_1]
-                             .group.energy_histogram_properties.maximum));
+                             .group.histogram_properties.maximum));
             histogram_name =
                 analysis.detectors[n_detector_1].name + "_" +
                 analysis.detectors[n_detector_1].channels[n_channel_1].name +

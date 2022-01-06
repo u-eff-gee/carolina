@@ -7,7 +7,7 @@ using std::dynamic_pointer_cast;
 
 CounterDetector::CounterDetector(const string name,
                                  const vector<shared_ptr<Channel>> channels)
-    : Detector(name, channels) {}
+    : Detector(name, counter, channels) {}
 
 void CounterDetector::activate_branches(TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {

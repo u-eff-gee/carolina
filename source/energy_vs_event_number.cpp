@@ -42,11 +42,11 @@ int main(int argc, char **argv) {
                 new TH2D(histogram_name.c_str(), histogram_name.c_str(), 256,
                          first, last,
                          analysis.detectors[n_detector]
-                             .group.energy_histogram_properties.n_bins,
+                             .group.histogram_properties.n_bins,
                          analysis.detectors[n_detector]
-                             .group.energy_histogram_properties.minimum,
+                             .group.histogram_properties.minimum,
                          analysis.detectors[n_detector]
-                             .group.energy_histogram_properties.maximum));
+                             .group.histogram_properties.maximum));
         }
     }
 

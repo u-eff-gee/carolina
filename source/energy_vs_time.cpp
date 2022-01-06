@@ -48,12 +48,12 @@ int main(int argc, char **argv) {
             energy_vs_time_histograms[n_detector].push_back(new TH2D(
                 histogram_name.c_str(), histogram_name.c_str(),
                 analysis.detectors[n_detector]
-                        .group.energy_histogram_properties.n_bins /
+                        .group.histogram_properties.n_bins /
                     8,
                 analysis.detectors[n_detector]
-                    .group.energy_histogram_properties.minimum,
+                    .group.histogram_properties.minimum,
                 analysis.detectors[n_detector]
-                    .group.energy_histogram_properties.maximum,
+                    .group.histogram_properties.maximum,
                 analysis.detectors[n_detector]
                     .group.time_difference_histogram_properties.n_bins,
                 analysis.detectors[n_detector]
