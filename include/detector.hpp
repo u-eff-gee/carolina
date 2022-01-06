@@ -22,8 +22,7 @@ struct Detector {
     const DetectorType type;
     vector<shared_ptr<Channel>> channels;
 
-    virtual void activate_branches(TTree *tree) = 0;
-    virtual void create_branches(TTree *tree) = 0;
-    virtual void register_branches(TTree *tree) = 0;
-    virtual void reset() = 0;
+    virtual void set_up_calibrated_branches_for_reading(TTree *tree) = 0;
+    virtual void set_up_calibrated_branches_for_writing(TTree *tree) = 0;
+    virtual void reset_calibrated_leaves() = 0;
 };

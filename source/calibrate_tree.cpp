@@ -36,17 +36,12 @@ int main(int argc, char **argv) {
     string output_file_name;
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {
-        for(auto detector: analysis.detectors){
-            for(auto channel: detector->channels){
-                cout << detector->name << "_" << channel->name << endl;
-            }
-        }
         TChain *tree = command_line_parser.set_up_tree(first, last);
-        analysis.activate_and_register_branches(tree);
+        analysis.set_up_raw_branches(tree);
         TTree *tree_calibrated = new TTree(tree_calibrated_name.c_str(),
                                            tree_calibrated_name.c_str());
 
-        analysis.create_branches(tree_calibrated);
+        analysis.set_up_calibrated_branches_for_writing(tree_calibrated);
 
         for (long long i = blocks[n_block].first; i <= blocks[n_block].second;
              ++i) {
@@ -55,7 +50,7 @@ int main(int argc, char **argv) {
             tree->GetEntry(i);
             analysis.calibrate(i);
             tree_calibrated->Fill();
-            analysis.reset();
+            analysis.reset_calibrated_leaves();
         }
 
         output_file_name =

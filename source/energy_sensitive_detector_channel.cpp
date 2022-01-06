@@ -1,6 +1,6 @@
 #include "energy_sensitive_detector_channel.hpp"
 
-void EnergySensitiveDetectorChannel::reset() {
+void EnergySensitiveDetectorChannel::reset_calibrated_leaves() {
     energy_calibrated = numeric_limits<double>::quiet_NaN();
     time_calibrated = numeric_limits<double>::quiet_NaN();
     timestamp_calibrated = numeric_limits<double>::quiet_NaN();

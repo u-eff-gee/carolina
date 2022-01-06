@@ -6,7 +6,7 @@ struct CounterDetectorChannel final : public Channel {
     CounterDetectorChannel(const string name, const size_t module,
                            const size_t channel);
 
-    void reset() override final;
+    void reset_calibrated_leaves() override final;
 
     long long counts, previous_counts;
 };

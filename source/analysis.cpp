@@ -16,27 +16,23 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
     : modules(modules), detector_groups(detector_groups), detectors(detectors),
       coincidence_matrices(coincidence_matrices) {}
 
-void Analysis::activate_and_register_branches(TTree *tree) {
-    activate_branches(tree);
-    register_branches(tree);
-}
-
-void Analysis::activate_branches(TTree *tree) {
+void Analysis::set_up_raw_branches(TTree *tree) {
     tree->SetBranchStatus("*", 0);
     for (size_t i = 0; i < modules.size(); ++i) {
         modules[i]->activate_branches(tree);
+        modules[i]->register_branches(tree);
     }
 }
 
-void Analysis::activate_calibrated_branches(TTree *tree) {
+void Analysis::set_up_calibrated_branches_for_reading(TTree *tree) {
     for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
-        detectors[n_detector]->activate_branches(tree);
+        detectors[n_detector]->set_up_calibrated_branches_for_reading(tree);
     }
 }
 
-void Analysis::create_branches(TTree *tree) {
+void Analysis::set_up_calibrated_branches_for_writing(TTree *tree) {
     for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
-        detectors[n_detector]->create_branches(tree);
+        detectors[n_detector]->set_up_calibrated_branches_for_writing(tree);
     }
 }
 
@@ -107,19 +103,19 @@ void Analysis::calibrate(const long long n_entry) {
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             detectors[n_detector]->channels[n_channel])
                             ->energy_calibration(
-                                n_entry, get_amplitude(n_detector, n_channel));
+                                get_amplitude(n_detector, n_channel), n_entry);
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
                         ->time_calibrated =
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             detectors[n_detector]->channels[n_channel])
                             ->time_calibration(
-                                get_time(n_detector, n_channel),
+                                get_time(n_detector, n_channel) *
+                                    get_tdc_resolution(n_detector, n_channel),
                                 dynamic_pointer_cast<
                                     EnergySensitiveDetectorChannel>(
                                     detectors[n_detector]->channels[n_channel])
-                                    ->energy_calibrated) *
-                        get_tdc_resolution(n_detector, n_channel);
+                                    ->energy_calibrated);
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
                         ->time_vs_time_RF_calibrated =
@@ -155,21 +151,8 @@ void Analysis::calibrate(const long long n_entry) {
     }
 }
 
-void Analysis::register_branches(TTree *tree) {
-
-    for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->register_branches(tree);
-    }
-}
-
-void Analysis::register_calibrated_branches(TTree *tree) {
+void Analysis::reset_calibrated_leaves() {
     for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
-        detectors[n_detector]->register_branches(tree);
-    }
-}
-
-void Analysis::reset() {
-    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
-        detectors[n_detector]->reset();
+        detectors[n_detector]->reset_calibrated_leaves();
     }
 }

@@ -36,8 +36,7 @@ struct EnergySensitiveDetector final : public Detector {
     double addback_time;
 
     void addback();
-    void activate_branches(TTree *tree) override final;
-    void create_branches(TTree *tree) override final;
-    void register_branches(TTree *tree) override final;
-    void reset() override final;
+    void set_up_calibrated_branches_for_reading(TTree *tree) override final;
+    void set_up_calibrated_branches_for_writing(TTree *tree) override final;
+    void reset_calibrated_leaves() override final;
 };

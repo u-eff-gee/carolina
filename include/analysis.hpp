@@ -33,12 +33,9 @@ struct Analysis {
     double get_time_RF(const size_t n_detector, const size_t n_channel) const;
     double get_timestamp(const size_t n_detector, const size_t n_channel) const;
 
-    void activate_and_register_branches(TTree *tree);
-    void activate_branches(TTree *tree);
-    void activate_calibrated_branches(TTree *tree);
     void calibrate(const int n_entry);
-    void create_branches(TTree *tree);
-    void register_branches(TTree *tree);
-    void register_calibrated_branches(TTree *tree);
-    void reset();
+    void reset_calibrated_leaves();
+    void set_up_calibrated_branches_for_reading(TTree *tree);
+    void set_up_calibrated_branches_for_writing(TTree *tree);
+    void set_up_raw_branches(TTree *tree);
 };

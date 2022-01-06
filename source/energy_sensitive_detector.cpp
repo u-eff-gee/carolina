@@ -175,7 +175,8 @@ void EnergySensitiveDetector::addback() {
     }
 }
 
-void EnergySensitiveDetector::activate_branches(TTree *tree) {
+void EnergySensitiveDetector::set_up_calibrated_branches_for_reading(
+    TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->SetBranchStatus(
             (name + "_" +
@@ -209,57 +210,6 @@ void EnergySensitiveDetector::activate_branches(TTree *tree) {
              "_t_vs_RF")
                 .c_str(),
             1);
-    }
-    tree->SetBranchStatus((name + "_addback_energy").c_str(), 1);
-    tree->SetBranchStatus((name + "_addback_time").c_str(), 1);
-}
-
-void EnergySensitiveDetector::create_branches(TTree *tree) {
-    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        tree->Branch((name + "_" +
-                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->name +
-                      "_e")
-                         .c_str(),
-                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->energy_calibrated);
-        tree->Branch((name + "_" +
-                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->name +
-                      "_t")
-                         .c_str(),
-                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->time_calibrated);
-        tree->Branch((name + "_" +
-                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->name +
-                      "_ts")
-                         .c_str(),
-                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->timestamp_calibrated);
-        tree->Branch((name + "_" +
-                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->name +
-                      "_t_vs_RF")
-                         .c_str(),
-                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          channels[n_channel])
-                          ->time_vs_time_RF_calibrated);
-    }
-
-    tree->Branch((name + "_addback_energy").c_str(), &addback_energy);
-    tree->Branch((name + "_addback_time").c_str(), &addback_time);
-}
-
-void EnergySensitiveDetector::register_branches(TTree *tree) {
-    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         tree->SetBranchAddress(
             (name + "_" +
              dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
@@ -302,13 +252,65 @@ void EnergySensitiveDetector::register_branches(TTree *tree) {
                  ->time_vs_time_RF_calibrated);
     }
 
-    tree->SetBranchAddress((name + "_addback_energy").c_str(), &addback_energy);
-    tree->SetBranchAddress((name + "_addback_time").c_str(), &addback_time);
+    if (channels.size() > 1) {
+        tree->SetBranchStatus((name + "_addback_energy").c_str(), 1);
+        tree->SetBranchStatus((name + "_addback_time").c_str(), 1);
+        tree->SetBranchAddress((name + "_addback_energy").c_str(),
+                               &addback_energy);
+        tree->SetBranchAddress((name + "_addback_time").c_str(), &addback_time);
+    }
 }
 
-void EnergySensitiveDetector::reset() {
+void EnergySensitiveDetector::set_up_calibrated_branches_for_writing(
+    TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        channels[n_channel]->reset();
+        tree->Branch((name + "_" +
+                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->name +
+                      "_e")
+                         .c_str(),
+                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->energy_calibrated);
+        tree->Branch((name + "_" +
+                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->name +
+                      "_t")
+                         .c_str(),
+                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->time_calibrated);
+        tree->Branch((name + "_" +
+                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->name +
+                      "_ts")
+                         .c_str(),
+                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->timestamp_calibrated);
+        tree->Branch((name + "_" +
+                      dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->name +
+                      "_t_vs_RF")
+                         .c_str(),
+                     &dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                          channels[n_channel])
+                          ->time_vs_time_RF_calibrated);
+    }
+
+    if (channels.size() > 1) {
+        tree->Branch((name + "_addback_energy").c_str(), &addback_energy);
+        tree->Branch((name + "_addback_time").c_str(), &addback_time);
+    }
+}
+
+void EnergySensitiveDetector::reset_calibrated_leaves() {
+    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
+        channels[n_channel]->reset_calibrated_leaves();
     }
 
     addback_energy = numeric_limits<double>::quiet_NaN();

@@ -47,5 +47,5 @@ struct EnergySensitiveDetectorChannel final : public Channel {
     double energy_calibrated, time_calibrated, timestamp_calibrated,
         time_vs_time_RF_calibrated;
 
-    void reset() override final;
+    void reset_calibrated_leaves() override final;
 };

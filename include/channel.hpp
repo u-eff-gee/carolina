@@ -11,5 +11,5 @@ struct Channel {
     const string name;
     const size_t module, channel;
 
-    virtual void reset() = 0;
+    virtual void reset_calibrated_leaves() = 0;
 };
