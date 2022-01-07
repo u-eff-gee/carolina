@@ -4,6 +4,10 @@
 
 using std::string;
 
+#include <utility>
+
+using std::pair;
+
 #include <vector>
 
 using std::vector;
@@ -18,4 +22,6 @@ struct CoincidenceMatrix {
 
     const HistogramProperties x_axis;
     const HistogramProperties y_axis;
+
+    vector<pair<size_t, size_t>> get_coincidence_pairs() const;
 };

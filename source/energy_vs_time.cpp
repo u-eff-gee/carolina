@@ -51,22 +51,25 @@ int main(int argc, char **argv) {
             for (auto channel : analysis.detectors[n_detector]->channels) {
                 histogram_name =
                     analysis.detectors[n_detector]->name + "_" + channel->name;
-                energy_vs_time_histograms[n_detector].push_back(new TH2D(
-                    histogram_name.c_str(), histogram_name.c_str(),
-                    analysis.get_group(n_detector)->histogram_properties.n_bins/vm["rebin_energy"].as<unsigned int>(),
-                    analysis.get_group(n_detector)
-                        ->histogram_properties.minimum,
-                    analysis.get_group(n_detector)
-                        ->histogram_properties.maximum,
-                    dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                        analysis.get_group(n_detector))
-                        ->time_histogram_properties.n_bins/vm["rebin_time"].as<unsigned int>(),
-                    dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                        analysis.get_group(n_detector))
-                        ->time_histogram_properties.n_bins,
-                    dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                        analysis.get_group(n_detector))
-                        ->time_histogram_properties.n_bins));
+                energy_vs_time_histograms[n_detector].push_back(
+                    new TH2D(histogram_name.c_str(), histogram_name.c_str(),
+                             analysis.get_group(n_detector)
+                                     ->histogram_properties.n_bins /
+                                 vm["rebin_energy"].as<unsigned int>(),
+                             analysis.get_group(n_detector)
+                                 ->histogram_properties.minimum,
+                             analysis.get_group(n_detector)
+                                 ->histogram_properties.maximum,
+                             dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                 analysis.get_group(n_detector))
+                                     ->time_histogram_properties.n_bins /
+                                 vm["rebin_time"].as<unsigned int>(),
+                             dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                 analysis.get_group(n_detector))
+                                 ->time_histogram_properties.n_bins,
+                             dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                 analysis.get_group(n_detector))
+                                 ->time_histogram_properties.n_bins));
             }
         }
     }

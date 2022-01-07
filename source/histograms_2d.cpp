@@ -8,14 +8,27 @@ using std::min;
 using std::cout;
 using std::endl;
 
+#include <memory>
+
+using std::dynamic_pointer_cast;
+
 #include "TChain.h"
 #include "TFile.h"
-#include "TH2D.h"
+#include "TH2I.h"
 
 #include "command_line_parser.hpp"
+#include "energy_sensitive_detector.hpp"
+#include "energy_sensitive_detector_channel.hpp"
 #include "histograms_1d.hpp"
 #include "progress_printer.hpp"
 #include "tfile_utilities.hpp"
+
+void fill(TH2I* histogram, const CoincidenceMatrix matrix, const double energy_1, const double energy_2){
+    histogram->Fill(energy_1, energy_2);
+    if(!matrix.detectors_y.size()){
+        histogram->Fill(energy_2, energy_1);
+    }
+}
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
@@ -31,23 +44,18 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1);
 
-    analysis.activate_branches(tree);
-    analysis.register_branches(tree);
+    analysis.set_up_calibrated_branches_for_reading(tree);
 
-    vector<TH2D *> coincidence_histograms;
+    vector<vector<pair<size_t, size_t>>> coincidence_pairs;
+    vector<TH2I *> coincidence_histograms;
     string histogram_name;
 
-    for (size_t n_matrix = 0; n_matrix < analysis.coincidence_matrices.size();
-         ++n_matrix) {
-        coincidence_histograms.push_back(
-            new TH2D(analysis.coincidence_matrices[n_matrix].name.c_str(),
-                     analysis.coincidence_matrices[n_matrix].name.c_str(),
-                     analysis.coincidence_matrices[n_matrix].x_axis.n_bins,
-                     analysis.coincidence_matrices[n_matrix].x_axis.minimum,
-                     analysis.coincidence_matrices[n_matrix].x_axis.maximum,
-                     analysis.coincidence_matrices[n_matrix].y_axis.n_bins,
-                     analysis.coincidence_matrices[n_matrix].y_axis.minimum,
-                     analysis.coincidence_matrices[n_matrix].y_axis.maximum));
+    for (auto matrix : analysis.coincidence_matrices) {
+        coincidence_pairs.push_back(matrix.get_coincidence_pairs());
+        coincidence_histograms.push_back(new TH2I(
+            matrix.name.c_str(), matrix.name.c_str(), matrix.x_axis.n_bins,
+            matrix.x_axis.minimum, matrix.x_axis.maximum, matrix.y_axis.n_bins,
+            matrix.y_axis.minimum, matrix.y_axis.maximum));
     }
 
     for (long long i = first; i <= last; ++i) {
@@ -57,176 +65,18 @@ int main(int argc, char **argv) {
 
         for (size_t n_matrix = 0;
              n_matrix < analysis.coincidence_matrices.size(); ++n_matrix) {
-            if (!analysis.coincidence_matrices[n_matrix].detectors_y.size()) {
-                for (size_t n_detector_1 = 0;
-                     n_detector_1 <
-                     analysis.coincidence_matrices[n_matrix].detectors_x.size();
-                     ++n_detector_1) {
-                    for (size_t n_channel_1 = 0;
-                         n_channel_1 <
-                         analysis.detectors[n_detector_1].channels.size();
-                         ++n_channel_1) {
-                        if (!isnan(
-                                analysis
-                                    .detectors
-                                        [analysis.coincidence_matrices[n_matrix]
-                                             .detectors_x[n_detector_1]]
-                                    .channels[n_channel_1]
-                                    .energy_calibrated) &&
-                            analysis
-                                .detectors[analysis
-                                               .coincidence_matrices[n_matrix]
-                                               .detectors_x[n_detector_1]]
-                                .channels[n_channel_1]
-                                .time_vs_time_RF_gate(
-                                    analysis
-                                        .detectors
-                                            [analysis
-                                                 .coincidence_matrices[n_matrix]
-                                                 .detectors_x[n_detector_1]]
-                                        .channels[n_channel_1]
-                                        .time_vs_time_RF_calibrated)) {
-                            for (size_t n_detector_2 = n_detector_1 + 1;
-                                 n_detector_2 <
-                                 analysis.coincidence_matrices[n_matrix]
-                                     .detectors_x.size();
-                                 ++n_detector_2) {
-                                for (size_t n_channel_2 = 0;
-                                     n_channel_2 <
-                                     analysis.detectors[n_detector_2]
-                                         .channels.size();
-                                     ++n_channel_2) {
-                                    if (!isnan(
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_x
-                                                             [n_detector_2]]
-                                                .channels[n_channel_2]
-                                                .energy_calibrated) &&
-                                        analysis
-                                            .detectors
-                                                [analysis
-                                                     .coincidence_matrices
-                                                         [n_matrix]
-                                                     .detectors_x[n_detector_2]]
-                                            .channels[n_channel_2]
-                                            .time_vs_time_RF_gate(
-                                                analysis
-                                                    .detectors
-                                                        [analysis
-                                                             .coincidence_matrices
-                                                                 [n_matrix]
-                                                             .detectors_x
-                                                                 [n_detector_2]]
-                                                    .channels[n_channel_2]
-                                                    .time_vs_time_RF_calibrated)) {
-                                        coincidence_histograms[n_matrix]->Fill(
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_x
-                                                             [n_detector_1]]
-                                                .channels[n_channel_1]
-                                                .energy_calibrated,
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_x
-                                                             [n_detector_2]]
-                                                .channels[n_channel_2]
-                                                .energy_calibrated);
-                                        coincidence_histograms[n_matrix]->Fill(
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_x
-                                                             [n_detector_2]]
-                                                .channels[n_channel_2]
-                                                .energy_calibrated,
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_x
-                                                             [n_detector_1]]
-                                                .channels[n_channel_1]
-                                                .energy_calibrated);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                for (size_t n_detector_x = 0;
-                     n_detector_x <
-                     analysis.coincidence_matrices[n_matrix].detectors_x.size();
-                     ++n_detector_x) {
-                    for (size_t n_channel_x = 0;
-                         n_channel_x <
-                         analysis.detectors[n_detector_x].channels.size();
-                         ++n_channel_x) {
-                        if (!isnan(
-                                analysis
-                                    .detectors
-                                        [analysis.coincidence_matrices[n_matrix]
-                                             .detectors_x[n_detector_x]]
-                                    .channels[n_channel_x]
-                                    .energy_calibrated)) {
-                            for (size_t n_detector_y = 0;
-                                 n_detector_y <
-                                 analysis.coincidence_matrices[n_matrix]
-                                     .detectors_y.size();
-                                 ++n_detector_y) {
-                                for (size_t n_channel_y = 0;
-                                     n_channel_y <
-                                     analysis.detectors[n_detector_y]
-                                         .channels.size();
-                                     ++n_channel_y) {
-                                    if (!isnan(
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_y
-                                                             [n_detector_y]]
-                                                .channels[n_channel_y]
-                                                .energy_calibrated)) {
-                                        coincidence_histograms[n_matrix]->Fill(
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_x
-                                                             [n_detector_x]]
-                                                .channels[n_channel_x]
-                                                .energy_calibrated,
-                                            analysis
-                                                .detectors
-                                                    [analysis
-                                                         .coincidence_matrices
-                                                             [n_matrix]
-                                                         .detectors_y
-                                                             [n_detector_y]]
-                                                .channels[n_channel_y]
-                                                .energy_calibrated);
-                                    }
-                                }
-                            }
-                        }
-                    }
+            for (auto detector_pair : coincidence_pairs[n_matrix]) {
+                if (!isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
+                               analysis.detectors[detector_pair.first])
+                               ->get_calibrated_and_RF_gated_energy()) &&
+                    !isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
+                               analysis.detectors[detector_pair.second])
+                               ->get_calibrated_and_RF_gated_energy())) {
+                    fill(coincidence_histograms[n_matrix], analysis.coincidence_matrices[n_matrix], dynamic_pointer_cast<EnergySensitiveDetector>(
+                               analysis.detectors[detector_pair.first])
+                               ->get_calibrated_and_RF_gated_energy(), dynamic_pointer_cast<EnergySensitiveDetector>(
+                               analysis.detectors[detector_pair.second])
+                               ->get_calibrated_and_RF_gated_energy());
                 }
             }
         }

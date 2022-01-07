@@ -175,6 +175,23 @@ void EnergySensitiveDetector::addback() {
     }
 }
 
+double EnergySensitiveDetector::get_calibrated_and_RF_gated_energy() const {
+    if (channels.size() > 1) {
+        return addback_energy;
+    }
+    return dynamic_pointer_cast<EnergySensitiveDetectorChannel>(channels[0])
+        ->energy_calibrated;
+}
+
+void EnergySensitiveDetector::reset_calibrated_leaves() {
+    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
+        channels[n_channel]->reset_calibrated_leaves();
+    }
+
+    addback_energy = numeric_limits<double>::quiet_NaN();
+    addback_time = numeric_limits<double>::quiet_NaN();
+}
+
 void EnergySensitiveDetector::set_up_calibrated_branches_for_reading(
     TTree *tree) {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
@@ -306,13 +323,4 @@ void EnergySensitiveDetector::set_up_calibrated_branches_for_writing(
         tree->Branch((name + "_addback_energy").c_str(), &addback_energy);
         tree->Branch((name + "_addback_time").c_str(), &addback_time);
     }
-}
-
-void EnergySensitiveDetector::reset_calibrated_leaves() {
-    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        channels[n_channel]->reset_calibrated_leaves();
-    }
-
-    addback_energy = numeric_limits<double>::quiet_NaN();
-    addback_time = numeric_limits<double>::quiet_NaN();
 }

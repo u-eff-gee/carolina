@@ -36,7 +36,8 @@ struct EnergySensitiveDetector final : public Detector {
     double addback_time;
 
     void addback();
+    double get_calibrated_and_RF_gated_energy() const;
+    void reset_calibrated_leaves() override final;
     void set_up_calibrated_branches_for_reading(TTree *tree) override final;
     void set_up_calibrated_branches_for_writing(TTree *tree) override final;
-    void reset_calibrated_leaves() override final;
 };
