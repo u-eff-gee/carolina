@@ -3,7 +3,8 @@
 class ProgressPrinter {
 
   public:
-    ProgressPrinter(const long long n_entries, const double update_increment=0.01);
+    ProgressPrinter(const long long n_entries,
+                    const double update_increment = 0.01);
 
     void operator()(const long long index);
 

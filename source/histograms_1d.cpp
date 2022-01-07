@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     vector<vector<TH1D *>> histograms;
     vector<vector<TH1D *>> time_vs_time_RF_histograms;
     vector<vector<vector<vector<TH1D *>>>> time_difference_histograms;
+    vector<TDirectory *> time_difference_directories;
     string histogram_name;
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
@@ -356,9 +357,14 @@ int main(int argc, char **argv) {
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
+    TDirectory *directory;
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
+        if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
+            directory = output_file.mkdir(
+                (analysis.detectors[n_detector_1]->name + "_tdiff").c_str());
+        }
         if (analysis.detectors[n_detector_1]->channels.size() > 1) {
             addback_histograms[n_detector_1]->Write();
         }
@@ -367,6 +373,7 @@ int main(int argc, char **argv) {
              ++n_channel_1) {
             histograms[n_detector_1][n_channel_1]->Write();
             if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
+                directory->cd();
                 time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Write();
 
                 for (size_t n_channel_2 = n_channel_1 + 1;
@@ -380,18 +387,20 @@ int main(int argc, char **argv) {
 
                 for (size_t n_detector_2 = n_detector_1 + 1;
                      n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
-                    if(analysis.detectors[n_detector_2]->type == energy_sensitive){
+                    if (analysis.detectors[n_detector_2]->type ==
+                        energy_sensitive) {
                         for (size_t n_channel_2 = 0;
-                            n_channel_2 <
-                            analysis.detectors[n_detector_2]->channels.size();
-                            ++n_channel_2) {
-                            time_difference_histograms[n_detector_1][n_channel_1]
-                                                    [n_detector_2 - n_detector_1]
-                                                    [n_channel_2]
-                                                        ->Write();
+                             n_channel_2 <
+                             analysis.detectors[n_detector_2]->channels.size();
+                             ++n_channel_2) {
+                            time_difference_histograms
+                                [n_detector_1][n_channel_1]
+                                [n_detector_2 - n_detector_1][n_channel_2]
+                                    ->Write();
                         }
                     }
                 }
+                output_file.cd();
             }
         }
     }
