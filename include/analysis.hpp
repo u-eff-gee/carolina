@@ -32,6 +32,11 @@ struct Analysis {
     double get_timestamp(const size_t n_detector, const size_t n_channel) const;
 
     void calibrate(const int n_entry);
+    void calibrate_counter_detector(const int n_entry, const size_t n_detector,
+                                    const size_t n_channel);
+    void calibrate_energy_sensitive_detector(const int n_entry,
+                                             const size_t n_detector,
+                                             const size_t n_channel);
     void reset_calibrated_leaves();
     void set_up_calibrated_branches_for_reading(TTree *tree);
     void set_up_calibrated_branches_for_writing(TTree *tree);
