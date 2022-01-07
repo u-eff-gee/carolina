@@ -34,6 +34,7 @@ struct EnergySensitiveDetector final : public Detector {
 
     double addback_energy;
     double addback_time;
+    double addback_time_vs_time_RF;
 
     void addback();
     double get_calibrated_and_RF_gated_energy() const;

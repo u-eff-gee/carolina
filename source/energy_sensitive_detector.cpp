@@ -163,14 +163,21 @@ void EnergySensitiveDetector::addback() {
 
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         if (addback_energies[n_channel] >
-            addback_energy_thresholds[n_channel]) {
-            if (isnan(addback_energy)) {
-                addback_energy = addback_energies[n_channel];
-                addback_time = addback_times[n_channel];
-            } else if (addback_energies[n_channel] > addback_energy) {
-                addback_energy = addback_energies[n_channel];
-                addback_time = addback_times[n_channel];
-            }
+                addback_energy_thresholds[n_channel] &&
+            (isnan(addback_energy) ||
+             addback_energies[n_channel] > addback_energy) &&
+            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                channels[n_channel])
+                ->time_vs_time_RF_gate(
+                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                        channels[n_channel])
+                        ->time_vs_time_RF_calibrated)) {
+            addback_energy = addback_energies[n_channel];
+            addback_time = addback_times[n_channel];
+            addback_time_vs_time_RF =
+                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                    channels[n_channel])
+                    ->time_vs_time_RF_calibrated;
         }
     }
 }
@@ -190,6 +197,7 @@ void EnergySensitiveDetector::reset_calibrated_leaves() {
 
     addback_energy = numeric_limits<double>::quiet_NaN();
     addback_time = numeric_limits<double>::quiet_NaN();
+    addback_time_vs_time_RF = numeric_limits<double>::quiet_NaN();
 }
 
 void EnergySensitiveDetector::set_up_calibrated_branches_for_reading(
@@ -272,9 +280,12 @@ void EnergySensitiveDetector::set_up_calibrated_branches_for_reading(
     if (channels.size() > 1) {
         tree->SetBranchStatus((name + "_addback_energy").c_str(), 1);
         tree->SetBranchStatus((name + "_addback_time").c_str(), 1);
+        tree->SetBranchStatus((name + "_addback_time_vs_time_RF").c_str(), 1);
         tree->SetBranchAddress((name + "_addback_energy").c_str(),
                                &addback_energy);
         tree->SetBranchAddress((name + "_addback_time").c_str(), &addback_time);
+        tree->SetBranchAddress((name + "_addback_time_vs_time_RF").c_str(),
+                               &addback_time_vs_time_RF);
     }
 }
 
@@ -322,5 +333,7 @@ void EnergySensitiveDetector::set_up_calibrated_branches_for_writing(
     if (channels.size() > 1) {
         tree->Branch((name + "_addback_energy").c_str(), &addback_energy);
         tree->Branch((name + "_addback_time").c_str(), &addback_time);
+        tree->Branch((name + "_addback_time_vs_time_RF").c_str(),
+                     &addback_time_vs_time_RF);
     }
 }

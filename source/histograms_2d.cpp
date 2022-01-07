@@ -23,9 +23,10 @@ using std::dynamic_pointer_cast;
 #include "progress_printer.hpp"
 #include "tfile_utilities.hpp"
 
-void fill(TH2I* histogram, const CoincidenceMatrix matrix, const double energy_1, const double energy_2){
+void fill(TH2I *histogram, const CoincidenceMatrix matrix,
+          const double energy_1, const double energy_2) {
     histogram->Fill(energy_1, energy_2);
-    if(!matrix.detectors_y.size()){
+    if (!matrix.detectors_y.size()) {
         histogram->Fill(energy_2, energy_1);
     }
 }
@@ -72,11 +73,14 @@ int main(int argc, char **argv) {
                     !isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
                                analysis.detectors[detector_pair.second])
                                ->get_calibrated_and_RF_gated_energy())) {
-                    fill(coincidence_histograms[n_matrix], analysis.coincidence_matrices[n_matrix], dynamic_pointer_cast<EnergySensitiveDetector>(
-                               analysis.detectors[detector_pair.first])
-                               ->get_calibrated_and_RF_gated_energy(), dynamic_pointer_cast<EnergySensitiveDetector>(
-                               analysis.detectors[detector_pair.second])
-                               ->get_calibrated_and_RF_gated_energy());
+                    fill(coincidence_histograms[n_matrix],
+                         analysis.coincidence_matrices[n_matrix],
+                         dynamic_pointer_cast<EnergySensitiveDetector>(
+                             analysis.detectors[detector_pair.first])
+                             ->get_calibrated_and_RF_gated_energy(),
+                         dynamic_pointer_cast<EnergySensitiveDetector>(
+                             analysis.detectors[detector_pair.second])
+                             ->get_calibrated_and_RF_gated_energy());
                 }
             }
         }
