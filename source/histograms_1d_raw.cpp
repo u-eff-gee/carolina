@@ -50,20 +50,20 @@ int main(int argc, char **argv) {
                 histograms[n_detector].push_back(
                     new TH1D(histogram_name.c_str(), histogram_name.c_str(),
                              analysis.get_group(n_detector)
-                                 .raw_histogram_properties.n_bins,
+                                 ->raw_histogram_properties.n_bins,
                              analysis.get_group(n_detector)
-                                 .raw_histogram_properties.minimum,
+                                 ->raw_histogram_properties.minimum,
                              analysis.get_group(n_detector)
-                                 .raw_histogram_properties.maximum));
+                                 ->raw_histogram_properties.maximum));
             } else if (analysis.detectors[n_detector]->type == counter) {
                 histograms[n_detector].push_back(
                     new TH1D(histogram_name.c_str(), histogram_name.c_str(),
                              analysis.get_group(n_detector)
-                                 .raw_histogram_properties.n_bins,
+                                 ->raw_histogram_properties.n_bins,
                              analysis.get_group(n_detector)
-                                 .raw_histogram_properties.minimum,
+                                 ->raw_histogram_properties.minimum,
                              analysis.get_group(n_detector)
-                                 .raw_histogram_properties.maximum));
+                                 ->raw_histogram_properties.maximum));
             }
         }
     }

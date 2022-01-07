@@ -12,19 +12,19 @@ using std::vector;
 
 struct Analysis {
     Analysis(vector<shared_ptr<Module>> modules,
-             const vector<DetectorGroup> detector_groups,
+             const vector<shared_ptr<DetectorGroup>> detector_groups,
              vector<shared_ptr<Detector>> detectors,
              const vector<CoincidenceMatrix> coincidence_matrices);
 
     vector<shared_ptr<Module>> modules;
-    const vector<DetectorGroup> detector_groups;
+    const vector<shared_ptr<DetectorGroup>> detector_groups;
     vector<shared_ptr<Detector>> detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
 
     void calibrate(const long long n_entry);
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;
     long long get_counts(const size_t n_detector, const size_t n_channel) const;
-    DetectorGroup get_group(const size_t n_detector) const;
+    shared_ptr<DetectorGroup> get_group(const size_t n_detector) const;
     double get_tdc_resolution(const size_t n_detector,
                               const size_t n_channel) const;
     double get_time(const size_t n_detector, const size_t n_channel) const;

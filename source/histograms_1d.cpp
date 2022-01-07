@@ -1,6 +1,15 @@
+#include <algorithm>
+
+using std::max;
+using std::min;
+
 #include <cmath>
 
 using std::isnan;
+
+#include <memory>
+
+using std::dynamic_pointer_cast;
 
 #include <iostream>
 
@@ -30,120 +39,158 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1, 0.001);
 
-    analysis.activate_branches(tree);
-    analysis.register_branches(tree);
+    analysis.set_up_calibrated_branches_for_reading(tree);
 
     vector<TH1D *> addback_histograms;
-    vector<vector<TH1D *>> energy_histograms;
+    vector<vector<TH1D *>> histograms;
     vector<vector<TH1D *>> time_vs_time_RF_histograms;
     vector<vector<vector<vector<TH1D *>>>> time_difference_histograms;
     string histogram_name;
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
-        if (analysis.detectors[n_detector_1].channels.size() > 1) {
-            histogram_name = analysis.detectors[n_detector_1].name + "_addback";
-            addback_histograms.push_back(
-                new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         analysis.detectors[n_detector_1]
-                             .group.histogram_properties.n_bins,
-                         analysis.detectors[n_detector_1]
-                             .group.histogram_properties.minimum,
-                         analysis.detectors[n_detector_1]
-                             .group.histogram_properties.maximum));
+        if (analysis.detectors[n_detector_1]->channels.size() > 1) {
+            histogram_name =
+                analysis.detectors[n_detector_1]->name + "_addback";
+            addback_histograms.push_back(new TH1D(
+                histogram_name.c_str(), histogram_name.c_str(),
+                analysis.get_group(n_detector_1)->histogram_properties.n_bins,
+                analysis.get_group(n_detector_1)->histogram_properties.minimum,
+                analysis.get_group(n_detector_1)
+                    ->histogram_properties.maximum));
         } else {
             addback_histograms.push_back(nullptr);
         }
-        energy_histograms.push_back(vector<TH1D *>());
+        histograms.push_back(vector<TH1D *>());
         time_difference_histograms.push_back(vector<vector<vector<TH1D *>>>());
         time_vs_time_RF_histograms.push_back(vector<TH1D *>());
         for (size_t n_channel_1 = 0;
-             n_channel_1 < analysis.detectors[n_detector_1].channels.size();
+             n_channel_1 < analysis.detectors[n_detector_1]->channels.size();
              ++n_channel_1) {
             time_difference_histograms[n_detector_1].push_back(
                 vector<vector<TH1D *>>());
             histogram_name =
-                analysis.detectors[n_detector_1].name + "_" +
-                analysis.detectors[n_detector_1].channels[n_channel_1].name;
-            energy_histograms[n_detector_1].push_back(
-                new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         analysis.detectors[n_detector_1]
-                             .group.histogram_properties.n_bins,
-                         analysis.detectors[n_detector_1]
-                             .group.histogram_properties.minimum,
-                         analysis.detectors[n_detector_1]
-                             .group.histogram_properties.maximum));
-            histogram_name =
-                analysis.detectors[n_detector_1].name + "_" +
-                analysis.detectors[n_detector_1].channels[n_channel_1].name +
-                "_t_vs_RF";
-            time_vs_time_RF_histograms[n_detector_1].push_back(new TH1D(
+                analysis.detectors[n_detector_1]->name + "_" +
+                analysis.detectors[n_detector_1]->channels[n_channel_1]->name;
+            histograms[n_detector_1].push_back(new TH1D(
                 histogram_name.c_str(), histogram_name.c_str(),
-                analysis.detectors[n_detector_1]
-                    .group.time_difference_histogram_properties.n_bins,
-                analysis.detectors[n_detector_1]
-                    .group.time_difference_histogram_properties.minimum,
-                analysis.detectors[n_detector_1]
-                    .group.time_difference_histogram_properties.maximum));
-
-            time_difference_histograms[n_detector_1][n_channel_1].push_back(
-                vector<TH1D *>());
-            for (size_t n_channel_2 = n_channel_1 + 1;
-                 n_channel_2 < analysis.detectors[n_detector_1].channels.size();
-                 ++n_channel_2) {
-                histogram_name = analysis.detectors[n_detector_1].name + "_" +
+                analysis.get_group(n_detector_1)->histogram_properties.n_bins,
+                analysis.get_group(n_detector_1)->histogram_properties.minimum,
+                analysis.get_group(n_detector_1)
+                    ->histogram_properties.maximum));
+            if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
+                histogram_name = analysis.detectors[n_detector_1]->name + "_" +
                                  analysis.detectors[n_detector_1]
-                                     .channels[n_channel_1]
-                                     .name +
-                                 "_" + analysis.detectors[n_detector_1].name +
-                                 "_" +
-                                 analysis.detectors[n_detector_1]
-                                     .channels[n_channel_2]
-                                     .name +
-                                 "_tdiff";
-                time_difference_histograms[n_detector_1][n_channel_1][0]
-                    .push_back(new TH1D(
-                        histogram_name.c_str(), histogram_name.c_str(),
-                        analysis.detectors[n_detector_1]
-                            .group.time_difference_histogram_properties.n_bins,
-                        analysis.detectors[n_detector_1]
-                            .group.time_difference_histogram_properties.minimum,
-                        analysis.detectors[n_detector_1]
-                            .group.time_difference_histogram_properties
-                            .maximum));
-            }
+                                     ->channels[n_channel_1]
+                                     ->name +
+                                 "_t_vs_RF";
+                time_vs_time_RF_histograms[n_detector_1].push_back(
+                    new TH1D(histogram_name.c_str(), histogram_name.c_str(),
+                             dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                 analysis.get_group(n_detector_1))
+                                 ->time_histogram_properties.n_bins,
+                             dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                 analysis.get_group(n_detector_1))
+                                 ->time_histogram_properties.minimum,
+                             dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                 analysis.get_group(n_detector_1))
+                                 ->time_histogram_properties.maximum));
 
-            for (size_t n_detector_2 = n_detector_1 + 1;
-                 n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                 time_difference_histograms[n_detector_1][n_channel_1].push_back(
                     vector<TH1D *>());
-                for (size_t n_channel_2 = 0;
+                for (size_t n_channel_2 = n_channel_1 + 1;
                      n_channel_2 <
-                     analysis.detectors[n_detector_2].channels.size();
+                     analysis.detectors[n_detector_1]->channels.size();
                      ++n_channel_2) {
                     histogram_name =
-                        analysis.detectors[n_detector_1].name + "_" +
+                        analysis.detectors[n_detector_1]->name + "_" +
                         analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .name +
-                        "_" + analysis.detectors[n_detector_2].name + "_" +
-                        analysis.detectors[n_detector_2]
-                            .channels[n_channel_2]
-                            .name +
+                            ->channels[n_channel_1]
+                            ->name +
+                        "_" + analysis.detectors[n_detector_1]->name + "_" +
+                        analysis.detectors[n_detector_1]
+                            ->channels[n_channel_2]
+                            ->name +
                         "_tdiff";
-                    time_difference_histograms
-                        [n_detector_1][n_channel_1][n_detector_2 - n_detector_1]
-                            .push_back(new TH1D(
-                                histogram_name.c_str(), histogram_name.c_str(),
+                    time_difference_histograms[n_detector_1][n_channel_1][0]
+                        .push_back(new TH1D(
+                            histogram_name.c_str(), histogram_name.c_str(),
+                            dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                analysis.get_group(n_detector_1))
+                                ->time_histogram_properties.n_bins,
+                            dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                analysis.get_group(n_detector_1))
+                                ->time_histogram_properties.minimum,
+                            dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                                analysis.get_group(n_detector_1))
+                                ->time_histogram_properties.maximum));
+                }
+
+                for (size_t n_detector_2 = n_detector_1 + 1;
+                     n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
+                    time_difference_histograms[n_detector_1][n_channel_1]
+                        .push_back(vector<TH1D *>());
+                    if (analysis.detectors[n_detector_2]->type ==
+                        energy_sensitive) {
+                        for (size_t n_channel_2 = 0;
+                             n_channel_2 <
+                             analysis.detectors[n_detector_2]->channels.size();
+                             ++n_channel_2) {
+                            histogram_name =
+                                analysis.detectors[n_detector_1]->name + "_" +
                                 analysis.detectors[n_detector_1]
-                                    .group.time_difference_histogram_properties
-                                    .n_bins,
-                                analysis.detectors[n_detector_1]
-                                    .group.time_difference_histogram_properties
-                                    .minimum,
-                                analysis.detectors[n_detector_1]
-                                    .group.time_difference_histogram_properties
-                                    .maximum));
+                                    ->channels[n_channel_1]
+                                    ->name +
+                                "_" + analysis.detectors[n_detector_2]->name +
+                                "_" +
+                                analysis.detectors[n_detector_2]
+                                    ->channels[n_channel_2]
+                                    ->name +
+                                "_tdiff";
+                            time_difference_histograms
+                                [n_detector_1][n_channel_1]
+                                [n_detector_2 - n_detector_1]
+                                    .push_back(new TH1D(
+                                        histogram_name.c_str(),
+                                        histogram_name.c_str(),
+                                        max(dynamic_pointer_cast<
+                                                EnergySensitiveDetectorGroup>(
+                                                analysis.get_group(
+                                                    n_detector_1))
+                                                ->time_histogram_properties
+                                                .n_bins,
+                                            dynamic_pointer_cast<
+                                                EnergySensitiveDetectorGroup>(
+                                                analysis.get_group(
+                                                    n_detector_2))
+                                                ->time_histogram_properties
+                                                .n_bins),
+                                        min(dynamic_pointer_cast<
+                                                EnergySensitiveDetectorGroup>(
+                                                analysis.get_group(
+                                                    n_detector_1))
+                                                ->time_histogram_properties
+                                                .minimum,
+                                            dynamic_pointer_cast<
+                                                EnergySensitiveDetectorGroup>(
+                                                analysis.get_group(
+                                                    n_detector_2))
+                                                ->time_histogram_properties
+                                                .minimum),
+                                        max(dynamic_pointer_cast<
+                                                EnergySensitiveDetectorGroup>(
+                                                analysis.get_group(
+                                                    n_detector_1))
+                                                ->time_histogram_properties
+                                                .maximum,
+                                            dynamic_pointer_cast<
+                                                EnergySensitiveDetectorGroup>(
+                                                analysis.get_group(
+                                                    n_detector_2))
+                                                ->time_histogram_properties
+                                                .maximum)));
+                        }
+                    }
                 }
             }
         }
@@ -157,85 +204,152 @@ int main(int argc, char **argv) {
         for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
              ++n_detector_1) {
             for (size_t n_channel_1 = 0;
-                 n_channel_1 < analysis.detectors[n_detector_1].channels.size();
+                 n_channel_1 <
+                 analysis.detectors[n_detector_1]->channels.size();
                  ++n_channel_1) {
-                if (!isnan(analysis.detectors[n_detector_1]
-                               .channels[n_channel_1]
-                               .energy_calibrated) &&
-                    analysis.detectors[n_detector_1]
-                        .channels[n_channel_1]
-                        .time_vs_time_RF_gate(
+                if (analysis.detectors[n_detector_1]->type ==
+                    energy_sensitive) {
+                    if (!isnan(dynamic_pointer_cast<
+                                   EnergySensitiveDetectorChannel>(
+                                   analysis.detectors[n_detector_1]
+                                       ->channels[n_channel_1])
+                                   ->energy_calibrated) &&
+                        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             analysis.detectors[n_detector_1]
-                                .channels[n_channel_1]
-                                .time_vs_time_RF_calibrated)) {
-                    energy_histograms[n_detector_1][n_channel_1]->Fill(
-                        analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .energy_calibrated);
-                    time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Fill(
-                        analysis.detectors[n_detector_1]
-                            .channels[n_channel_1]
-                            .time_vs_time_RF_calibrated);
-
-                    for (size_t n_channel_2 = n_channel_1 + 1;
-                         n_channel_2 <
-                         analysis.detectors[n_detector_1].channels.size();
-                         ++n_channel_2) {
-                        if (!isnan(analysis.detectors[n_detector_1]
-                                       .channels[n_channel_2]
-                                       .energy_calibrated) &&
-                            analysis.detectors[n_detector_1]
-                                .channels[n_channel_2]
-                                .time_vs_time_RF_gate(
+                                ->channels[n_channel_1])
+                            ->time_vs_time_RF_gate(
+                                dynamic_pointer_cast<
+                                    EnergySensitiveDetectorChannel>(
                                     analysis.detectors[n_detector_1]
-                                        .channels[n_channel_2]
-                                        .time_vs_time_RF_calibrated)) {
-                            time_difference_histograms
-                                [n_detector_1][n_channel_1][0]
-                                [n_channel_2 - n_channel_1 - 1]
-                                    ->Fill(analysis.detectors[n_detector_1]
-                                               .channels[n_channel_1]
-                                               .time_calibrated -
-                                           analysis.detectors[n_detector_1]
-                                               .channels[n_channel_2]
-                                               .time_calibrated);
-                        }
-                    }
+                                        ->channels[n_channel_1])
+                                    ->time_vs_time_RF_calibrated)) {
+                        histograms[n_detector_1][n_channel_1]->Fill(
+                            dynamic_pointer_cast<
+                                EnergySensitiveDetectorChannel>(
+                                analysis.detectors[n_detector_1]
+                                    ->channels[n_channel_1])
+                                ->energy_calibrated);
+                        time_vs_time_RF_histograms[n_detector_1][n_channel_1]
+                            ->Fill(dynamic_pointer_cast<
+                                       EnergySensitiveDetectorChannel>(
+                                       analysis.detectors[n_detector_1]
+                                           ->channels[n_channel_1])
+                                       ->time_vs_time_RF_calibrated);
 
-                    for (size_t n_detector_2 = n_detector_1 + 1;
-                         n_detector_2 < analysis.detectors.size();
-                         ++n_detector_2) {
-                        for (size_t n_channel_2 = 0;
+                        for (size_t n_channel_2 = n_channel_1 + 1;
                              n_channel_2 <
-                             analysis.detectors[n_detector_2].channels.size();
+                             analysis.detectors[n_detector_1]->channels.size();
                              ++n_channel_2) {
-                            if (!isnan(analysis.detectors[n_detector_2]
-                                           .channels[n_channel_2]
-                                           .energy_calibrated) &&
-                                analysis.detectors[n_detector_2]
-                                    .channels[n_channel_2]
-                                    .time_vs_time_RF_gate(
-                                        analysis.detectors[n_detector_2]
-                                            .channels[n_channel_2]
-                                            .time_vs_time_RF_calibrated)) {
+                            if (!isnan(dynamic_pointer_cast<
+                                           EnergySensitiveDetectorChannel>(
+                                           analysis.detectors[n_detector_1]
+                                               ->channels[n_channel_2])
+                                           ->energy_calibrated) &&
+                                dynamic_pointer_cast<
+                                    EnergySensitiveDetectorChannel>(
+                                    analysis.detectors[n_detector_1]
+                                        ->channels[n_channel_2])
+                                    ->time_vs_time_RF_gate(
+                                        dynamic_pointer_cast<
+                                            EnergySensitiveDetectorChannel>(
+                                            analysis.detectors[n_detector_1]
+                                                ->channels[n_channel_2])
+                                            ->time_vs_time_RF_calibrated)) {
                                 time_difference_histograms
-                                    [n_detector_1][n_channel_1]
-                                    [n_detector_2 - n_detector_1][n_channel_2]
-                                        ->Fill(analysis.detectors[n_detector_1]
-                                                   .channels[n_channel_1]
-                                                   .time_calibrated -
-                                               analysis.detectors[n_detector_2]
-                                                   .channels[n_channel_2]
-                                                   .time_calibrated);
+                                    [n_detector_1][n_channel_1][0]
+                                    [n_channel_2 - n_channel_1 - 1]
+                                        ->Fill(
+                                            dynamic_pointer_cast<
+                                                EnergySensitiveDetectorChannel>(
+                                                analysis
+                                                    .detectors[n_detector_1]
+                                                    ->channels[n_channel_1])
+                                                ->time_calibrated -
+                                            dynamic_pointer_cast<
+                                                EnergySensitiveDetectorChannel>(
+                                                analysis
+                                                    .detectors[n_detector_1]
+                                                    ->channels[n_channel_2])
+                                                ->time_calibrated);
+                            }
+                        }
+
+                        for (size_t n_detector_2 = n_detector_1 + 1;
+                             n_detector_2 < analysis.detectors.size();
+                             ++n_detector_2) {
+                            if (analysis.detectors[n_detector_2]->type ==
+                                energy_sensitive) {
+                                for (size_t n_channel_2 = 0;
+                                     n_channel_2 <
+                                     analysis.detectors[n_detector_2]
+                                         ->channels.size();
+                                     ++n_channel_2) {
+                                    if (!isnan(
+                                            dynamic_pointer_cast<
+                                                EnergySensitiveDetectorChannel>(
+                                                analysis
+                                                    .detectors[n_detector_2]
+                                                    ->channels[n_channel_2])
+                                                ->energy_calibrated) &&
+                                        dynamic_pointer_cast<
+                                            EnergySensitiveDetectorChannel>(
+                                            analysis.detectors[n_detector_2]
+                                                ->channels[n_channel_2])
+                                            ->time_vs_time_RF_gate(
+                                                dynamic_pointer_cast<
+                                                    EnergySensitiveDetectorChannel>(
+                                                    analysis
+                                                        .detectors[n_detector_2]
+                                                        ->channels[n_channel_2])
+                                                    ->time_vs_time_RF_calibrated)) {
+                                        time_difference_histograms
+                                            [n_detector_1][n_channel_1]
+                                            [n_detector_2 - n_detector_1]
+                                            [n_channel_2]
+                                                ->Fill(
+                                                    dynamic_pointer_cast<
+                                                        EnergySensitiveDetectorChannel>(
+                                                        analysis
+                                                            .detectors
+                                                                [n_detector_1]
+                                                            ->channels
+                                                                [n_channel_1])
+                                                        ->time_calibrated -
+                                                    dynamic_pointer_cast<
+                                                        EnergySensitiveDetectorChannel>(
+                                                        analysis
+                                                            .detectors
+                                                                [n_detector_2]
+                                                            ->channels
+                                                                [n_channel_2])
+                                                        ->time_calibrated);
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
-            if (analysis.detectors[n_detector_1].channels.size() > 1) {
-                if (!isnan(analysis.detectors[n_detector_1].addback_energy)) {
-                    addback_histograms[n_detector_1]->Fill(
-                        analysis.detectors[n_detector_1].addback_energy);
+                    if (analysis.detectors[n_detector_1]->channels.size() > 1) {
+                        if (!isnan(
+                                dynamic_pointer_cast<EnergySensitiveDetector>(
+                                    analysis.detectors[n_detector_1])
+                                    ->addback_energy)) {
+                            addback_histograms[n_detector_1]->Fill(
+                                dynamic_pointer_cast<EnergySensitiveDetector>(
+                                    analysis.detectors[n_detector_1])
+                                    ->addback_energy);
+                        }
+                    }
+                } else if (analysis.detectors[n_detector_1]->type == counter) {
+                    if (!isnan(dynamic_pointer_cast<CounterDetectorChannel>(
+                                   analysis.detectors[n_detector_1]
+                                       ->channels[n_channel_1])
+                                   ->count_rate)) {
+                        histograms[n_detector_1][n_channel_1]->Fill(
+                            dynamic_pointer_cast<CounterDetectorChannel>(
+                                analysis.detectors[n_detector_1]
+                                    ->channels[n_channel_1])
+                                ->count_rate);
+                    }
                 }
             }
         }
@@ -245,33 +359,38 @@ int main(int argc, char **argv) {
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
-        if (analysis.detectors[n_detector_1].channels.size() > 1) {
+        if (analysis.detectors[n_detector_1]->channels.size() > 1) {
             addback_histograms[n_detector_1]->Write();
         }
         for (size_t n_channel_1 = 0;
-             n_channel_1 < analysis.detectors[n_detector_1].channels.size();
+             n_channel_1 < analysis.detectors[n_detector_1]->channels.size();
              ++n_channel_1) {
-            energy_histograms[n_detector_1][n_channel_1]->Write();
-            time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Write();
+            histograms[n_detector_1][n_channel_1]->Write();
+            if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
+                time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Write();
 
-            for (size_t n_channel_2 = n_channel_1 + 1;
-                 n_channel_2 < analysis.detectors[n_detector_1].channels.size();
-                 ++n_channel_2) {
-                time_difference_histograms[n_detector_1][n_channel_1][0]
-                                          [n_channel_2 - n_channel_1 - 1]
-                                              ->Write();
-            }
-
-            for (size_t n_detector_2 = n_detector_1 + 1;
-                 n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
-                for (size_t n_channel_2 = 0;
+                for (size_t n_channel_2 = n_channel_1 + 1;
                      n_channel_2 <
-                     analysis.detectors[n_detector_2].channels.size();
+                     analysis.detectors[n_detector_1]->channels.size();
                      ++n_channel_2) {
-                    time_difference_histograms[n_detector_1][n_channel_1]
-                                              [n_detector_2 - n_detector_1]
-                                              [n_channel_2]
+                    time_difference_histograms[n_detector_1][n_channel_1][0]
+                                              [n_channel_2 - n_channel_1 - 1]
                                                   ->Write();
+                }
+
+                for (size_t n_detector_2 = n_detector_1 + 1;
+                     n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
+                    if(analysis.detectors[n_detector_2]->type == energy_sensitive){
+                        for (size_t n_channel_2 = 0;
+                            n_channel_2 <
+                            analysis.detectors[n_detector_2]->channels.size();
+                            ++n_channel_2) {
+                            time_difference_histograms[n_detector_1][n_channel_1]
+                                                    [n_detector_2 - n_detector_1]
+                                                    [n_channel_2]
+                                                        ->Write();
+                        }
+                    }
                 }
             }
         }

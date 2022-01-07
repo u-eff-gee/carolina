@@ -11,7 +11,7 @@ using std::dynamic_pointer_cast;
 #include "energy_sensitive_detector_channel.hpp"
 
 Analysis::Analysis(vector<shared_ptr<Module>> modules,
-                   const vector<DetectorGroup> detector_groups,
+                   const vector<shared_ptr<DetectorGroup>> detector_groups,
                    vector<shared_ptr<Detector>> detectors,
                    const vector<CoincidenceMatrix> coincidence_matrices)
     : modules(modules), detector_groups(detector_groups), detectors(detectors),
@@ -50,7 +50,7 @@ long long Analysis::get_counts(const size_t n_detector,
         ->get_counts(detectors[n_detector]->channels[n_channel]->channel);
 }
 
-DetectorGroup Analysis::get_group(const size_t n_detector) const {
+shared_ptr<DetectorGroup> Analysis::get_group(const size_t n_detector) const {
     return detector_groups[n_detector];
 }
 

@@ -13,29 +13,36 @@ using std::make_shared;
 #include "mdpp16.hpp"
 #include "v830.hpp"
 
-DetectorGroup clover{.name = "clover",
-                     .histogram_properties = {65536, -0.125, 16383.875},
-                     .raw_histogram_properties = {65536, -0.5, 65535.5}};
-DetectorGroup coaxial{.name = "coaxial",
-                      .histogram_properties = {65536, -0.125, 16383.875},
-                      .raw_histogram_properties = {65536, -0.5, 65535.5}};
-DetectorGroup nai{.name = "nai",
-                  .histogram_properties = {16384, -0.5, 16383.5},
-                  .raw_histogram_properties = {16384, -0.03125, 1023.96875}};
-DetectorGroup fission_chamber{
-    .name = "fission_chamber",
-    .histogram_properties = {65536, -0.125, 16383.875},
-    .raw_histogram_properties = {65536, -0.5, 65535.5}};
+EnergySensitiveDetectorGroup clover{
+    "clover",
+    {65536, -0.125, 16383.875},
+    {65536, -0.5, 65535.5},
+    {8192, -4096 - 0.5, 4096 - 0.5},
+    {8192, (-4096 - 0.5) * 0.125, (4096 - 0.5) * 0.125}};
+EnergySensitiveDetectorGroup coaxial{
+    "coaxial",
+    {65536, -0.125, 16383.875},
+    {65536, -0.5, 65535.5},
+    {8192, -4096 - 0.5, 4096 - 0.5},
+    {8192, (-4096 - 0.5) * 0.125, (4096 - 0.5) * 0.125}};
+EnergySensitiveDetectorGroup nai{
+    "nai",
+    {16384, -0.5, 16383.5},
+    {16384, -0.03125, 1023.96875},
+    {8192, -4096 - 0.5, 4096 - 0.5},
+    {8192, (-4096 - 0.5) * 0.125, (4096 - 0.5) * 0.125}};
+EnergySensitiveDetectorGroup fission_chamber{
+    "fission_chamber",
+    {65536, -0.125, 16383.875},
+    {65536, -0.5, 65535.5},
+    {8192, -4096 - 0.5, 4096 - 0.5},
+    {8192, (-4096 - 0.5) * 0.125, (4096 - 0.5) * 0.125}};
 
-DetectorGroup paddle{
-    .name = "paddle",
-    .histogram_properties = {10000, 0, 1e6},
-    .raw_histogram_properties = {65536, 0, numeric_limits<int>::max()}};
+CounterDetectorGroup paddle{
+    "paddle", {100000, -5., 1e6 - 5.}, {65536, 0, numeric_limits<int>::max()}};
 
-DetectorGroup pulser{
-    .name = "pulser",
-    .histogram_properties = {10000, 0., 1e6},
-    .raw_histogram_properties = {65536, 0, numeric_limits<int>::max()}};
+CounterDetectorGroup pulser{
+    "pulser", {100000, -5., 1e6 - 5.}, {65536, 0, numeric_limits<int>::max()}};
 
 const double tdc_resolution =
     0.024; // in nanoseconds, tdc resolution in nanoseconds per bin
@@ -52,8 +59,18 @@ Analysis analysis(
                             "module_timestamp_qdc", tdc_resolution),
         make_shared<V830>(5.),
     },
-    {clover, clover, clover, clover, clover, coaxial, coaxial, clover,
-     fission_chamber, coaxial, paddle, pulser},
+    {make_shared<EnergySensitiveDetectorGroup>(clover),
+     make_shared<EnergySensitiveDetectorGroup>(clover),
+     make_shared<EnergySensitiveDetectorGroup>(clover),
+     make_shared<EnergySensitiveDetectorGroup>(clover),
+     make_shared<EnergySensitiveDetectorGroup>(clover),
+     make_shared<EnergySensitiveDetectorGroup>(coaxial),
+     make_shared<EnergySensitiveDetectorGroup>(coaxial),
+     make_shared<EnergySensitiveDetectorGroup>(clover),
+     make_shared<EnergySensitiveDetectorGroup>(fission_chamber),
+     make_shared<EnergySensitiveDetectorGroup>(coaxial),
+     make_shared<CounterDetectorGroup>(paddle),
+     make_shared<CounterDetectorGroup>(pulser)},
     {make_shared<EnergySensitiveDetector>(
          "clover_1",
          vector<shared_ptr<Channel>>{

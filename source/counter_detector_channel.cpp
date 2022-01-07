@@ -11,7 +11,8 @@ CounterDetectorChannel::CounterDetectorChannel(const string name,
 
 void CounterDetectorChannel::reset_calibrated_leaves() {
     // Do not reset previous_counts here.
-    // This function is only used to reset values that are actually written to file.
-    // previous_counts is just an auxiliary quantity to calculate the rate.
+    // This function is only used to reset values that are actually written to
+    // file. previous_counts is just an auxiliary quantity to calculate the
+    // rate.
     count_rate = numeric_limits<double>::quiet_NaN();
 }
