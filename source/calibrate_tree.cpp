@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
         divide_into_blocks(first, last, vm["block_size"].as<long long>());
     const string tree_calibrated_name = t->GetName();
 
-    ProgressPrinter progress_printer(last - first + 1, 0.001);
+    ProgressPrinter progress_printer(last - first + 1);
     string output_file_name;
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {

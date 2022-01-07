@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     long long first, last;
     TChain *tree = command_line_parser.set_up_tree(first, last);
 
-    ProgressPrinter progress_printer(last - first + 1, 0.001);
+    ProgressPrinter progress_printer(last - first + 1);
 
     analysis.set_up_calibrated_branches_for_reading(tree);
 

@@ -18,10 +18,10 @@ using std::endl;
 
 #include "progress_printer.hpp"
 
-ProgressPrinter::ProgressPrinter(const long long ne, const double ui)
-    : start_time(time(nullptr)), n_entries(ne),
-      inverse_n_entries(1. / (double)ne), update_increment(ui),
-      current_percentage(ui) {
+ProgressPrinter::ProgressPrinter(const long long n_entries, const double update_increment)
+    : start_time(time(nullptr)), n_entries(n_entries),
+      inverse_n_entries(1. / (double)n_entries), update_increment(update_increment),
+      current_percentage(update_increment) {
     cout << get_time_string() << " : Starting to process " << n_entries
          << " entries." << endl;
 }
