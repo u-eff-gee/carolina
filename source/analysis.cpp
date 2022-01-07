@@ -130,10 +130,10 @@ void Analysis::calibrate(const long long n_entry) {
                         ->timestamp_calibrated =
                         get_timestamp(n_detector, n_channel) *
                         INVERSE_VME_CLOCK_FREQUENCY;
-                    if(detectors[n_detector]->channels.size() > 1){
+                    if (detectors[n_detector]->channels.size() > 1) {
                         dynamic_pointer_cast<EnergySensitiveDetector>(
-                        detectors[n_detector])
-                        ->addback();
+                            detectors[n_detector])
+                            ->addback();
                     }
                 } else {
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
