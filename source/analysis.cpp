@@ -8,6 +8,7 @@ using std::dynamic_pointer_cast;
 
 #include "analysis.hpp"
 #include "counter_detector_channel.hpp"
+#include "energy_sensitive_detector.hpp"
 #include "energy_sensitive_detector_channel.hpp"
 
 Analysis::Analysis(vector<shared_ptr<Module>> modules,
@@ -129,6 +130,11 @@ void Analysis::calibrate(const long long n_entry) {
                         ->timestamp_calibrated =
                         get_timestamp(n_detector, n_channel) *
                         INVERSE_VME_CLOCK_FREQUENCY;
+                    if(detectors[n_detector]->channels.size() > 1){
+                        dynamic_pointer_cast<EnergySensitiveDetector>(
+                        detectors[n_detector])
+                        ->addback();
+                    }
                 } else {
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
