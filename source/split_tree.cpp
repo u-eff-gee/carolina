@@ -81,8 +81,7 @@ int main(int argc, char **argv) {
     const int n_entries_per_file = n_entries / n_output_files;
     const int n_entries_remainder = n_entries % n_output_files;
 
-    analysis.activate_branches(tree);
-    analysis.register_branches(tree);
+    analysis.set_up_calibrated_branches_for_reading(tree);
 
     ProgressPrinter progress_printer(n_entries, 0.001);
 
