@@ -24,9 +24,7 @@ struct EnergySensitiveDetectorChannel final : public Channel {
                     return amplitude;
                 },
         const function<double(const double)> time_calibration =
-            []([[maybe_unused]] const double energy) {
-                return 1.;
-            },
+            []([[maybe_unused]] const double energy) { return 1.; },
         const function<bool(const double)> time_vs_time_RF_gate =
             []([[maybe_unused]] const double time_vs_time_RF) { return true; })
         : Channel(name, module, channel),

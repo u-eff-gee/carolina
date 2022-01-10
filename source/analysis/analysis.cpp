@@ -158,8 +158,9 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
                 ->time_calibration(
                     dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         detectors[n_detector]->channels[n_channel])
-                        ->energy_calibrated)*get_time(n_detector, n_channel) *
-                        get_tdc_resolution(n_detector, n_channel);
+                        ->energy_calibrated) *
+            get_time(n_detector, n_channel) *
+            get_tdc_resolution(n_detector, n_channel);
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
             detectors[n_detector]->channels[n_channel])
             ->time_vs_time_RF_calibrated =
