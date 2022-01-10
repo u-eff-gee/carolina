@@ -150,4 +150,8 @@ Analysis analysis(
          "mvlc",
          vector<shared_ptr<Channel>>{
              make_shared<CounterDetectorChannel>("pulser", 4, 15)})},
-    {});
+    {{"clover_1_vs_clover_3",
+      {0, 1},
+      {},
+      {2048, -2., 16382.},
+      {2048, -2., 16382.}}});

@@ -13,8 +13,6 @@ using std::numeric_limits;
 using std::string;
 
 #include "channel.hpp"
-#include "digitizer_module.hpp"
-#include "vme.hpp"
 
 struct EnergySensitiveDetectorChannel final : public Channel {
     EnergySensitiveDetectorChannel(
