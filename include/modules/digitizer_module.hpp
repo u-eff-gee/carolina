@@ -22,4 +22,6 @@ struct DigitizerModule : Module {
     virtual double get_time(const size_t leaf) const = 0;
     virtual double get_time_RF(const size_t leaf) const = 0;
     virtual double get_timestamp(const size_t leaf) const = 0;
+
+    virtual void set_amplitude(const size_t leaf, const double amplitude) = 0;
 };

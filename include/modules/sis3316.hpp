@@ -18,7 +18,6 @@ struct SIS3316 final : public DigitizerModule {
     Branch<unsigned int, 1> time_RF;
     Branch<unsigned int, 8> timestamp;
 
-    void set_up_raw_branches(TTree *tree) override final;
     double get_amplitude(const size_t leaf) const override final {
         return amplitude_conversion *
                (amplitude_e2.leaves[leaf] - amplitude_e1.leaves[leaf]);
@@ -33,6 +32,9 @@ struct SIS3316 final : public DigitizerModule {
     double get_timestamp(const size_t leaf) const override final {
         return timestamp.leaves[leaf];
     }
+
+    void set_up_raw_branches_for_reading(TTree *tree) override final;
+    void set_up_raw_branches_for_writing(TTree *tree) override final;
 
     const double amplitude_conversion = 1. / pow(2, 8);
 };

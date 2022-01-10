@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(last - first + 1);
 
-    analysis.set_up_raw_branches(tree);
+    analysis.set_up_raw_branches_for_reading(tree);
 
     vector<vector<TH1D *>> histograms;
     string histogram_name;

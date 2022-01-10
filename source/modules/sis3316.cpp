@@ -4,7 +4,7 @@ using std::to_string;
 
 #include "sis3316.hpp"
 
-void SIS3316::set_up_raw_branches(TTree *tree) {
+void SIS3316::set_up_raw_branches_for_reading(TTree *tree) {
 
     tree->SetBranchStatus("ADC1CH1MAXE1", 1);
     tree->SetBranchStatus("ADC1CH1MAXE2", 1);
@@ -61,4 +61,35 @@ void SIS3316::set_up_raw_branches(TTree *tree) {
     tree->SetBranchAddress("HPGEL4T", &time.leaves[7]);
 
     tree->SetBranchAddress("TRIGT11", &time_RF.leaves[0]);
+}
+
+void SIS3316::set_up_raw_branches_for_writing(TTree *tree) {
+
+    tree->Branch("ADC1CH1MAXE1", &amplitude_e1.leaves[0]);
+    tree->Branch("ADC1CH1MAXE2", &amplitude_e2.leaves[0]);
+    tree->Branch("LABRL1T", &time.leaves[0]);
+    tree->Branch("ADC1CH5MAXE1", &amplitude_e1.leaves[1]);
+    tree->Branch("ADC1CH5MAXE2", &amplitude_e2.leaves[1]);
+    tree->Branch("LABRL2T", &time.leaves[1]);
+    tree->Branch("ADC1CH9MAXE1", &amplitude_e1.leaves[2]);
+    tree->Branch("ADC1CH9MAXE2", &amplitude_e2.leaves[2]);
+    tree->Branch("LABRL3T", &time.leaves[2]);
+    tree->Branch("ADC1CH13MAXE1", &amplitude_e1.leaves[3]);
+    tree->Branch("ADC1CH13MAXE2", &amplitude_e2.leaves[3]);
+    tree->Branch("LABRL4T", &time.leaves[3]);
+
+    tree->Branch("ADC3CH1MAXE1", &amplitude_e1.leaves[4]);
+    tree->Branch("ADC3CH1MAXE2", &amplitude_e2.leaves[4]);
+    tree->Branch("HPGEL1T", &time.leaves[4]);
+    tree->Branch("ADC3CH5MAXE1", &amplitude_e1.leaves[5]);
+    tree->Branch("ADC3CH5MAXE2", &amplitude_e2.leaves[5]);
+    tree->Branch("HPGEL2T", &time.leaves[5]);
+    tree->Branch("ADC3CH9MAXE1", &amplitude_e1.leaves[6]);
+    tree->Branch("ADC3CH9MAXE2", &amplitude_e2.leaves[6]);
+    tree->Branch("HPGEL3T", &time.leaves[6]);
+    tree->Branch("ADC3CH13MAXE1", &amplitude_e1.leaves[7]);
+    tree->Branch("ADC3CH13MAXE2", &amplitude_e2.leaves[7]);
+    tree->Branch("HPGEL4T", &time.leaves[7]);
+
+    tree->Branch("TRIGT11", &time_RF.leaves[0]);
 }

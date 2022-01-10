@@ -19,10 +19,16 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
     : modules(modules), detector_groups(detector_groups), detectors(detectors),
       coincidence_matrices(coincidence_matrices) {}
 
-void Analysis::set_up_raw_branches(TTree *tree) {
+void Analysis::set_up_raw_branches_for_reading(TTree *tree) {
     tree->SetBranchStatus("*", 0);
     for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->set_up_raw_branches(tree);
+        modules[i]->set_up_raw_branches_for_reading(tree);
+    }
+}
+
+void Analysis::set_up_raw_branches_for_writing(TTree *tree) {
+    for (size_t i = 0; i < modules.size(); ++i) {
+        modules[i]->set_up_raw_branches_for_writing(tree);
     }
 }
 
@@ -98,43 +104,40 @@ void Analysis::calibrate(const long long n_entry) {
                 calibrate_energy_sensitive_detector(n_entry, n_detector,
                                                     n_channel);
             } else {
-                calibrate_counter_detector(n_entry, n_detector,
-                                                    n_channel);
+                calibrate_counter_detector(n_entry, n_detector, n_channel);
             }
         }
     }
 }
 
 void Analysis::calibrate_counter_detector(const int n_entry,
-                                                   const size_t n_detector,
-                                                   const size_t n_channel) {
-                if (n_entry > 1 && !isnan(get_counts(n_detector, n_channel)) &&
-                    get_counts(n_detector, n_channel) > 0 &&
-                    get_counts(n_detector, n_channel) !=
-                        dynamic_pointer_cast<CounterDetectorChannel>(
-                            detectors[n_detector]->channels[n_channel])
-                            ->previous_counts) {
-                    dynamic_pointer_cast<CounterDetectorChannel>(
-                        detectors[n_detector]->channels[n_channel])
-                        ->count_rate =
-                        (get_counts(n_detector, n_channel) -
-                         dynamic_pointer_cast<CounterDetectorChannel>(
-                             detectors[n_detector]->channels[n_channel])
-                             ->previous_counts) *
-                        dynamic_pointer_cast<ScalerModule>(
-                            modules[detectors[n_detector]
-                                        ->channels[n_channel]
-                                        ->module])
-                            ->trigger_frequency;
-                    dynamic_pointer_cast<CounterDetectorChannel>(
-                        detectors[n_detector]->channels[n_channel])
-                        ->previous_counts = get_counts(n_detector, n_channel);
-                } else {
-                    dynamic_pointer_cast<CounterDetectorChannel>(
-                        detectors[n_detector]->channels[n_channel])
-                        ->reset_calibrated_leaves();
-                }
-                                                   }
+                                          const size_t n_detector,
+                                          const size_t n_channel) {
+    if (n_entry > 1 && !isnan(get_counts(n_detector, n_channel)) &&
+        get_counts(n_detector, n_channel) > 0 &&
+        get_counts(n_detector, n_channel) !=
+            dynamic_pointer_cast<CounterDetectorChannel>(
+                detectors[n_detector]->channels[n_channel])
+                ->previous_counts) {
+        dynamic_pointer_cast<CounterDetectorChannel>(
+            detectors[n_detector]->channels[n_channel])
+            ->count_rate =
+            (get_counts(n_detector, n_channel) -
+             dynamic_pointer_cast<CounterDetectorChannel>(
+                 detectors[n_detector]->channels[n_channel])
+                 ->previous_counts) *
+            dynamic_pointer_cast<ScalerModule>(
+                modules[detectors[n_detector]->channels[n_channel]->module])
+                ->trigger_frequency;
+        dynamic_pointer_cast<CounterDetectorChannel>(
+            detectors[n_detector]->channels[n_channel])
+            ->previous_counts = get_counts(n_detector, n_channel);
+    } else {
+        dynamic_pointer_cast<CounterDetectorChannel>(
+            detectors[n_detector]->channels[n_channel])
+            ->reset_calibrated_leaves();
+    }
+}
 
 void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
                                                    const size_t n_detector,
@@ -185,4 +188,12 @@ void Analysis::reset_calibrated_leaves() {
     for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
         detectors[n_detector]->reset_calibrated_leaves();
     }
+}
+
+void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
+                             const double amplitude) {
+    dynamic_pointer_cast<DigitizerModule>(
+        modules[detectors[n_detector]->channels[n_channel]->module])
+        ->set_amplitude(detectors[n_detector]->channels[n_channel]->channel,
+                        amplitude);
 }
