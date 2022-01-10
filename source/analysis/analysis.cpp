@@ -190,10 +190,23 @@ void Analysis::reset_calibrated_leaves() {
     }
 }
 
+void Analysis::reset_raw_leaves() {
+    for (auto module : modules) {
+        module->reset_raw_leaves();
+    }
+}
+
 void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
                              const double amplitude) {
     dynamic_pointer_cast<DigitizerModule>(
         modules[detectors[n_detector]->channels[n_channel]->module])
         ->set_amplitude(detectors[n_detector]->channels[n_channel]->channel,
                         amplitude);
+}
+
+void Analysis::set_time(const size_t n_detector, const size_t n_channel,
+                        const double time) {
+    dynamic_pointer_cast<DigitizerModule>(
+        modules[detectors[n_detector]->channels[n_channel]->module])
+        ->set_time(detectors[n_detector]->channels[n_channel]->channel, time);
 }

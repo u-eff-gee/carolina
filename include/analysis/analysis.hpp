@@ -33,6 +33,8 @@ struct Analysis {
 
     void set_amplitude(const size_t n_detector, const size_t n_channel,
                        const double amplitude);
+    void set_time(const size_t n_detector, const size_t n_channel,
+                  const double time);
 
     void calibrate(const int n_entry);
     void calibrate_counter_detector(const int n_entry, const size_t n_detector,
@@ -41,6 +43,7 @@ struct Analysis {
                                              const size_t n_detector,
                                              const size_t n_channel);
     void reset_calibrated_leaves();
+    void reset_raw_leaves();
     void set_up_calibrated_branches_for_reading(TTree *tree);
     void set_up_calibrated_branches_for_writing(TTree *tree);
     void set_up_raw_branches_for_reading(TTree *tree);

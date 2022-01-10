@@ -18,6 +18,7 @@ struct V830 final : public ScalerModule {
         return counter_values.leaves[leaf];
     }
 
+    void reset_raw_leaves() override final;
     void set_up_raw_branches_for_reading(TTree *tree) override final;
     void set_up_raw_branches_for_writing(TTree *tree) override final;
 };

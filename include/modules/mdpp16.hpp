@@ -33,6 +33,11 @@ struct MDPP16 final : public DigitizerModule {
         amplitude.leaves[leaf] = amp;
     }
 
+    void set_time(const size_t leaf, const double t) override final {
+        time.leaves[leaf] = t;
+    }
+
+    void reset_raw_leaves() override final;
     void set_up_raw_branches_for_reading(TTree *tree) override final;
     void set_up_raw_branches_for_writing(TTree *tree) override final;
 };
