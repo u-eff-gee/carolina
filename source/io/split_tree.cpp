@@ -101,8 +101,8 @@ int main(int argc, char **argv) {
             n_entry_stop = (int)(n_file + 1) * n_entries_per_file +
                            n_entries_remainder - 1;
         }
-        for (int n_entry = n_file * n_entries_per_file + 1;
-             n_entry <= n_entry_stop; ++n_entry) {
+        for (int n_entry = n_file * n_entries_per_file;
+             n_entry < n_entry_stop; ++n_entry) {
             progress_printer(n_entry);
             tree->GetEntry(n_entry);
             new_tree->Fill();

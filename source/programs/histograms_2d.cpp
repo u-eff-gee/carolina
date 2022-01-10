@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
             matrix.y_axis.minimum, matrix.y_axis.maximum));
     }
 
-    for (long long i = first; i <= last; ++i) {
+    for (long long i = first; i < last; ++i) {
         progress_printer(i - first);
 
         tree->GetEntry(i);

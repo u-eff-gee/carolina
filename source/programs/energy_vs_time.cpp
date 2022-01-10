@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    for (long long i = first; i <= last; ++i) {
+    for (long long i = first; i < last; ++i) {
         progress_printer(i - first);
 
         tree->GetEntry(i);

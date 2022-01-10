@@ -16,10 +16,10 @@ using std::vector;
 
 CommandLineParser::CommandLineParser() {
     desc.add_options()("help", "Produce help message.")(
-        "first", po::value<int>()->default_value(1),
+        "first", po::value<long long>()->default_value(0),
         "First entry to be processed.")("input", po::value<vector<string>>(),
                                         "Input file names.")(
-        "last", po::value<int>()->default_value(0),
+        "last", po::value<long long>()->default_value(-1),
         "Last entry to be processed.")(
         "output", po::value<string>()->default_value("output.root"),
         "Output file name (default: 'output.root').")(
@@ -58,9 +58,9 @@ TChain *CommandLineParser::set_up_tree(long long &first,
         tree->Add(input_file.c_str());
     }
 
-    first = vm["first"].as<int>();
+    first = vm["first"].as<long long>();
     last =
-        vm["last"].as<int>() == 0 ? tree->GetEntries() : vm["last"].as<int>();
+        vm["last"].as<long long>() == -1 ? tree->GetEntries() : vm["last"].as<long long>();
 
     if (first > last) {
         cout << "Error: first entry (" << first
