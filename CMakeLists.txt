@@ -17,6 +17,7 @@ add_subdirectory(source/analysis)
 add_subdirectory(source/detectors)
 add_subdirectory(source/io)
 add_subdirectory(source/modules)
+add_subdirectory(source/programs)
 add_subdirectory(source/test)
 
 configure_file(include/io/split_tree.hpp.in include/io/split_tree.hpp)

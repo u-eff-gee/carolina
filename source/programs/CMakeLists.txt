@@ -1,3 +1,4 @@
+include_directories(${CMAKE_SOURCE_DIR}/include/analysis)
 include_directories(${CMAKE_SOURCE_DIR}/include/detectors)
 include_directories(${CMAKE_SOURCE_DIR}/include/experiments)
 include_directories(${CMAKE_SOURCE_DIR}/include/io)
