@@ -23,9 +23,9 @@ struct EnergySensitiveDetectorChannel final : public Channel {
                    [[maybe_unused]] const long long n_entry) {
                     return amplitude;
                 },
-        const function<double(const double, const double)> time_calibration =
-            [](const double time, [[maybe_unused]] const double energy) {
-                return time;
+        const function<double(const double)> time_calibration =
+            []([[maybe_unused]] const double energy) {
+                return 1.;
             },
         const function<bool(const double)> time_vs_time_RF_gate =
             []([[maybe_unused]] const double time_vs_time_RF) { return true; })
@@ -39,7 +39,7 @@ struct EnergySensitiveDetectorChannel final : public Channel {
           time_vs_time_RF_calibrated(numeric_limits<double>::quiet_NaN()) {}
 
     const function<double(const int, const double)> energy_calibration;
-    const function<double(const double, const double)> time_calibration;
+    const function<double(const double)> time_calibration;
     const function<bool(const double)> time_vs_time_RF_gate;
 
     double energy_calibrated, time_calibrated, timestamp_calibrated,
