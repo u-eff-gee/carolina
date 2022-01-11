@@ -59,8 +59,8 @@ TChain *CommandLineParser::set_up_tree(long long &first,
     }
 
     first = vm["first"].as<long long>();
-    last =
-        vm["last"].as<long long>() == -1 ? tree->GetEntries() : vm["last"].as<long long>();
+    last = vm["last"].as<long long>() == -1 ? tree->GetEntries()
+                                            : vm["last"].as<long long>();
 
     if (first > last) {
         cout << "Error: first entry (" << first

@@ -19,12 +19,19 @@ using std::endl;
 #include "progress_printer.hpp"
 
 ProgressPrinter::ProgressPrinter(const long long n_entries,
-                                 const double update_increment)
+                                 const double update_increment,
+                                 const string unit_singular,
+                                 const string unit_plural)
     : start_time(time(nullptr)), n_entries(n_entries),
       inverse_n_entries(1. / (double)n_entries),
       update_increment(update_increment), current_percentage(update_increment) {
-    cout << get_time_string() << " : Starting to process " << n_entries
-         << " entries." << endl;
+    cout << get_time_string() << " : Starting to process " << n_entries << " ";
+    if (n_entries == 1) {
+        cout << unit_singular;
+    } else {
+        cout << unit_plural;
+    }
+    cout << endl;
 }
 
 void ProgressPrinter::operator()(const long long index) {

@@ -1,10 +1,16 @@
 #pragma once
 
+#include <string>
+
+using std::string;
+
 class ProgressPrinter {
 
   public:
     ProgressPrinter(const long long n_entries,
-                    const double update_increment = 0.01);
+                    const double update_increment = 0.01,
+                    const string unit_singular = "event",
+                    const string unit_plural = "events");
 
     void operator()(const long long index);
 

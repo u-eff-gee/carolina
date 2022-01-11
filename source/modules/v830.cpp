@@ -17,5 +17,6 @@ void V830::set_up_raw_branches_for_reading(TTree *tree) {
 }
 
 void V830::set_up_raw_branches_for_writing(TTree *tree) {
-    tree->Branch(counter_values.name.c_str(), counter_values.leaves, (counter_values.name + "[32]/D").c_str());
+    tree->Branch(counter_values.name.c_str(), counter_values.leaves,
+                 (counter_values.name + "[32]/D").c_str());
 }
