@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+
+using std::string;
+
 #include <boost/program_options.hpp>
 
 #include "TChain.h"
@@ -12,7 +16,8 @@ class CommandLineParser {
 
     void operator()(int argc, char *argv[], int &status);
     po::variables_map get_variables_map() const { return vm; };
-    TChain *set_up_tree(long long &first, long long &last) const;
+    TChain *set_up_tree(long long &first, long long &last,
+                        const bool log_file = false) const;
 
     po::options_description desc;
 

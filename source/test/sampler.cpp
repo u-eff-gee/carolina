@@ -120,9 +120,12 @@ vector<double> split_up_energy(const double energy,
     for (unsigned int n_channel = 0; n_channel < n_channels; ++n_channel) {
         uniform_random_numbers[n_channel] = uni_dis(random_engine);
     }
-    const double uniform_random_numbers_normalization = 1./accumulate(uniform_random_numbers.begin(), uniform_random_numbers.end(), 0.);
+    const double uniform_random_numbers_normalization =
+        1. / accumulate(uniform_random_numbers.begin(),
+                        uniform_random_numbers.end(), 0.);
     for (unsigned int n_channel = 0; n_channel < n_channels; ++n_channel) {
-        energies[n_channel] = energy*uniform_random_numbers[n_channel]*uniform_random_numbers_normalization;
+        energies[n_channel] = energy * uniform_random_numbers[n_channel] *
+                              uniform_random_numbers_normalization;
     }
     return energies;
 }

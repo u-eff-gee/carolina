@@ -3,10 +3,6 @@
 using std::cout;
 using std::endl;
 
-#include <string>
-
-using std::string;
-
 #include <vector>
 
 using std::vector;
@@ -46,13 +42,16 @@ void CommandLineParser::operator()(int argc, char *argv[], int &status) {
     }
 }
 
-TChain *CommandLineParser::set_up_tree(long long &first,
-                                       long long &last) const {
-    TChain *tree =
-        new TChain(find_tree_in_file(vm["input"].as<vector<string>>()[0],
-                                     vm["tree"].as<string>())
-                       .c_str());
-    vector<string> input_files = vm["input"].as<vector<string>>();
+TChain *CommandLineParser::set_up_tree(long long &first, long long &last,
+                                       const bool log_file) const {
+    vector<string> input_files;
+    if (!log_file) {
+        input_files = vm["input"].as<vector<string>>();
+    } else {
+        input_files = read_log_file(vm["input"].as<vector<string>>()[0]);
+    }
+    TChain *tree = new TChain(
+        find_tree_in_file(input_files[0], vm["tree"].as<string>()).c_str());
     for (auto input_file : input_files) {
         cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
         tree->Add(input_file.c_str());

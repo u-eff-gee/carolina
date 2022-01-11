@@ -28,3 +28,9 @@ configure_file(include/programs/histograms_1d_raw.hpp.in include/programs/histog
 configure_file(include/programs/histograms_2d.hpp.in include/programs/histograms_2d.hpp)
 configure_file(include/programs/history.hpp.in include/programs/history.hpp)
 configure_file(include/test/sampler.hpp.in include/test/sampler.hpp)
+
+enable_testing()
+add_test(sample_test_data sampler --n 100)
+add_test(create_raw_histograms histograms_1d_raw test.root --output test_raw.root)
+add_test(calibrate_test_data calibrate_tree test.root --output test_cal.root --log)
+add_test(create_histograms histograms_1d test_cal.log --output test_hist.root --log)
