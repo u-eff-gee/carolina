@@ -17,15 +17,10 @@ using std::vector;
 struct EnergySensitiveDetector final : public Detector {
     EnergySensitiveDetector(const string name,
                             const vector<shared_ptr<Channel>> channels);
-    EnergySensitiveDetector(const string name,
-                            const vector<shared_ptr<Channel>> channels,
-                            const vector<double> addback_energy_thresholds);
     EnergySensitiveDetector(
         const string name, const vector<shared_ptr<Channel>> channels,
-        const vector<double> addback_energy_thresholds,
         const vector<vector<pair<double, double>>> addback_coincidence_windows);
 
-    vector<double> addback_energy_thresholds;
     vector<vector<pair<double, double>>> addback_coincidence_windows;
 
     vector<bool> skip_channel;

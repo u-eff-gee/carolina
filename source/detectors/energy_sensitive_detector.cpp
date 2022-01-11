@@ -19,8 +19,7 @@ using std::to_string;
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels)
-    : Detector(name, energy_sensitive, channels),
-      addback_energy_thresholds(vector<double>(channels.size(), 0.)) {
+    : Detector(name, energy_sensitive, channels) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
         addback_coincidence_windows.push_back(vector<pair<double, double>>());
@@ -38,30 +37,8 @@ EnergySensitiveDetector::EnergySensitiveDetector(
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels,
-    const vector<double> addback_energy_thresholds)
-    : Detector(name, energy_sensitive, channels),
-      addback_energy_thresholds(addback_energy_thresholds) {
-
-    for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
-        addback_coincidence_windows.push_back(vector<pair<double, double>>());
-        for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); n_c_1++) {
-            addback_coincidence_windows[n_c_0].push_back(
-                {-numeric_limits<double>::max(),
-                 numeric_limits<double>::max()});
-        }
-    }
-
-    skip_channel = vector<bool>(channels.size(), false);
-    addback_energies = vector<double>(channels.size(), 0.);
-    addback_times = vector<double>(channels.size(), 0.);
-}
-
-EnergySensitiveDetector::EnergySensitiveDetector(
-    const string name, const vector<shared_ptr<Channel>> channels,
-    const vector<double> addback_energy_thresholds,
     const vector<vector<pair<double, double>>> addback_coincidence_windows)
     : Detector(name, energy_sensitive, channels),
-      addback_energy_thresholds(addback_energy_thresholds),
       addback_coincidence_windows(addback_coincidence_windows),
       addback_energy(numeric_limits<double>::quiet_NaN()),
       addback_time(numeric_limits<double>::quiet_NaN()) {
@@ -91,17 +68,12 @@ EnergySensitiveDetector::EnergySensitiveDetector(
 }
 
 void EnergySensitiveDetector::addback() {
-    for (size_t n_c = 0; n_c < channels.size(); ++n_c) {
-        skip_channel[n_c] = false;
-        addback_energies[n_c] = 0.;
-    }
-
     size_t maximum_energy_deposition_index = 0;
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
-        if (dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+        if (!isnan(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                 channels[n_c_0])
-                    ->energy_calibrated > addback_energy_thresholds[n_c_0] &&
+                    ->energy_calibrated) &&
             !skip_channel[n_c_0]) {
             addback_energies[n_c_0] =
                 dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
@@ -114,11 +86,9 @@ void EnergySensitiveDetector::addback() {
             maximum_energy_deposition_index = n_c_0;
 
             for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); ++n_c_1) {
-                if (dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                if (!isnan(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                         channels[n_c_1])
-                        ->energy_calibrated >
-                    addback_energy_thresholds[n_c_1]) {
-                    if (!skip_channel[n_c_1] &&
+                        ->energy_calibrated) && !skip_channel[n_c_1] &&
                         addback_coincidence_windows[n_c_0][n_c_1].first <=
                             dynamic_pointer_cast<
                                 EnergySensitiveDetectorChannel>(channels[n_c_0])
@@ -148,7 +118,6 @@ void EnergySensitiveDetector::addback() {
                                 ->energy_calibrated) {
                             maximum_energy_deposition_index = n_c_1;
                         }
-                    }
                 } else {
                     skip_channel[n_c_1] = true;
                 }
@@ -157,21 +126,13 @@ void EnergySensitiveDetector::addback() {
                 dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                     channels[maximum_energy_deposition_index])
                     ->time_calibrated;
+            skip_channel[n_c_0] = true;
         }
-        skip_channel[n_c_0] = true;
     }
 
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        if (addback_energies[n_channel] >
-                addback_energy_thresholds[n_channel] &&
-            (isnan(addback_energy) ||
-             addback_energies[n_channel] > addback_energy) &&
-            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                channels[n_channel])
-                ->time_vs_time_RF_gate(
-                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                        channels[n_channel])
-                        ->time_vs_time_RF_calibrated)) {
+        if (isnan(addback_energy) ||
+             addback_energies[n_channel] > addback_energy) {
             addback_energy = addback_energies[n_channel];
             addback_time = addback_times[n_channel];
             addback_time_vs_time_RF =
@@ -193,6 +154,9 @@ double EnergySensitiveDetector::get_calibrated_and_RF_gated_energy() const {
 void EnergySensitiveDetector::reset_calibrated_leaves() {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         channels[n_channel]->reset_calibrated_leaves();
+        skip_channel[n_channel] = false;
+        addback_energies[n_channel] = numeric_limits<double>::quiet_NaN();
+        addback_times[n_channel] = numeric_limits<double>::quiet_NaN();
     }
 
     addback_energy = numeric_limits<double>::quiet_NaN();
