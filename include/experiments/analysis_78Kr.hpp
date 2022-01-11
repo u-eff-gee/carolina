@@ -69,6 +69,7 @@ Analysis analysis(
      make_shared<EnergySensitiveDetectorGroup>(clover),
      make_shared<EnergySensitiveDetectorGroup>(fission_chamber),
      make_shared<EnergySensitiveDetectorGroup>(coaxial),
+     make_shared<EnergySensitiveDetectorGroup>(nai),
      make_shared<CounterDetectorGroup>(paddle),
      make_shared<CounterDetectorGroup>(pulser)},
     {make_shared<EnergySensitiveDetector>(
@@ -139,6 +140,11 @@ Analysis analysis(
          "zero_degree",
          vector<shared_ptr<Channel>>{
              make_shared<EnergySensitiveDetectorChannel>("E", 2, 15),
+         }),
+     make_shared<EnergySensitiveDetector>(
+         "molly",
+         vector<shared_ptr<Channel>>{
+             make_shared<EnergySensitiveDetectorChannel>("E", 3, 15),
          }),
      make_shared<CounterDetector>(
          "paddle",
