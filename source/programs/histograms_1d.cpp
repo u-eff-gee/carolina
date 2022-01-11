@@ -210,12 +210,11 @@ int main(int argc, char **argv) {
 
         for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
              ++n_detector_1) {
-            for (size_t n_channel_1 = 0;
-                 n_channel_1 <
-                 analysis.detectors[n_detector_1]->channels.size();
-                 ++n_channel_1) {
-                if (analysis.detectors[n_detector_1]->type ==
-                    energy_sensitive) {
+            if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
+                for (size_t n_channel_1 = 0;
+                     n_channel_1 <
+                     analysis.detectors[n_detector_1]->channels.size();
+                     ++n_channel_1) {
                     if (!isnan(dynamic_pointer_cast<
                                    EnergySensitiveDetectorChannel>(
                                    analysis.detectors[n_detector_1]
@@ -335,26 +334,29 @@ int main(int argc, char **argv) {
                             }
                         }
                     }
-                    if (analysis.detectors[n_detector_1]->channels.size() > 1) {
-                        if (!isnan(
-                                dynamic_pointer_cast<EnergySensitiveDetector>(
-                                    analysis.detectors[n_detector_1])
-                                    ->addback_energy)) {
-                            addback_histograms[n_detector_1]->Fill(
-                                dynamic_pointer_cast<EnergySensitiveDetector>(
-                                    analysis.detectors[n_detector_1])
-                                    ->addback_energy);
-                        }
-                    }
-                } else if (analysis.detectors[n_detector_1]->type == counter) {
+                }
+                if (analysis.detectors[n_detector_1]->channels.size() > 1 &&
+                    !isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
+                            analysis.detectors[n_detector_1])
+                            ->addback_energy)) {
+                    addback_histograms[n_detector_1]->Fill(
+                        dynamic_pointer_cast<EnergySensitiveDetector>(
+                            analysis.detectors[n_detector_1])
+                            ->addback_energy);
+                }
+            } else if (analysis.detectors[n_detector_1]->type == counter) {
+                for (size_t n_channel = 0;
+                     n_channel <
+                     analysis.detectors[n_detector_1]->channels.size();
+                     ++n_channel) {
                     if (!isnan(dynamic_pointer_cast<CounterDetectorChannel>(
                                    analysis.detectors[n_detector_1]
-                                       ->channels[n_channel_1])
+                                       ->channels[n_channel])
                                    ->count_rate)) {
-                        histograms[n_detector_1][n_channel_1]->Fill(
+                        histograms[n_detector_1][n_channel]->Fill(
                             dynamic_pointer_cast<CounterDetectorChannel>(
                                 analysis.detectors[n_detector_1]
-                                    ->channels[n_channel_1])
+                                    ->channels[n_channel])
                                 ->count_rate);
                     }
                 }
