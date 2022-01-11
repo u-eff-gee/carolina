@@ -337,8 +337,8 @@ int main(int argc, char **argv) {
                 }
                 if (analysis.detectors[n_detector_1]->channels.size() > 1 &&
                     !isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
-                            analysis.detectors[n_detector_1])
-                            ->addback_energy)) {
+                               analysis.detectors[n_detector_1])
+                               ->addback_energy)) {
                     addback_histograms[n_detector_1]->Fill(
                         dynamic_pointer_cast<EnergySensitiveDetector>(
                             analysis.detectors[n_detector_1])

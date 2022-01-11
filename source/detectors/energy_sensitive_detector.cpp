@@ -67,13 +67,45 @@ EnergySensitiveDetector::EnergySensitiveDetector(
     addback_times = vector<double>(channels.size(), 0.);
 }
 
+bool EnergySensitiveDetector::inside_addback_coincidence_window(
+    const size_t n_channel_1, const size_t n_channel_2) {
+    return addback_coincidence_windows[n_channel_1][n_channel_2].first <=
+               dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                   channels[n_channel_1])
+                       ->time_calibrated -
+                   dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                       channels[n_channel_2])
+                       ->time_calibrated &&
+           dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+               channels[n_channel_1])
+                       ->time_calibrated -
+                   dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                       channels[n_channel_2])
+                       ->time_calibrated <=
+               addback_coincidence_windows[n_channel_1][n_channel_2].second;
+}
+
+void EnergySensitiveDetector::filter_addback(){
+    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
+        if (isnan(addback_energy) ||
+            addback_energies[n_channel] > addback_energy) {
+            addback_energy = addback_energies[n_channel];
+            addback_time = addback_times[n_channel];
+            addback_time_vs_time_RF =
+                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                    channels[n_channel])
+                    ->time_vs_time_RF_calibrated;
+        }
+    }    
+}
+
 void EnergySensitiveDetector::addback() {
     size_t maximum_energy_deposition_index = 0;
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
         if (!isnan(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                channels[n_c_0])
-                    ->energy_calibrated) &&
+                       channels[n_c_0])
+                       ->energy_calibrated) &&
             !skip_channel[n_c_0]) {
             addback_energies[n_c_0] =
                 dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
@@ -87,37 +119,23 @@ void EnergySensitiveDetector::addback() {
 
             for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); ++n_c_1) {
                 if (!isnan(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                        channels[n_c_1])
-                        ->energy_calibrated) && !skip_channel[n_c_1] &&
-                        addback_coincidence_windows[n_c_0][n_c_1].first <=
-                            dynamic_pointer_cast<
-                                EnergySensitiveDetectorChannel>(channels[n_c_0])
-                                    ->time_calibrated -
-                                dynamic_pointer_cast<
-                                    EnergySensitiveDetectorChannel>(
-                                    channels[n_c_1])
-                                    ->time_calibrated &&
+                               channels[n_c_1])
+                               ->energy_calibrated) &&
+                    !skip_channel[n_c_1] &&
+                    inside_addback_coincidence_window(n_c_0, n_c_1)) {
+                    addback_energies[n_c_0] +=
+                        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                            channels[n_c_1])
+                            ->energy_calibrated;
+                    skip_channel[n_c_1] = true;
+                    if (dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                            channels[n_c_1])
+                            ->energy_calibrated >
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             channels[n_c_0])
-                                    ->time_calibrated -
-                                dynamic_pointer_cast<
-                                    EnergySensitiveDetectorChannel>(
-                                    channels[n_c_1])
-                                    ->time_calibrated <=
-                            addback_coincidence_windows[n_c_0][n_c_1].second) {
-                        addback_energies[n_c_0] +=
-                            dynamic_pointer_cast<
-                                EnergySensitiveDetectorChannel>(channels[n_c_1])
-                                ->energy_calibrated;
-                        skip_channel[n_c_1] = true;
-                        if (dynamic_pointer_cast<
-                                EnergySensitiveDetectorChannel>(channels[n_c_1])
-                                ->energy_calibrated >
-                            dynamic_pointer_cast<
-                                EnergySensitiveDetectorChannel>(channels[n_c_0])
-                                ->energy_calibrated) {
-                            maximum_energy_deposition_index = n_c_1;
-                        }
+                            ->energy_calibrated) {
+                        maximum_energy_deposition_index = n_c_1;
+                    }
                 } else {
                     skip_channel[n_c_1] = true;
                 }
@@ -130,17 +148,7 @@ void EnergySensitiveDetector::addback() {
         }
     }
 
-    for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
-        if (isnan(addback_energy) ||
-             addback_energies[n_channel] > addback_energy) {
-            addback_energy = addback_energies[n_channel];
-            addback_time = addback_times[n_channel];
-            addback_time_vs_time_RF =
-                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                    channels[n_channel])
-                    ->time_vs_time_RF_calibrated;
-        }
-    }
+    filter_addback();
 }
 
 double EnergySensitiveDetector::get_calibrated_and_RF_gated_energy() const {

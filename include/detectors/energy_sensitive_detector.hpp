@@ -32,7 +32,10 @@ struct EnergySensitiveDetector final : public Detector {
     double addback_time_vs_time_RF;
 
     void addback();
+    void filter_addback();
     double get_calibrated_and_RF_gated_energy() const;
+    bool inside_addback_coincidence_window(const size_t n_channel_1,
+                                           const size_t n_channel_2);
     void reset_calibrated_leaves() override final;
     void set_up_calibrated_branches_for_reading(TTree *tree) override final;
     void set_up_calibrated_branches_for_writing(TTree *tree) override final;
