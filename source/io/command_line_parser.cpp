@@ -58,13 +58,13 @@ TChain *CommandLineParser::set_up_tree(long long &first, long long &last,
     }
 
     first = vm["first"].as<long long>();
-    last = vm["last"].as<long long>() == -1 ? tree->GetEntries()
+    last = vm["last"].as<long long>() == -1 ? tree->GetEntries() - 1
                                             : vm["last"].as<long long>();
 
     if (first > last) {
         cout << "Error: first entry (" << first
-             << ") is larger or equal to last entry (" << last
-             << "). Aborting ..." << endl;
+             << ") is larger than last entry (" << last << "). Aborting ..."
+             << endl;
         abort();
     }
 

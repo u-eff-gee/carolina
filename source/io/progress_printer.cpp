@@ -18,12 +18,12 @@ using std::endl;
 
 #include "progress_printer.hpp"
 
-ProgressPrinter::ProgressPrinter(const long long n_entries,
+ProgressPrinter::ProgressPrinter(const long long first, const long long last,
                                  const double update_increment,
                                  const string unit_singular,
                                  const string unit_plural)
-    : start_time(time(nullptr)), n_entries(n_entries),
-      inverse_n_entries(1. / (double)n_entries),
+    : start_time(time(nullptr)), first(first), last(last),
+      n_entries(last - first + 1), inverse_n_entries(1. / (double)n_entries),
       update_increment(update_increment), current_percentage(update_increment) {
     cout << get_time_string() << " : Starting to process " << n_entries << " ";
     if (n_entries == 1) {
@@ -35,7 +35,7 @@ ProgressPrinter::ProgressPrinter(const long long n_entries,
 }
 
 void ProgressPrinter::operator()(const long long index) {
-    const double percentage = index * inverse_n_entries;
+    const double percentage = (index - first + 1) * inverse_n_entries;
 
     if (percentage >= current_percentage) {
         time_t current_time = time(nullptr);

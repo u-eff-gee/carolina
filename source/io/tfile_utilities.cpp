@@ -34,15 +34,12 @@ divide_into_blocks(const long long first, const long long last,
 
     long long current_index = first;
 
-    while (current_index < last) {
-        current_index += block_size;
-        if (current_index < last) {
-            blocks.push_back({current_index - block_size, current_index});
-        } else {
-            blocks.push_back({current_index - block_size, last});
-            break;
-        }
+    while ((current_index + block_size - 1) < last) {
+        blocks.push_back({current_index, current_index + block_size - 1});
+        current_index = current_index + block_size;
     }
+
+    blocks.push_back({current_index, last});
 
     return blocks;
 };

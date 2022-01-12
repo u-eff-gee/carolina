@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     long long first, last;
     TChain *tree = command_line_parser.set_up_tree(first, last);
 
-    ProgressPrinter progress_printer(last - first + 1);
+    ProgressPrinter progress_printer(first, last);
 
     analysis.set_up_raw_branches_for_reading(tree);
 
@@ -68,9 +68,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    for (long long i = first; i < last; ++i) {
-        progress_printer(i - first);
-
+    for (long long i = first; i <= last; ++i) {
         tree->GetEntry(i);
 
         for (size_t n_detector = 0; n_detector < analysis.detectors.size();
@@ -87,6 +85,7 @@ int main(int argc, char **argv) {
                 }
             }
         }
+        progress_printer(i);
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");

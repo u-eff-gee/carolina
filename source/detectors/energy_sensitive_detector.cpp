@@ -85,7 +85,7 @@ bool EnergySensitiveDetector::inside_addback_coincidence_window(
                addback_coincidence_windows[n_channel_1][n_channel_2].second;
 }
 
-void EnergySensitiveDetector::filter_addback(){
+void EnergySensitiveDetector::filter_addback() {
     for (size_t n_channel = 0; n_channel < channels.size(); ++n_channel) {
         if (isnan(addback_energy) ||
             addback_energies[n_channel] > addback_energy) {
@@ -96,7 +96,7 @@ void EnergySensitiveDetector::filter_addback(){
                     channels[n_channel])
                     ->time_vs_time_RF_calibrated;
         }
-    }    
+    }
 }
 
 void EnergySensitiveDetector::addback() {

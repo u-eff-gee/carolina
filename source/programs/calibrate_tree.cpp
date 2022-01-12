@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         divide_into_blocks(first, last, vm["block"].as<long long>());
     const string tree_calibrated_name = t->GetName();
 
-    ProgressPrinter progress_printer(last - first + 1);
+    ProgressPrinter progress_printer(first, last);
     vector<string> output_file_names;
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {
@@ -53,12 +53,11 @@ int main(int argc, char **argv) {
 
         for (long long i = blocks[n_block].first; i <= blocks[n_block].second;
              ++i) {
-            progress_printer(i - first);
-
             tree->GetEntry(i);
             analysis.calibrate(i);
             tree_calibrated->Fill();
             analysis.reset_calibrated_leaves();
+            progress_printer(i);
         }
 
         output_file_names.push_back(
@@ -67,7 +66,7 @@ int main(int argc, char **argv) {
         tree_calibrated->Write();
         output_file.Close();
         cout << "Wrote block [" << blocks[n_block].first << ", "
-             << blocks[n_block].second - 1 << "] to output file '"
+             << blocks[n_block].second << "] to output file '"
              << output_file_names[n_block] << "'." << endl;
 
         delete tree_calibrated;
