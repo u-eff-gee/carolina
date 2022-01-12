@@ -19,7 +19,7 @@ using std::dynamic_pointer_cast;
 #include "command_line_parser.hpp"
 #include "energy_sensitive_detector.hpp"
 #include "energy_sensitive_detector_channel.hpp"
-#include "histograms_1d.hpp"
+#include "histograms_2d.hpp"
 #include "progress_printer.hpp"
 #include "tfile_utilities.hpp"
 

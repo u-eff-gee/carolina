@@ -16,5 +16,5 @@ target_link_libraries(histograms_1d_text ${Boost_LIBRARIES} command_line_parser 
 add_library(progress_printer progress_printer.cpp)
 
 add_executable(split_tree split_tree.cpp)
-target_include_directories(split_tree PUBLIC ${CMAKE_BINARY_DIR}/include)
+target_include_directories(split_tree PUBLIC ${CMAKE_BINARY_DIR}/include/io)
 target_link_libraries(split_tree analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel energy_sensitive_detector energy_sensitive_detector_channel mdpp16 progress_printer ${ROOT_LIBRARIES} sis3316 tfile_utilities v830)
