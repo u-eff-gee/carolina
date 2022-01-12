@@ -107,7 +107,8 @@ void Analysis::calibrate(const long long n_entry) {
                 calibrate_counter_detector(n_entry, n_detector, n_channel);
             }
         }
-        if (detectors[n_detector]->type == energy_sensitive && detectors[n_detector]->channels.size() > 1) {
+        if (detectors[n_detector]->type == energy_sensitive &&
+            detectors[n_detector]->channels.size() > 1) {
             dynamic_pointer_cast<EnergySensitiveDetector>(detectors[n_detector])
                 ->addback();
         }

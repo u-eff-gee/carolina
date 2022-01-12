@@ -19,7 +19,9 @@ using std::to_string;
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<shared_ptr<Channel>> channels)
-    : Detector(name, energy_sensitive, channels) {
+    : Detector(name, energy_sensitive, channels),
+      addback_energy(numeric_limits<double>::quiet_NaN()),
+      addback_time(numeric_limits<double>::quiet_NaN()) {
 
     for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
         addback_coincidence_windows.push_back(vector<pair<double, double>>());
@@ -31,8 +33,10 @@ EnergySensitiveDetector::EnergySensitiveDetector(
     }
 
     skip_channel = vector<bool>(channels.size(), false);
-    addback_energies = vector<double>(channels.size(), 0.);
-    addback_times = vector<double>(channels.size(), 0.);
+    addback_energies =
+        vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
+    addback_times =
+        vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
 }
 
 EnergySensitiveDetector::EnergySensitiveDetector(
@@ -63,13 +67,17 @@ EnergySensitiveDetector::EnergySensitiveDetector(
     }
 
     skip_channel = vector<bool>(channels.size(), false);
-    addback_energies = vector<double>(channels.size(), 0.);
-    addback_times = vector<double>(channels.size(), 0.);
+    addback_energies =
+        vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
+    addback_times =
+        vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
 }
 
 bool EnergySensitiveDetector::inside_addback_coincidence_window(
     const size_t n_channel_1, const size_t n_channel_2) {
-    return addback_coincidence_windows[n_channel_1][n_channel_2 - n_channel_1 - 1].first <=
+    return addback_coincidence_windows[n_channel_1]
+                                      [n_channel_2 - n_channel_1 - 1]
+                                          .first <=
                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                    channels[n_channel_1])
                        ->time_calibrated -
@@ -82,7 +90,9 @@ bool EnergySensitiveDetector::inside_addback_coincidence_window(
                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                        channels[n_channel_2])
                        ->time_calibrated <=
-               addback_coincidence_windows[n_channel_1][n_channel_2 - n_channel_1 - 1].second;
+               addback_coincidence_windows[n_channel_1]
+                                          [n_channel_2 - n_channel_1 - 1]
+                                              .second;
 }
 
 void EnergySensitiveDetector::filter_addback() {
