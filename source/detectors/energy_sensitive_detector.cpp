@@ -69,7 +69,7 @@ EnergySensitiveDetector::EnergySensitiveDetector(
 
 bool EnergySensitiveDetector::inside_addback_coincidence_window(
     const size_t n_channel_1, const size_t n_channel_2) {
-    return addback_coincidence_windows[n_channel_1][n_channel_2].first <=
+    return addback_coincidence_windows[n_channel_1][n_channel_2 - n_channel_1 - 1].first <=
                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                    channels[n_channel_1])
                        ->time_calibrated -
@@ -82,7 +82,7 @@ bool EnergySensitiveDetector::inside_addback_coincidence_window(
                    dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                        channels[n_channel_2])
                        ->time_calibrated <=
-               addback_coincidence_windows[n_channel_1][n_channel_2].second;
+               addback_coincidence_windows[n_channel_1][n_channel_2 - n_channel_1 - 1].second;
 }
 
 void EnergySensitiveDetector::filter_addback() {

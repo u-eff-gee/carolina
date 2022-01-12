@@ -107,6 +107,10 @@ void Analysis::calibrate(const long long n_entry) {
                 calibrate_counter_detector(n_entry, n_detector, n_channel);
             }
         }
+        if (detectors[n_detector]->type == energy_sensitive && detectors[n_detector]->channels.size() > 1) {
+            dynamic_pointer_cast<EnergySensitiveDetector>(detectors[n_detector])
+                ->addback();
+        }
     }
 }
 
@@ -173,10 +177,6 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
             detectors[n_detector]->channels[n_channel])
             ->timestamp_calibrated =
             get_timestamp(n_detector, n_channel) * INVERSE_VME_CLOCK_FREQUENCY;
-        if (detectors[n_detector]->channels.size() > 1) {
-            dynamic_pointer_cast<EnergySensitiveDetector>(detectors[n_detector])
-                ->addback();
-        }
     } else {
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
             detectors[n_detector]->channels[n_channel])
