@@ -17,7 +17,8 @@ using std::to_string;
 #include "TFile.h"
 #include "TKey.h"
 
-string remove_or_replace_root_suffix(const string file_name, const string new_suffix){
+string remove_or_replace_root_suffix(const string file_name,
+                                     const string new_suffix) {
     size_t root_file_suffix_position = file_name.find(".root");
     if (root_file_suffix_position == std::string::npos) {
         return file_name + new_suffix;
@@ -27,7 +28,8 @@ string remove_or_replace_root_suffix(const string file_name, const string new_su
 }
 
 string add_index_to_root_file_name(const string file_name, const size_t index) {
-    return remove_or_replace_root_suffix(file_name) + "_" + to_string(index) + ".root";
+    return remove_or_replace_root_suffix(file_name) + "_" + to_string(index) +
+           ".root";
 }
 
 vector<pair<long long, long long>>

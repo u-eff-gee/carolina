@@ -4,14 +4,7 @@
 
 using std::make_shared;
 
-#include "analysis.hpp"
-#include "coincidence_matrix.hpp"
-#include "counter_detector.hpp"
-#include "counter_detector_channel.hpp"
-#include "energy_sensitive_detector.hpp"
-#include "energy_sensitive_detector_channel.hpp"
-#include "mdpp16.hpp"
-#include "v830.hpp"
+#include "analysis_include.hpp"
 
 EnergySensitiveDetectorGroup clover{
     "clover",
@@ -157,7 +150,7 @@ Analysis analysis(
          vector<shared_ptr<Channel>>{
              make_shared<CounterDetectorChannel>("pulser", 4, 15)})},
     {{"clover_1_vs_clover_3",
-      {0, 1},
-      {},
+      {0},
+      {1},
       {2048, -2., 16382.},
       {2048, -2., 16382.}}});

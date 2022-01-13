@@ -22,7 +22,8 @@ string find_tree_in_file(const string filename, const string tree_name = "");
 
 vector<string> read_log_file(const string filename);
 
-string remove_or_replace_root_suffix(const string file_name, const string new_suffix = "");
+string remove_or_replace_root_suffix(const string file_name,
+                                     const string new_suffix = "");
 
 void write_list_of_output_files(const string output_file_name,
                                 vector<string> list_of_files);

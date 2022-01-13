@@ -1,5 +1,6 @@
 FILES=\
 `ls include/analysis/*.hpp`" "\
+`ls include/experiments/*.hpp`" "\
 `ls include/detectors/*.hpp`" "\
 `ls include/io/*.hpp`" "\
 `ls include/modules/*.hpp`" "\
