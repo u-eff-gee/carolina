@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
-        if (analysis.detectors[n_detector_1]->channels.size() > 1) {
+        if (analysis.detectors[n_detector_1]->type == energy_sensitive && analysis.detectors[n_detector_1]->channels.size() > 1) {
             histogram_name =
                 analysis.detectors[n_detector_1]->name + "_addback";
             addback_histograms.push_back(new TH1D(
@@ -366,9 +366,9 @@ int main(int argc, char **argv) {
         if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
             directory = output_file.mkdir(
                 (analysis.detectors[n_detector_1]->name + "_tdiff").c_str());
-        }
-        if (analysis.detectors[n_detector_1]->channels.size() > 1) {
-            addback_histograms[n_detector_1]->Write();
+            if (analysis.detectors[n_detector_1]->channels.size() > 1) {
+                addback_histograms[n_detector_1]->Write();
+            }
         }
         for (size_t n_channel_1 = 0;
              n_channel_1 < analysis.detectors[n_detector_1]->channels.size();
