@@ -54,31 +54,26 @@ int main(int argc, char **argv) {
         n_output_files = vm["n"].as<unsigned int>();
     }
 
-    const int n_entries = tree->GetEntries();
-    const int n_entries_per_file = n_entries / n_output_files;
-    const int n_entries_remainder = n_entries % n_output_files;
+    const long long n_entries = tree->GetEntries();
+    const long long block_size = (long long) ceil((double) n_entries / (double) n_output_files);
+
+    vector<pair<long long, long long>> blocks = divide_into_blocks(first, last, block_size);
 
     analysis.set_up_raw_branches_for_reading(tree);
 
     ProgressPrinter progress_printer(first, last);
 
-    int n_entry_stop;
     vector<string> output_file_names;
     TFile *new_file;
     TTree *new_tree;
 
-    for (unsigned int n_file = 0; n_file < n_output_files; ++n_file) {
+    for (unsigned int n_block = 0; n_block < blocks.size(); ++n_block) {
         output_file_names.push_back(vm["output"].as<string>() + "_" +
-                                    to_string(n_file) + ".root");
-        new_file = new TFile(output_file_names[n_file].c_str(), "RECREATE");
+                                    to_string(n_block) + ".root");
+        new_file = new TFile(output_file_names[n_block].c_str(), "RECREATE");
         new_tree = tree->CloneTree(0);
-        if (n_file < n_output_files - 1) {
-            n_entry_stop = (int)(n_file + 1) * n_entries_per_file;
-        } else {
-            n_entry_stop = (int)(n_file + 1) * n_entries_per_file +
-                           n_entries_remainder - 1;
-        }
-        for (int n_entry = n_file * n_entries_per_file; n_entry < n_entry_stop;
+
+        for (int n_entry = blocks[n_block].first; n_entry <= blocks[n_block].second;
              ++n_entry) {
             progress_printer(n_entry);
             tree->GetEntry(n_entry);
@@ -87,8 +82,8 @@ int main(int argc, char **argv) {
         new_tree->Write();
         new_file->Close();
 
-        cout << "Wrote part " << (n_file + 1) << "/" << n_output_files
-             << " of the data to '" << output_file_names[n_file] << "'."
+        cout << "Wrote part " << (n_block + 1) << "/" << n_output_files
+             << " of the data to '" << output_file_names[n_block] << "'."
              << endl;
     }
 

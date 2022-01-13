@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     vector<string> output_file_names;
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {
-        TChain *tree = command_line_parser.set_up_tree(first, last);
+        TChain *tree = command_line_parser.set_up_tree(first, last, vm.count("list"));
         analysis.set_up_raw_branches_for_reading(tree);
         TTree *tree_calibrated = new TTree(tree_calibrated_name.c_str(),
                                            tree_calibrated_name.c_str());
