@@ -224,7 +224,7 @@ int main(int argc, char **argv) {
                     analysis.reset_raw_leaves();
                 }
 
-                for (size_t n_detector_2 = 0;
+                for (size_t n_detector_2 = n_detector_1 + 1;
                      n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                     if (analysis.detectors[n_detector_2]->type ==
                         energy_sensitive) {
