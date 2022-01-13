@@ -130,6 +130,10 @@ vector<double> split_up_energy(const double energy,
     return energies;
 }
 
+void create_counter_event(const size_t n_detector, const size_t n_channel, const long long counter_increment){
+    analysis.add_counts(n_detector, n_channel, counter_increment / dynamic_pointer_cast<ScalerModule>(analysis.modules[analysis.detectors[n_detector]->channels[n_channel]->module])->trigger_frequency);
+}
+
 void create_single_event(const size_t n_detector, const size_t n_channel,
                          const double gamma_energy,
                          const vector<vector<TGraph>> energy_calibration,
@@ -193,9 +197,7 @@ int main(int argc, char **argv) {
     vector<vector<TGraph>> inverse_energy_calibrations =
         invert_energy_calibrations();
 
-    const double gamma_energy = 1000;
-    const double gamma_time = 0.;
-    vector<double> energies;
+    const double gamma_energy(1000.), gamma_time(0.), counter_increment(1000.);
 
     const unsigned int n_max = vm["n"].as<unsigned int>();
     ProgressPrinter progress_printer(0, n_max - 1, 0.01, "set of events",
@@ -243,6 +245,15 @@ int main(int argc, char **argv) {
                         analysis.reset_raw_leaves();
                     }
                 }
+            } else if (analysis.detectors[n_detector_1]->type == counter) {
+                for (size_t n_channel = 0;
+                     n_channel <
+                     analysis.detectors[n_detector_1]->channels.size();
+                     ++n_channel) {
+                    create_counter_event(n_detector_1, n_channel, counter_increment);
+                }
+                tree->Fill();
+                analysis.reset_raw_leaves();
             }
         }
         progress_printer(n);

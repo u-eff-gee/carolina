@@ -189,10 +189,10 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
         reset = true;
     }
 
-    if(reset){
+    if (reset) {
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                    detectors[n_detector]->channels[n_channel])
-                    ->reset_calibrated_leaves();
+            detectors[n_detector]->channels[n_channel])
+            ->reset_calibrated_leaves();
     }
 }
 
@@ -214,6 +214,14 @@ void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
         modules[detectors[n_detector]->channels[n_channel]->module])
         ->set_amplitude(detectors[n_detector]->channels[n_channel]->channel,
                         amplitude);
+}
+
+void Analysis::add_counts(const size_t n_detector, const size_t n_channel,
+                          const long long counts) {
+    dynamic_pointer_cast<ScalerModule>(
+        modules[detectors[n_detector]->channels[n_channel]->module])
+        ->add_counts(detectors[n_detector]->channels[n_channel]->channel,
+                     counts);
 }
 
 void Analysis::set_time(const size_t n_detector, const size_t n_channel,

@@ -18,6 +18,10 @@ struct V830 final : public ScalerModule {
         return counter_values.leaves[leaf];
     }
 
+    void add_counts(const size_t leaf, const long long counts) override final {
+        counter_values.leaves[leaf] += (double)counts;
+    }
+
     void reset_raw_leaves() override final;
     void set_up_raw_branches_for_reading(TTree *tree) override final;
     void set_up_raw_branches_for_writing(TTree *tree) override final;

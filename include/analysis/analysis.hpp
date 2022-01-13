@@ -33,6 +33,8 @@ struct Analysis {
 
     void set_amplitude(const size_t n_detector, const size_t n_channel,
                        const double amplitude);
+    void add_counts(const size_t n_detector, const size_t n_channel,
+                    const long long counts);
     void set_time(const size_t n_detector, const size_t n_channel,
                   const double time);
 

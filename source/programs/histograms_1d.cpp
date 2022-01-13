@@ -51,7 +51,8 @@ int main(int argc, char **argv) {
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
-        if (analysis.detectors[n_detector_1]->type == energy_sensitive && analysis.detectors[n_detector_1]->channels.size() > 1) {
+        if (analysis.detectors[n_detector_1]->type == energy_sensitive &&
+            analysis.detectors[n_detector_1]->channels.size() > 1) {
             histogram_name =
                 analysis.detectors[n_detector_1]->name + "_addback";
             addback_histograms.push_back(new TH1D(

@@ -10,4 +10,5 @@ struct ScalerModule : Module {
     const double trigger_frequency;
 
     virtual long long get_counts(const size_t leaf) = 0;
+    virtual void add_counts(const size_t leaf, const long long counts) = 0;
 };
