@@ -55,9 +55,11 @@ int main(int argc, char **argv) {
     }
 
     const long long n_entries = tree->GetEntries();
-    const long long block_size = (long long) ceil((double) n_entries / (double) n_output_files);
+    const long long block_size =
+        (long long)ceil((double)n_entries / (double)n_output_files);
 
-    vector<pair<long long, long long>> blocks = divide_into_blocks(first, last, block_size);
+    vector<pair<long long, long long>> blocks =
+        divide_into_blocks(first, last, block_size);
 
     analysis.set_up_raw_branches_for_reading(tree);
 
@@ -73,8 +75,8 @@ int main(int argc, char **argv) {
         new_file = new TFile(output_file_names[n_block].c_str(), "RECREATE");
         new_tree = tree->CloneTree(0);
 
-        for (int n_entry = blocks[n_block].first; n_entry <= blocks[n_block].second;
-             ++n_entry) {
+        for (int n_entry = blocks[n_block].first;
+             n_entry <= blocks[n_block].second; ++n_entry) {
             progress_printer(n_entry);
             tree->GetEntry(n_entry);
             new_tree->Fill();

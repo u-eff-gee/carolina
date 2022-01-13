@@ -45,7 +45,8 @@ int main(int argc, char **argv) {
     vector<string> output_file_names;
 
     for (size_t n_block = 0; n_block < blocks.size(); ++n_block) {
-        TChain *tree = command_line_parser.set_up_tree(first, last, vm.count("list"));
+        TChain *tree =
+            command_line_parser.set_up_tree(first, last, vm.count("list"));
         analysis.set_up_raw_branches_for_reading(tree);
         TTree *tree_calibrated = new TTree(tree_calibrated_name.c_str(),
                                            tree_calibrated_name.c_str());
@@ -62,7 +63,7 @@ int main(int argc, char **argv) {
         }
 
         output_file_names.push_back(
-            add_index_to_file_name(vm["output"].as<string>(), n_block));
+            add_index_to_root_file_name(vm["output"].as<string>(), n_block));
         TFile output_file(output_file_names[n_block].c_str(), "RECREATE");
         tree_calibrated->Write();
         output_file.Close();
@@ -75,7 +76,7 @@ int main(int argc, char **argv) {
     }
     if (vm.count("log")) {
         write_list_of_output_files(
-            add_or_change_file_name_suffix(vm["output"].as<string>(), ".log"),
+            remove_or_replace_root_suffix(vm["output"].as<string>(), ".log"),
             output_file_names);
     }
 }

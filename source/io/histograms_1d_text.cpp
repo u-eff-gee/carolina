@@ -23,15 +23,7 @@ namespace po = boost::program_options;
 #include "TH1.h"
 #include "TKey.h"
 
-string trim_input_file_name(const string input_file_name) {
-    size_t root_file_suffix_position = input_file_name.find(".root");
-
-    if (root_file_suffix_position == std::string::npos) {
-        return input_file_name;
-    }
-
-    return input_file_name.substr(0, root_file_suffix_position);
-}
+#include "tfile_utilities.hpp"
 
 void write_histogram_single_column(TH1 *histogram,
                                    const string output_file_name) {
@@ -113,7 +105,7 @@ int main(int argc, char *argv[]) {
     for (auto input_file : input_files) {
         TFile file(input_file.c_str(), "READ");
         TIter next_key(file.GetListOfKeys());
-        prefix = trim_input_file_name(input_file) + "_";
+        prefix = remove_or_replace_root_suffix(input_file) + "_";
 
         TKey *key;
         while ((key = (TKey *)next_key())) {
