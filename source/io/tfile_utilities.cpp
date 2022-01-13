@@ -3,6 +3,12 @@
 #include <fstream>
 
 using std::ifstream;
+using std::ofstream;
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 #include <string>
 
@@ -71,4 +77,17 @@ vector<string> read_log_file(const string filename) {
         file_names.push_back(line);
     }
     return file_names;
+}
+
+void write_list_of_output_files(const string output_file_name,
+                                vector<string> list_of_files) {
+    ofstream log_file(output_file_name);
+    for (auto file : list_of_files) {
+        log_file << file;
+        log_file << "\n";
+    }
+    log_file.close();
+
+    cout << "Wrote list of generated output files to '" << output_file_name
+         << "'." << endl;
 }

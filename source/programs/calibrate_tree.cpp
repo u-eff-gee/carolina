@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
         "Create a text file ('log file') that contains the names of the "
         "generated "
         "output files (default: create no log file). The log file will have "
-        "the same prefix as the ROOT output file, but a '.log' suffix.");
+        "the same prefix as the ROOT output files, but a '.log' suffix.");
     int command_line_parser_status;
     command_line_parser(argc, argv, command_line_parser_status);
     if (command_line_parser_status) {
@@ -74,16 +74,8 @@ int main(int argc, char **argv) {
         delete tree;
     }
     if (vm.count("log")) {
-        const string log_file_name =
-            add_or_change_file_name_suffix(vm["output"].as<string>(), ".log");
-        ofstream log_file(log_file_name);
-        for (auto file : output_file_names) {
-            log_file << file;
-            log_file << "\n";
-        }
-        log_file.close();
-
-        cout << "Wrote list of generated output files to '" << log_file_name
-             << "'." << endl;
+        write_list_of_output_files(
+            add_or_change_file_name_suffix(vm["output"].as<string>(), ".log"),
+            output_file_names);
     }
 }

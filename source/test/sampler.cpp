@@ -130,8 +130,15 @@ vector<double> split_up_energy(const double energy,
     return energies;
 }
 
-void create_counter_event(const size_t n_detector, const size_t n_channel, const long long counter_increment){
-    analysis.add_counts(n_detector, n_channel, counter_increment / dynamic_pointer_cast<ScalerModule>(analysis.modules[analysis.detectors[n_detector]->channels[n_channel]->module])->trigger_frequency);
+void create_counter_event(const size_t n_detector, const size_t n_channel,
+                          const long long counter_increment) {
+    analysis.add_counts(n_detector, n_channel,
+                        counter_increment /
+                            dynamic_pointer_cast<ScalerModule>(
+                                analysis.modules[analysis.detectors[n_detector]
+                                                     ->channels[n_channel]
+                                                     ->module])
+                                ->trigger_frequency);
 }
 
 void create_single_event(const size_t n_detector, const size_t n_channel,
@@ -250,7 +257,8 @@ int main(int argc, char **argv) {
                      n_channel <
                      analysis.detectors[n_detector_1]->channels.size();
                      ++n_channel) {
-                    create_counter_event(n_detector_1, n_channel, counter_increment);
+                    create_counter_event(n_detector_1, n_channel,
+                                         counter_increment);
                 }
                 tree->Fill();
                 analysis.reset_raw_leaves();
