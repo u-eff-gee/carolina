@@ -147,14 +147,8 @@ void Analysis::calibrate_counter_detector(const int n_entry,
 void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
                                                    const size_t n_detector,
                                                    const size_t n_channel) {
+    bool reset = false;
     if (!isnan(get_amplitude(n_detector, n_channel))) {
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->energy_calibrated =
-            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                detectors[n_detector]->channels[n_channel])
-                ->energy_calibration(get_amplitude(n_detector, n_channel),
-                                     n_entry);
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
             detectors[n_detector]->channels[n_channel])
             ->time_calibrated =
@@ -174,14 +168,31 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
                 ->time_calibrated -
             get_time_RF(n_detector, n_channel) *
                 get_tdc_resolution(n_detector, n_channel);
+        if (dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                detectors[n_detector]->channels[n_channel])
+                ->apply_RF_gate()) {
+            dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                detectors[n_detector]->channels[n_channel])
+                ->energy_calibrated =
+                dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
+                    detectors[n_detector]->channels[n_channel])
+                    ->energy_calibration(get_amplitude(n_detector, n_channel),
+                                         n_entry);
+        } else {
+            reset = true;
+        }
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
             detectors[n_detector]->channels[n_channel])
             ->timestamp_calibrated =
             get_timestamp(n_detector, n_channel) * INVERSE_VME_CLOCK_FREQUENCY;
     } else {
+        reset = true;
+    }
+
+    if(reset){
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            detectors[n_detector]->channels[n_channel])
-            ->reset_calibrated_leaves();
+                    detectors[n_detector]->channels[n_channel])
+                    ->reset_calibrated_leaves();
     }
 }
 
