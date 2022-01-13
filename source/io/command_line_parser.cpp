@@ -17,6 +17,8 @@ CommandLineParser::CommandLineParser() {
                                         "Input file names.")(
         "last", po::value<long long>()->default_value(-1),
         "Last entry to be processed.")(
+        "list", "Indicates that the input file is a text file that contains a "
+                "list of ROOT files to read.")(
         "output", po::value<string>()->default_value("output.root"),
         "Output file name (default: 'output.root').")(
         "tree", po::value<string>()->default_value(""),

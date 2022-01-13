@@ -27,11 +27,6 @@ using std::endl;
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
-    command_line_parser.desc.add_options()(
-        "log",
-        "Indicates that the input file is a log file (probably created by the "
-        "'calibrate_tree' program) that contains a list of ROOT files to read "
-        "(default: assume the input file is a ROOT file).");
     int command_line_parser_status;
     command_line_parser(argc, argv, command_line_parser_status);
     if (command_line_parser_status) {
@@ -41,7 +36,7 @@ int main(int argc, char **argv) {
 
     long long first, last;
     TChain *tree =
-        command_line_parser.set_up_tree(first, last, vm.count("log"));
+        command_line_parser.set_up_tree(first, last, vm.count("list"));
 
     ProgressPrinter progress_printer(first, last);
 

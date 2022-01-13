@@ -23,7 +23,8 @@ int main(int argc, char **argv) {
         "Number of data entries that are processed before the data are written "
         "to file (default: 10^6).")(
         "log",
-        "Create a log file that contains the names of the generated "
+        "Create a text file ('log file') that contains the names of the "
+        "generated "
         "output files (default: create no log file). The log file will have "
         "the same prefix as the ROOT output file, but a '.log' suffix.");
     int command_line_parser_status;
@@ -34,7 +35,7 @@ int main(int argc, char **argv) {
     po::variables_map vm = command_line_parser.get_variables_map();
 
     long long first, last;
-    TChain *t = command_line_parser.set_up_tree(first, last);
+    TChain *t = command_line_parser.set_up_tree(first, last, vm.count("list"));
 
     vector<pair<long long, long long>> blocks =
         divide_into_blocks(first, last, vm["block"].as<long long>());

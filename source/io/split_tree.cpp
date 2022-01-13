@@ -26,7 +26,7 @@ namespace po = boost::program_options;
 
 int main(int argc, char **argv) {
     po::options_description desc(
-        "Split a single ROOT file or a TChain of heterogeneoous ROOT files "
+        "Split a single ROOT file or a TChain of heterogeneous ROOT files "
         "which contain the same TTree structure into n files with the same "
         "size (more precisely: number of contained events up to rounding) for "
         "easier parallel processing.");

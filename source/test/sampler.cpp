@@ -198,11 +198,10 @@ int main(int argc, char **argv) {
     vector<double> energies;
 
     const unsigned int n_max = vm["n"].as<unsigned int>();
-    ProgressPrinter progress_printer(n_max, 0.01, "set of events",
+    ProgressPrinter progress_printer(0, n_max - 1, 0.01, "set of events",
                                      "sets of events");
 
     for (unsigned int n = 0; n < n_max; ++n) {
-        progress_printer(n);
         for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
              ++n_detector_1) {
             if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
@@ -229,7 +228,8 @@ int main(int argc, char **argv) {
                      n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                     if (analysis.detectors[n_detector_2]->type ==
                         energy_sensitive) {
-                        // Create a coincident event in two detectors that
+                        // Create a coincident event in two detectors
+                        // that
                         // requires addback.
                         create_single_event_with_addback(
                             n_detector_1, gamma_energy,
@@ -245,6 +245,7 @@ int main(int argc, char **argv) {
                 }
             }
         }
+        progress_printer(n);
     }
 
     tree->Write();
