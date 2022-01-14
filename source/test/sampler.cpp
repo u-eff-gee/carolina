@@ -44,10 +44,10 @@ TGraph invert_energy_calibration(const size_t n_detector,
         },
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
             analysis.get_group(n_detector))
-            ->raw_histogram_properties.minimum,
+            ->raw_histogram_properties.lower_edge_of_first_bin,
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
             analysis.get_group(n_detector))
-            ->raw_histogram_properties.maximum);
+            ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 
 TGraph invert_time_calibration(const size_t n_detector, const size_t n_channel,
@@ -62,10 +62,10 @@ TGraph invert_time_calibration(const size_t n_detector, const size_t n_channel,
         },
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
             analysis.get_group(n_detector))
-            ->raw_histogram_properties.minimum,
+            ->raw_histogram_properties.lower_edge_of_first_bin,
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
             analysis.get_group(n_detector))
-            ->raw_histogram_properties.maximum);
+            ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 
 vector<vector<TGraph>> invert_energy_calibrations() {

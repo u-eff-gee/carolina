@@ -48,8 +48,10 @@ int main(int argc, char **argv) {
                 histogram_name.c_str(), histogram_name.c_str(), 256, first,
                 last,
                 analysis.get_group(n_detector)->histogram_properties.n_bins,
-                analysis.get_group(n_detector)->histogram_properties.minimum,
-                analysis.get_group(n_detector)->histogram_properties.maximum));
+                analysis.get_group(n_detector)
+                    ->histogram_properties.lower_edge_of_first_bin,
+                analysis.get_group(n_detector)
+                    ->histogram_properties.upper_edge_of_last_bin));
         }
     }
 

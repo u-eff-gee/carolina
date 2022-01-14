@@ -56,8 +56,10 @@ int main(int argc, char **argv) {
         coincidence_pairs.push_back(matrix.get_coincidence_pairs());
         coincidence_histograms.push_back(new TH2I(
             matrix.name.c_str(), matrix.name.c_str(), matrix.x_axis.n_bins,
-            matrix.x_axis.minimum, matrix.x_axis.maximum, matrix.y_axis.n_bins,
-            matrix.y_axis.minimum, matrix.y_axis.maximum));
+            matrix.x_axis.lower_edge_of_first_bin,
+            matrix.x_axis.upper_edge_of_last_bin, matrix.y_axis.n_bins,
+            matrix.y_axis.lower_edge_of_first_bin,
+            matrix.y_axis.upper_edge_of_last_bin));
     }
 
     for (long long i = first; i <= last; ++i) {

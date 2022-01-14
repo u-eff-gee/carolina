@@ -20,8 +20,8 @@ struct CoincidenceMatrix {
     const vector<size_t> detectors_x;
     const vector<size_t> detectors_y;
 
-    const HistogramProperties x_axis;
-    const HistogramProperties y_axis;
+    const Histogram x_axis;
+    const Histogram y_axis;
 
     vector<pair<size_t, size_t>> get_coincidence_pairs() const;
 };

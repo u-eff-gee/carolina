@@ -48,23 +48,23 @@ int main(int argc, char **argv) {
                 analysis.detectors[n_detector]->name + "_" +
                 analysis.detectors[n_detector]->channels[n_channel]->name;
             if (analysis.detectors[n_detector]->type == energy_sensitive) {
-                histograms[n_detector].push_back(
-                    new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                             analysis.get_group(n_detector)
-                                 ->raw_histogram_properties.n_bins,
-                             analysis.get_group(n_detector)
-                                 ->raw_histogram_properties.minimum,
-                             analysis.get_group(n_detector)
-                                 ->raw_histogram_properties.maximum));
+                histograms[n_detector].push_back(new TH1D(
+                    histogram_name.c_str(), histogram_name.c_str(),
+                    analysis.get_group(n_detector)
+                        ->raw_histogram_properties.n_bins,
+                    analysis.get_group(n_detector)
+                        ->raw_histogram_properties.lower_edge_of_first_bin,
+                    analysis.get_group(n_detector)
+                        ->raw_histogram_properties.upper_edge_of_last_bin));
             } else if (analysis.detectors[n_detector]->type == counter) {
-                histograms[n_detector].push_back(
-                    new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                             analysis.get_group(n_detector)
-                                 ->raw_histogram_properties.n_bins,
-                             analysis.get_group(n_detector)
-                                 ->raw_histogram_properties.minimum,
-                             analysis.get_group(n_detector)
-                                 ->raw_histogram_properties.maximum));
+                histograms[n_detector].push_back(new TH1D(
+                    histogram_name.c_str(), histogram_name.c_str(),
+                    analysis.get_group(n_detector)
+                        ->raw_histogram_properties.n_bins,
+                    analysis.get_group(n_detector)
+                        ->raw_histogram_properties.lower_edge_of_first_bin,
+                    analysis.get_group(n_detector)
+                        ->raw_histogram_properties.upper_edge_of_last_bin));
             }
         }
     }

@@ -58,9 +58,9 @@ int main(int argc, char **argv) {
                                      ->histogram_properties.n_bins /
                                  vm["rebin_energy"].as<unsigned int>(),
                              analysis.get_group(n_detector)
-                                 ->histogram_properties.minimum,
+                                 ->histogram_properties.lower_edge_of_first_bin,
                              analysis.get_group(n_detector)
-                                 ->histogram_properties.maximum,
+                                 ->histogram_properties.upper_edge_of_last_bin,
                              dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
                                  analysis.get_group(n_detector))
                                      ->time_histogram_properties.n_bins /
