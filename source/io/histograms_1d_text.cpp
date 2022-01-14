@@ -1,3 +1,20 @@
+/*
+     This file is part of carolina.
+
+    carolina is free software: you can redistribute it and/or modify it under
+   the terms of the GNU General Public License as published by the Free Software
+   Foundation, either version 3 of the License, or (at your option) any later
+   version.
+
+    carolina is distributed in the hope that it will be useful, but WITHOUT ANY
+    WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+    more details.
+
+    You should have received a copy of the GNU General Public License along with
+    carolina. If not, see <https://www.gnu.org/licenses/>.
+*/
+
 #include <fstream>
 
 using std::ofstream;
@@ -70,7 +87,9 @@ int main(int argc, char *argv[]) {
         "separator", po::value<string>()->default_value(""),
         "Separator between 'bin center' and 'bin content' columns. The default "
         "is an empty string, indicating that only the bin contents should be "
-        "written.")("suffix", po::value<string>()->default_value(""), "User-defined suffix to be inserted between the file name and the file-type ('.txt') suffix.");
+        "written.")("suffix", po::value<string>()->default_value(""),
+                    "User-defined suffix to be inserted between the file name "
+                    "and the file-type ('.txt') suffix.");
     p.add("input_file", -1);
 
     po::store(
@@ -108,7 +127,7 @@ int main(int argc, char *argv[]) {
                     histogram->Rebin(vm["rebin"].as<unsigned int>());
                 }
                 output_file_name = prefix + key->GetName();
-                if(vm["suffix"].as<string>() != ""){
+                if (vm["suffix"].as<string>() != "") {
                     output_file_name += ("_" + vm["suffix"].as<string>());
                 }
                 output_file_name += ".txt";
