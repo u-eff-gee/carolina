@@ -23,13 +23,12 @@
 
 struct SIS3316 final : public DigitizerModule {
     SIS3316(const double tdc_resolution)
-        : DigitizerModule(tdc_resolution, "reference_time"), amplitude_e1("e1"),
-          amplitude_e2("e2"), time("time"), timestamp("timestamp") {}
+        : DigitizerModule(tdc_resolution, "reference_time", "timestamp"), amplitude_e1("e1"),
+          amplitude_e2("e2"), time("time") {}
 
     Branch<double, 8> amplitude_e1;
     Branch<double, 8> amplitude_e2;
     Branch<double, 8> time;
-    Branch<double, 8> timestamp;
 
     double get_amplitude(const size_t leaf) const override final {
         return amplitude_conversion *
@@ -37,10 +36,6 @@ struct SIS3316 final : public DigitizerModule {
     }
     double get_time(const size_t leaf) const override final {
         return time.leaves[leaf];
-    }
-
-    double get_timestamp(const size_t leaf) const override final {
-        return timestamp.leaves[leaf];
     }
 
     void set_amplitude(const size_t leaf, const double amp) override final {

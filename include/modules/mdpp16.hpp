@@ -25,23 +25,17 @@ struct MDPP16 final : public DigitizerModule {
     MDPP16(const string amplitude_branch_name, const string time_branch_name,
            const string reference_time_branch_name, const string timestamp_branch_name,
            const double tdc_resolution)
-        : DigitizerModule(tdc_resolution, reference_time_branch_name),
-          amplitude(amplitude_branch_name), time(time_branch_name),
-          timestamp(timestamp_branch_name) {}
+        : DigitizerModule(tdc_resolution, reference_time_branch_name, timestamp_branch_name),
+          amplitude(amplitude_branch_name), time(time_branch_name) {}
 
     Branch<double, 16> amplitude;
     Branch<double, 16> time;
-    Branch<double, 16> timestamp;
 
     double get_amplitude(const size_t leaf) const override final {
         return amplitude.leaves[leaf];
     }
     double get_time(const size_t leaf) const override final {
         return time.leaves[leaf];
-    }
-
-    double get_timestamp(const size_t leaf) const override final {
-        return timestamp.leaves[leaf];
     }
 
     void set_amplitude(const size_t leaf, const double amp) override final {

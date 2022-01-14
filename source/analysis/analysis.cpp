@@ -106,9 +106,7 @@ double Analysis::get_timestamp(const size_t n_detector,
                                const size_t n_channel) const {
     return dynamic_pointer_cast<DigitizerModule>(
                modules[detectors[n_detector]->channels[n_channel]->module])
-        ->get_timestamp(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                            detectors[n_detector]->channels[n_channel])
-                            ->channel);
+        ->get_timestamp();
 }
 
 void Analysis::calibrate(const long long n_entry) {

@@ -32,19 +32,22 @@ using std::vector;
 
 struct DigitizerModule : Module {
     DigitizerModule(const double tdc_resolution,
-                    const string reference_time_branch_name)
-        : tdc_resolution(tdc_resolution), reference_time(reference_time_branch_name) {}
+                    const string reference_time_branch_name,
+                    const string timestamp_branch_name)
+        : tdc_resolution(tdc_resolution), reference_time(reference_time_branch_name), timestamp(timestamp_branch_name) {}
 
     const double tdc_resolution;
 
     Branch<double, 1> reference_time;
+    Branch<double, 1> timestamp;
 
     virtual double get_amplitude(const size_t leaf) const = 0;
     virtual double get_time(const size_t leaf) const = 0;
     double get_reference_time() const { return reference_time.leaves[0]; };
-    virtual double get_timestamp(const size_t leaf) const = 0;
+    virtual double get_timestamp() { return timestamp.leaves[0]; };
 
     virtual void set_amplitude(const size_t leaf, const double amplitude) = 0;
     virtual void set_time(const size_t leaf, const double time) = 0;
-    void set_reference_time(const double time) { reference_time.leaves[0] = time; };
+    void set_reference_time(const double ref_time) { reference_time.leaves[0] = ref_time; };
+    void set_timestamp(const double ts) { reference_time.leaves[0] = ts; };
 };
