@@ -11,11 +11,11 @@ struct SIS3316 final : public DigitizerModule {
           amplitude_e2("e2"), time("time"), time_RF("time_RF"),
           timestamp("timestamp") {}
 
-    Branch<unsigned int, 8> amplitude_e1;
-    Branch<unsigned int, 8> amplitude_e2;
-    Branch<unsigned int, 8> time;
-    Branch<unsigned int, 1> time_RF;
-    Branch<unsigned int, 8> timestamp;
+    Branch<double, 8> amplitude_e1;
+    Branch<double, 8> amplitude_e2;
+    Branch<double, 8> time;
+    Branch<double, 1> time_RF;
+    Branch<double, 8> timestamp;
 
     double get_amplitude(const size_t leaf) const override final {
         return amplitude_conversion *
@@ -33,7 +33,7 @@ struct SIS3316 final : public DigitizerModule {
     }
 
     void set_amplitude(const size_t leaf, const double amp) override final {
-        amplitude_e2.leaves[leaf] = (unsigned int) amp * inverse_amplitude_conversion;
+        amplitude_e2.leaves[leaf] = (amp * inverse_amplitude_conversion);
         amplitude_e1.leaves[leaf] = 0;
     }
 
