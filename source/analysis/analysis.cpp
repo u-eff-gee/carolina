@@ -99,9 +99,7 @@ double Analysis::get_time_RF(const size_t n_detector,
                              const size_t n_channel) const {
     return dynamic_pointer_cast<DigitizerModule>(
                modules[detectors[n_detector]->channels[n_channel]->module])
-        ->get_time_RF(dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-                          detectors[n_detector]->channels[n_channel])
-                          ->channel);
+        ->get_time_RF();
 }
 
 double Analysis::get_timestamp(const size_t n_detector,
@@ -246,4 +244,9 @@ void Analysis::set_time(const size_t n_detector, const size_t n_channel,
     dynamic_pointer_cast<DigitizerModule>(
         modules[detectors[n_detector]->channels[n_channel]->module])
         ->set_time(detectors[n_detector]->channels[n_channel]->channel, time);
+}
+
+void Analysis::set_time_RF(const size_t n_module, const double time_RF) {
+    dynamic_pointer_cast<DigitizerModule>(modules[n_module])
+        ->set_time_RF(time_RF);
 }

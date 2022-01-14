@@ -19,19 +19,16 @@
 
 #include "TTree.h"
 
-#include "branch.hpp"
 #include "digitizer_module.hpp"
 
 struct SIS3316 final : public DigitizerModule {
     SIS3316(const double tdc_resolution)
-        : DigitizerModule(tdc_resolution), amplitude_e1("e1"),
-          amplitude_e2("e2"), time("time"), time_RF("time_RF"),
-          timestamp("timestamp") {}
+        : DigitizerModule(tdc_resolution, "time_RF"), amplitude_e1("e1"),
+          amplitude_e2("e2"), time("time"), timestamp("timestamp") {}
 
     Branch<double, 8> amplitude_e1;
     Branch<double, 8> amplitude_e2;
     Branch<double, 8> time;
-    Branch<double, 1> time_RF;
     Branch<double, 8> timestamp;
 
     double get_amplitude(const size_t leaf) const override final {
@@ -41,10 +38,7 @@ struct SIS3316 final : public DigitizerModule {
     double get_time(const size_t leaf) const override final {
         return time.leaves[leaf];
     }
-    double get_time_RF([
-        [maybe_unused]] const size_t leaf) const override final {
-        return time_RF.leaves[0];
-    }
+
     double get_timestamp(const size_t leaf) const override final {
         return timestamp.leaves[leaf];
     }

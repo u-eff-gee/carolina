@@ -54,6 +54,7 @@ struct Analysis {
                     const long long counts);
     void set_time(const size_t n_detector, const size_t n_channel,
                   const double time);
+    void set_time_RF(const size_t n_module, const double time_vs_time_RF);
 
     void calibrate(const int n_entry);
     void calibrate_counter_detector(const int n_entry, const size_t n_detector,
