@@ -9,7 +9,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(ROOT REQUIRED)
 include(${ROOT_USE_FILE})
 
-set(ANALYSIS "analysis_78Kr.hpp" CACHE STRING "Set name of header file in ${CMAKE_SOURCE_DIR}/include/experiments/ that contains the analysis configuration. Default: 'analysis_78Kr.hpp'.")
+set(ANALYSIS "test.hpp" CACHE STRING "Set name of header file in ${CMAKE_SOURCE_DIR}/include/experiments/ that contains the analysis configuration. Default: 'test.hpp'.")
 
 add_compile_options(-Wall -Wextra)
 option(BUILD_TESTS "Build unit tests. Default: ON" ON)

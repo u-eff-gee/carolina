@@ -7,4 +7,5 @@
 #include "energy_sensitive_detector.hpp"
 #include "energy_sensitive_detector_channel.hpp"
 #include "mdpp16.hpp"
+#include "sis3316.hpp"
 #include "v830.hpp"
