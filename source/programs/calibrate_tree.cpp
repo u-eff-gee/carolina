@@ -7,6 +7,10 @@ using std::ofstream;
 using std::cout;
 using std::endl;
 
+#include <string>
+
+using std::to_string;
+
 #include "TChain.h"
 #include "TFile.h"
 #include "TH1D.h"
@@ -62,8 +66,8 @@ int main(int argc, char **argv) {
             progress_printer(i);
         }
 
-        output_file_names.push_back(
-            add_index_to_root_file_name(vm["output"].as<string>(), n_block));
+        output_file_names.push_back(remove_or_replace_suffix(
+            vm["output"].as<string>(), "_" + to_string(n_block) + ".root"));
         TFile output_file(output_file_names[n_block].c_str(), "RECREATE");
         tree_calibrated->Write();
         output_file.Close();
@@ -76,7 +80,7 @@ int main(int argc, char **argv) {
     }
     if (vm.count("log")) {
         write_list_of_output_files(
-            remove_or_replace_root_suffix(vm["output"].as<string>(), ".log"),
+            remove_or_replace_suffix(vm["output"].as<string>(), ".log"),
             output_file_names);
     }
 }

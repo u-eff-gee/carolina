@@ -21,7 +21,7 @@ EnergySensitiveDetectorGroup coaxial{
 EnergySensitiveDetectorGroup nai{
     "nai",
     {16384, -0.5, 16383.5},
-    {16384, -0.03125, 1023.96875},
+    {4096, -0.5, 4096 - 0.5},
     {8192, -4096 - 0.5, 4096 - 0.5},
     {8192, (-4096 - 0.5) * 0.125, (4096 - 0.5) * 0.125}};
 EnergySensitiveDetectorGroup fission_chamber{

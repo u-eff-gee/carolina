@@ -29,11 +29,6 @@ void write_histogram_single_column(TH1 *histogram,
                                    const string output_file_name) {
 
     ofstream output_file(output_file_name);
-    if (!output_file.is_open()) {
-        cout << "Error: File '" << output_file_name
-             << "' could not be opened. Aborting ..." << endl;
-        abort();
-    }
 
     for (int i = 1; i <= histogram->GetNbinsX(); ++i) {
         output_file << histogram->GetBinContent(i) << "\n";
@@ -46,11 +41,6 @@ void write_histogram_two_column(TH1 *histogram, const string separator,
                                 const string output_file_name) {
 
     ofstream output_file(output_file_name);
-    if (!output_file.is_open()) {
-        cout << "Error: File '" << output_file_name
-             << "' could not be opened. Aborting ..." << endl;
-        abort();
-    }
 
     for (int i = 1; i <= histogram->GetNbinsX(); ++i) {
         output_file << histogram->GetBinCenter(i) << separator
@@ -65,7 +55,11 @@ int main(int argc, char *argv[]) {
     po::variables_map vm;
     po::options_description desc(
         "Write the bin centers and bin contents of all TH1 histograms in a "
-        "ROOT file to separate single- or two-column text files");
+        "ROOT file to separate single- or two-column text files. The file "
+        "names of the text files will contain the ROOT file name "
+        "ROOT_FILE_NAME as a prefix, followed by the histogram name HIST_NAME, "
+        "a user-defined suffix USER_SUFFIX, and '.root', "
+        "i.e.\n\n\t{ROOT_FILE_NAME}_{HIST_NAME}[_{USER_SUFFIX}].txt\n");
     po::positional_options_description p;
     desc.add_options()("help", "Produce help message.")(
         "input_file", po::value<vector<string>>(), "Input file names.")(
@@ -73,12 +67,10 @@ int main(int argc, char *argv[]) {
         "Before writing, rebin the spectrum using TH1::Rebin(). The parameter "
         "of the 'rebin' option corresponds to the 'ngroup' parameter of "
         "TH1::Rebin(). Default: 1, i.e. do not rebin.")(
-        "output_directory", po::value<string>()->default_value(""),
-        "Output directory. Default: Empty string, i.e. 'here'.")(
         "separator", po::value<string>()->default_value(""),
         "Separator between 'bin center' and 'bin content' columns. The default "
         "is an empty string, indicating that only the bin contents should be "
-        "written.");
+        "written.")("suffix", po::value<string>()->default_value(""), "User-defined suffix to be inserted between the file name and the file-type ('.txt') suffix.");
     p.add("input_file", -1);
 
     po::store(
@@ -105,7 +97,7 @@ int main(int argc, char *argv[]) {
     for (auto input_file : input_files) {
         TFile file(input_file.c_str(), "READ");
         TIter next_key(file.GetListOfKeys());
-        prefix = remove_or_replace_root_suffix(input_file) + "_";
+        prefix = remove_or_replace_suffix(input_file) + "_";
 
         TKey *key;
         while ((key = (TKey *)next_key())) {
@@ -115,8 +107,11 @@ int main(int argc, char *argv[]) {
                 if (vm["rebin"].as<unsigned int>() != 1) {
                     histogram->Rebin(vm["rebin"].as<unsigned int>());
                 }
-                output_file_name = vm["output_directory"].as<string>() +
-                                   prefix + key->GetName() + ".txt";
+                output_file_name = prefix + key->GetName();
+                if(vm["suffix"].as<string>() != ""){
+                    output_file_name += ("_" + vm["suffix"].as<string>());
+                }
+                output_file_name += ".txt";
                 if (separator == "") {
                     write_histogram_single_column(histogram, output_file_name);
                 } else {

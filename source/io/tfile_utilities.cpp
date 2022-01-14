@@ -17,19 +17,14 @@ using std::to_string;
 #include "TFile.h"
 #include "TKey.h"
 
-string remove_or_replace_root_suffix(const string file_name,
-                                     const string new_suffix) {
-    size_t root_file_suffix_position = file_name.find(".root");
-    if (root_file_suffix_position == std::string::npos) {
+string remove_or_replace_suffix(const string file_name,
+                                const string new_suffix) {
+    size_t suffix_separator_position = file_name.rfind(".");
+    if (suffix_separator_position == std::string::npos) {
         return file_name + new_suffix;
     }
 
-    return file_name.substr(0, root_file_suffix_position) + new_suffix;
-}
-
-string add_index_to_root_file_name(const string file_name, const size_t index) {
-    return remove_or_replace_root_suffix(file_name) + "_" + to_string(index) +
-           ".root";
+    return file_name.substr(0, suffix_separator_position) + new_suffix;
 }
 
 vector<pair<long long, long long>>
