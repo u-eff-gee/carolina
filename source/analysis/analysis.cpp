@@ -95,11 +95,11 @@ double Analysis::get_time(const size_t n_detector,
                        ->channel);
 }
 
-double Analysis::get_time_RF(const size_t n_detector,
+double Analysis::get_reference_time(const size_t n_detector,
                              const size_t n_channel) const {
     return dynamic_pointer_cast<DigitizerModule>(
                modules[detectors[n_detector]->channels[n_channel]->module])
-        ->get_time_RF();
+        ->get_reference_time();
 }
 
 double Analysis::get_timestamp(const size_t n_detector,
@@ -177,11 +177,11 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
             get_tdc_resolution(n_detector, n_channel);
         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
             detectors[n_detector]->channels[n_channel])
-            ->time_vs_time_RF_calibrated =
+            ->time_vs_reference_time_calibrated =
             dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                 detectors[n_detector]->channels[n_channel])
                 ->time_calibrated -
-            get_time_RF(n_detector, n_channel) *
+            get_reference_time(n_detector, n_channel) *
                 get_tdc_resolution(n_detector, n_channel);
         if (dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                 detectors[n_detector]->channels[n_channel])
@@ -246,7 +246,7 @@ void Analysis::set_time(const size_t n_detector, const size_t n_channel,
         ->set_time(detectors[n_detector]->channels[n_channel]->channel, time);
 }
 
-void Analysis::set_time_RF(const size_t n_module, const double time_RF) {
+void Analysis::set_reference_time(const size_t n_module, const double reference_time) {
     dynamic_pointer_cast<DigitizerModule>(modules[n_module])
-        ->set_time_RF(time_RF);
+        ->set_reference_time(reference_time);
 }

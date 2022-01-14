@@ -69,8 +69,8 @@ vector<EnergySensitiveDetector> detectors{
                  }
              },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 20.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 20.) {
                      return true;
                  }
                  return false;
@@ -99,8 +99,8 @@ vector<EnergySensitiveDetector> detectors{
                  }
              },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 20.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 20.) {
                      return true;
                  }
                  return false;
@@ -129,8 +129,8 @@ vector<EnergySensitiveDetector> detectors{
                  }
              },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 20.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 20.) {
                      return true;
                  }
                  return false;
@@ -159,8 +159,8 @@ vector<EnergySensitiveDetector> detectors{
                  }
              },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 20.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 20.) {
                      return true;
                  }
                  return false;
@@ -181,8 +181,8 @@ vector<EnergySensitiveDetector> detectors{
              // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 150.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 150.) {
                      return true;
                  }
                  return false;
@@ -203,8 +203,8 @@ vector<EnergySensitiveDetector> detectors{
              // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 150.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 150.) {
                      return true;
                  }
                  return false;
@@ -225,8 +225,8 @@ vector<EnergySensitiveDetector> detectors{
              // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 150.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 150.) {
                      return true;
                  }
                  return false;
@@ -247,8 +247,8 @@ vector<EnergySensitiveDetector> detectors{
              // Run 528
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             [](const double time_vs_time_RF) {
-                 if (abs(time_vs_time_RF - 180.) < 150.) {
+             [](const double time_vs_reference_time) {
+                 if (abs(time_vs_reference_time - 180.) < 150.) {
                      return true;
                  }
                  return false;

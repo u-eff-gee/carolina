@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 
     vector<TH1D *> addback_histograms;
     vector<vector<TH1D *>> histograms;
-    vector<vector<TH1D *>> time_vs_time_RF_histograms;
+    vector<vector<TH1D *>> time_vs_reference_time_histograms;
     vector<vector<vector<vector<TH1D *>>>> time_difference_histograms;
     vector<TDirectory *> time_difference_directories;
     string histogram_name;
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
         }
         histograms.push_back(vector<TH1D *>());
         time_difference_histograms.push_back(vector<vector<vector<TH1D *>>>());
-        time_vs_time_RF_histograms.push_back(vector<TH1D *>());
+        time_vs_reference_time_histograms.push_back(vector<TH1D *>());
         for (size_t n_channel_1 = 0;
              n_channel_1 < analysis.detectors[n_detector_1]->channels.size();
              ++n_channel_1) {
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
                                      ->channels[n_channel_1]
                                      ->name +
                                  "_t_vs_RF";
-                time_vs_time_RF_histograms[n_detector_1].push_back(new TH1D(
+                time_vs_reference_time_histograms[n_detector_1].push_back(new TH1D(
                     histogram_name.c_str(), histogram_name.c_str(),
                     dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
                         analysis.get_group(n_detector_1))
@@ -238,24 +238,24 @@ int main(int argc, char **argv) {
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             analysis.detectors[n_detector_1]
                                 ->channels[n_channel_1])
-                            ->time_vs_time_RF_gate(
+                            ->time_vs_reference_time_gate(
                                 dynamic_pointer_cast<
                                     EnergySensitiveDetectorChannel>(
                                     analysis.detectors[n_detector_1]
                                         ->channels[n_channel_1])
-                                    ->time_vs_time_RF_calibrated)) {
+                                    ->time_vs_reference_time_calibrated)) {
                         histograms[n_detector_1][n_channel_1]->Fill(
                             dynamic_pointer_cast<
                                 EnergySensitiveDetectorChannel>(
                                 analysis.detectors[n_detector_1]
                                     ->channels[n_channel_1])
                                 ->energy_calibrated);
-                        time_vs_time_RF_histograms[n_detector_1][n_channel_1]
+                        time_vs_reference_time_histograms[n_detector_1][n_channel_1]
                             ->Fill(dynamic_pointer_cast<
                                        EnergySensitiveDetectorChannel>(
                                        analysis.detectors[n_detector_1]
                                            ->channels[n_channel_1])
-                                       ->time_vs_time_RF_calibrated);
+                                       ->time_vs_reference_time_calibrated);
 
                         for (size_t n_channel_2 = n_channel_1 + 1;
                              n_channel_2 <
@@ -270,12 +270,12 @@ int main(int argc, char **argv) {
                                     EnergySensitiveDetectorChannel>(
                                     analysis.detectors[n_detector_1]
                                         ->channels[n_channel_2])
-                                    ->time_vs_time_RF_gate(
+                                    ->time_vs_reference_time_gate(
                                         dynamic_pointer_cast<
                                             EnergySensitiveDetectorChannel>(
                                             analysis.detectors[n_detector_1]
                                                 ->channels[n_channel_2])
-                                            ->time_vs_time_RF_calibrated)) {
+                                            ->time_vs_reference_time_calibrated)) {
                                 time_difference_histograms
                                     [n_detector_1][n_channel_1][0]
                                     [n_channel_2 - n_channel_1 - 1]
@@ -316,13 +316,13 @@ int main(int argc, char **argv) {
                                             EnergySensitiveDetectorChannel>(
                                             analysis.detectors[n_detector_2]
                                                 ->channels[n_channel_2])
-                                            ->time_vs_time_RF_gate(
+                                            ->time_vs_reference_time_gate(
                                                 dynamic_pointer_cast<
                                                     EnergySensitiveDetectorChannel>(
                                                     analysis
                                                         .detectors[n_detector_2]
                                                         ->channels[n_channel_2])
-                                                    ->time_vs_time_RF_calibrated)) {
+                                                    ->time_vs_reference_time_calibrated)) {
                                         time_difference_histograms
                                             [n_detector_1][n_channel_1]
                                             [n_detector_2 - n_detector_1]
@@ -398,7 +398,7 @@ int main(int argc, char **argv) {
             histograms[n_detector_1][n_channel_1]->Write();
             if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
                 directory->cd();
-                time_vs_time_RF_histograms[n_detector_1][n_channel_1]->Write();
+                time_vs_reference_time_histograms[n_detector_1][n_channel_1]->Write();
 
                 for (size_t n_channel_2 = n_channel_1 + 1;
                      n_channel_2 <

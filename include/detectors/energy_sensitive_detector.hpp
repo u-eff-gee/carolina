@@ -46,7 +46,7 @@ struct EnergySensitiveDetector final : public Detector {
 
     double addback_energy;
     double addback_time;
-    double addback_time_vs_time_RF;
+    double addback_time_vs_reference_time;
 
     void addback();
     void filter_addback();

@@ -21,5 +21,5 @@ void EnergySensitiveDetectorChannel::reset_calibrated_leaves() {
     energy_calibrated = numeric_limits<double>::quiet_NaN();
     time_calibrated = numeric_limits<double>::quiet_NaN();
     timestamp_calibrated = numeric_limits<double>::quiet_NaN();
-    time_vs_time_RF_calibrated = numeric_limits<double>::quiet_NaN();
+    time_vs_reference_time_calibrated = numeric_limits<double>::quiet_NaN();
 }

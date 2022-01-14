@@ -23,7 +23,7 @@
 
 struct SIS3316 final : public DigitizerModule {
     SIS3316(const double tdc_resolution)
-        : DigitizerModule(tdc_resolution, "time_RF"), amplitude_e1("e1"),
+        : DigitizerModule(tdc_resolution, "reference_time"), amplitude_e1("e1"),
           amplitude_e2("e2"), time("time"), timestamp("timestamp") {}
 
     Branch<double, 8> amplitude_e1;

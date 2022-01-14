@@ -23,9 +23,9 @@
 
 struct MDPP16 final : public DigitizerModule {
     MDPP16(const string amplitude_branch_name, const string time_branch_name,
-           const string time_RF_branch_name, const string timestamp_branch_name,
+           const string reference_time_branch_name, const string timestamp_branch_name,
            const double tdc_resolution)
-        : DigitizerModule(tdc_resolution, time_RF_branch_name),
+        : DigitizerModule(tdc_resolution, reference_time_branch_name),
           amplitude(amplitude_branch_name), time(time_branch_name),
           timestamp(timestamp_branch_name) {}
 

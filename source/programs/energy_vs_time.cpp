@@ -109,12 +109,12 @@ int main(int argc, char **argv) {
                                    ->energy_calibrated) &&
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             analysis.detectors[n_detector]->channels[n_channel])
-                            ->time_vs_time_RF_gate(
+                            ->time_vs_reference_time_gate(
                                 dynamic_pointer_cast<
                                     EnergySensitiveDetectorChannel>(
                                     analysis.detectors[n_detector]
                                         ->channels[n_channel])
-                                    ->time_vs_time_RF_calibrated)) {
+                                    ->time_vs_reference_time_calibrated)) {
                         energy_vs_time_histograms[n_detector][n_channel]->Fill(
                             dynamic_pointer_cast<
                                 EnergySensitiveDetectorChannel>(

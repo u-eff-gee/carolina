@@ -45,7 +45,7 @@ struct Analysis {
     double get_tdc_resolution(const size_t n_detector,
                               const size_t n_channel) const;
     double get_time(const size_t n_detector, const size_t n_channel) const;
-    double get_time_RF(const size_t n_detector, const size_t n_channel) const;
+    double get_reference_time(const size_t n_detector, const size_t n_channel) const;
     double get_timestamp(const size_t n_detector, const size_t n_channel) const;
 
     void set_amplitude(const size_t n_detector, const size_t n_channel,
@@ -54,7 +54,7 @@ struct Analysis {
                     const long long counts);
     void set_time(const size_t n_detector, const size_t n_channel,
                   const double time);
-    void set_time_RF(const size_t n_module, const double time_vs_time_RF);
+    void set_reference_time(const size_t n_module, const double time_vs_reference_time);
 
     void calibrate(const int n_entry);
     void calibrate_counter_detector(const int n_entry, const size_t n_detector,
