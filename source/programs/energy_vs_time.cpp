@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
         energy_vs_time_histograms.push_back(vector<TH2D *>());
-        if (analysis.detectors[n_detector]->type == energy_sensitive) {
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
             for (auto channel : analysis.detectors[n_detector]->channels) {
                 histogram_name =
                     analysis.detectors[n_detector]->name + "_" + channel->name;
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
 
         for (size_t n_detector = 0; n_detector < analysis.detectors.size();
              ++n_detector) {
-            if (analysis.detectors[n_detector]->type == energy_sensitive) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
                 for (size_t n_channel = 0;
                      n_channel <
                      analysis.detectors[n_detector]->channels.size();
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 
     for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
-        if (analysis.detectors[n_detector]->type == energy_sensitive) {
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
             for (size_t n_channel = 0;
                  n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {

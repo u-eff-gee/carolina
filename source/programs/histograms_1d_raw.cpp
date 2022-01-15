@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
             histogram_name =
                 analysis.detectors[n_detector]->name + "_" +
                 analysis.detectors[n_detector]->channels[n_channel]->name;
-            if (analysis.detectors[n_detector]->type == energy_sensitive) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
                 histograms[n_detector].push_back(new TH1D(
                     histogram_name.c_str(), histogram_name.c_str(),
                     analysis.get_group(n_detector)
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
                         ->raw_histogram_properties.lower_edge_of_first_bin,
                     analysis.get_group(n_detector)
                         ->raw_histogram_properties.upper_edge_of_last_bin));
-            } else if (analysis.detectors[n_detector]->type == counter) {
+            } else if (dynamic_pointer_cast<CounterDetector>(analysis.detectors[n_detector])) {
                 histograms[n_detector].push_back(new TH1D(
                     histogram_name.c_str(), histogram_name.c_str(),
                     analysis.get_group(n_detector)
@@ -94,10 +94,10 @@ int main(int argc, char **argv) {
             for (size_t n_channel = 0;
                  n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {
-                if (analysis.detectors[n_detector]->type == energy_sensitive) {
+                if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
                     histograms[n_detector][n_channel]->Fill(
                         analysis.get_amplitude(n_detector, n_channel));
-                } else if (analysis.detectors[n_detector]->type == counter) {
+                } else if (dynamic_pointer_cast<CounterDetector>(analysis.detectors[n_detector])) {
                     histograms[n_detector][n_channel]->Fill(
                         analysis.get_counts(n_detector, n_channel));
                 }

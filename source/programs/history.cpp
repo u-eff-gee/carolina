@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
             for (size_t n_channel = 0;
                  n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {
-                if (analysis.detectors[n_detector]->type == energy_sensitive &&
+                if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector]) &&
                     !isnan(
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             analysis.detectors[n_detector]->channels[n_channel])
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
                         dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
                             analysis.detectors[n_detector]->channels[n_channel])
                             ->energy_calibrated);
-                } else if (analysis.detectors[n_detector]->type == counter &&
+                } else if (dynamic_pointer_cast<CounterDetector>(analysis.detectors[n_detector]) &&
                            !isnan(dynamic_pointer_cast<CounterDetectorChannel>(
                                       analysis.detectors[n_detector]
                                           ->channels[n_channel])

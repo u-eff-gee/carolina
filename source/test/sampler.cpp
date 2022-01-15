@@ -102,7 +102,7 @@ vector<vector<TGraph>> invert_energy_calibrations() {
     for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
         inverse_calibrations.push_back(vector<TGraph>());
-        if (analysis.detectors[n_detector]->type == energy_sensitive) {
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
             for (size_t n_channel = 0;
                  n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {
@@ -120,7 +120,7 @@ vector<vector<TGraph>> invert_time_calibrations() {
     for (size_t n_detector = 0; n_detector < analysis.detectors.size();
          ++n_detector) {
         inverse_calibrations.push_back(vector<TGraph>());
-        if (analysis.detectors[n_detector]->type == energy_sensitive) {
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector])) {
             for (size_t n_channel = 0;
                  n_channel < analysis.detectors[n_detector]->channels.size();
                  ++n_channel) {
@@ -242,7 +242,7 @@ int main(int argc, char **argv) {
     for (unsigned int n = 0; n < n_max; ++n) {
         for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
              ++n_detector_1) {
-            if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_1])) {
                 // Generate single events that require addback.
                 create_single_event_with_addback(
                     n_detector_1, gamma_energy, inverse_energy_calibrations,
@@ -266,8 +266,7 @@ int main(int argc, char **argv) {
 
                 for (size_t n_detector_2 = n_detector_1 + 1;
                      n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
-                    if (analysis.detectors[n_detector_2]->type ==
-                        energy_sensitive) {
+                    if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_2])) {
                         // Create a coincident event in two detectors
                         // that
                         // requires addback.
@@ -284,7 +283,7 @@ int main(int argc, char **argv) {
                         increment_timestamp();
                     }
                 }
-            } else if (analysis.detectors[n_detector_1]->type == counter) {
+            } else if (dynamic_pointer_cast<CounterDetector>(analysis.detectors[n_detector_1])) {
                 for (size_t n_channel = 0;
                      n_channel <
                      analysis.detectors[n_detector_1]->channels.size();
