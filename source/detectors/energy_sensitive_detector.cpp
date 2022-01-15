@@ -279,12 +279,14 @@ void EnergySensitiveDetector::set_up_calibrated_branches_for_reading(
     if (channels.size() > 1) {
         tree->SetBranchStatus((name + "_addback_energy").c_str(), 1);
         tree->SetBranchStatus((name + "_addback_time").c_str(), 1);
-        tree->SetBranchStatus((name + "_addback_time_vs_reference_time").c_str(), 1);
+        tree->SetBranchStatus(
+            (name + "_addback_time_vs_reference_time").c_str(), 1);
         tree->SetBranchAddress((name + "_addback_energy").c_str(),
                                &addback_energy);
         tree->SetBranchAddress((name + "_addback_time").c_str(), &addback_time);
-        tree->SetBranchAddress((name + "_addback_time_vs_reference_time").c_str(),
-                               &addback_time_vs_reference_time);
+        tree->SetBranchAddress(
+            (name + "_addback_time_vs_reference_time").c_str(),
+            &addback_time_vs_reference_time);
     }
 }
 

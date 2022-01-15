@@ -30,7 +30,6 @@ void SIS3316::reset_raw_leaves() {
         amplitude_e1.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
         amplitude_e2.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
         time.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
-        timestamp.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
     }
     reference_time.leaves[0] = numeric_limits<double>::quiet_NaN();
 }
@@ -92,6 +91,7 @@ void SIS3316::set_up_raw_branches_for_reading(TTree *tree) {
     tree->SetBranchAddress("HPGEL4T", &time.leaves[7]);
 
     tree->SetBranchAddress("TRIGT11", &reference_time.leaves[0]);
+    tree->SetBranchAddress("TS", &timestamp.leaves[0]);
 }
 
 void SIS3316::set_up_raw_branches_for_writing(TTree *tree) {
@@ -123,4 +123,5 @@ void SIS3316::set_up_raw_branches_for_writing(TTree *tree) {
     tree->Branch("HPGEL4T", &time.leaves[7]);
 
     tree->Branch("TRIGT11", &reference_time.leaves[0]);
+    tree->Branch("TS", &timestamp.leaves[0]);
 }

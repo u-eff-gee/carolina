@@ -43,7 +43,9 @@ struct EnergySensitiveDetectorChannel final : public Channel {
         const function<double(const double)> time_calibration =
             []([[maybe_unused]] const double energy) { return 1.; },
         const function<bool(const double)> time_vs_reference_time_gate =
-            []([[maybe_unused]] const double time_vs_reference_time) { return true; })
+            []([[maybe_unused]] const double time_vs_reference_time) {
+                return true;
+            })
         : Channel(name, module, channel),
           energy_calibration(energy_calibration),
           time_calibration(time_calibration),
@@ -51,7 +53,8 @@ struct EnergySensitiveDetectorChannel final : public Channel {
           energy_calibrated(numeric_limits<double>::quiet_NaN()),
           time_calibrated(numeric_limits<double>::quiet_NaN()),
           timestamp_calibrated(numeric_limits<double>::quiet_NaN()),
-          time_vs_reference_time_calibrated(numeric_limits<double>::quiet_NaN()) {}
+          time_vs_reference_time_calibrated(
+              numeric_limits<double>::quiet_NaN()) {}
 
     const function<double(const int, const double)> energy_calibration;
     const function<double(const double)> time_calibration;
@@ -60,6 +63,8 @@ struct EnergySensitiveDetectorChannel final : public Channel {
     double energy_calibrated, time_calibrated, timestamp_calibrated,
         time_vs_reference_time_calibrated;
 
-    bool apply_RF_gate() { return time_vs_reference_time_gate(time_calibrated); };
+    bool apply_RF_gate() {
+        return time_vs_reference_time_gate(time_calibrated);
+    };
     void reset_calibrated_leaves() override final;
 };

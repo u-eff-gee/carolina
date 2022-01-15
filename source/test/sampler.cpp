@@ -85,6 +85,18 @@ TGraph invert_time_calibration(const size_t n_detector, const size_t n_channel,
             ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 
+void increment_timestamp() {
+    for (size_t n_module = 0; n_module < analysis.modules.size(); ++n_module) {
+        if (dynamic_pointer_cast<DigitizerModule>(analysis.modules[n_module])) {
+            dynamic_pointer_cast<DigitizerModule>(analysis.modules[n_module])
+                ->set_timestamp(dynamic_pointer_cast<DigitizerModule>(
+                                    analysis.modules[n_module])
+                                    ->get_timestamp() +
+                                1.);
+        }
+    }
+}
+
 vector<vector<TGraph>> invert_energy_calibrations() {
     vector<vector<TGraph>> inverse_calibrations;
     for (size_t n_detector = 0; n_detector < analysis.detectors.size();
@@ -237,6 +249,7 @@ int main(int argc, char **argv) {
                     gamma_time, inverse_time_calibrations);
                 tree->Fill();
                 analysis.reset_raw_leaves();
+                increment_timestamp();
                 // Generate events in which the entire gamma-ray energy is
                 // deposited in a single crystal.
                 for (size_t n_channel = 0;
@@ -248,6 +261,7 @@ int main(int argc, char **argv) {
                                         inverse_time_calibrations);
                     tree->Fill();
                     analysis.reset_raw_leaves();
+                    increment_timestamp();
                 }
 
                 for (size_t n_detector_2 = n_detector_1 + 1;
@@ -267,6 +281,7 @@ int main(int argc, char **argv) {
                             inverse_time_calibrations);
                         tree->Fill();
                         analysis.reset_raw_leaves();
+                        increment_timestamp();
                     }
                 }
             } else if (analysis.detectors[n_detector_1]->type == counter) {

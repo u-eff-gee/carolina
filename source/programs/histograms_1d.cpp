@@ -106,17 +106,19 @@ int main(int argc, char **argv) {
                                      ->channels[n_channel_1]
                                      ->name +
                                  "_t_vs_RF";
-                time_vs_reference_time_histograms[n_detector_1].push_back(new TH1D(
-                    histogram_name.c_str(), histogram_name.c_str(),
-                    dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                        analysis.get_group(n_detector_1))
-                        ->time_histogram_properties.n_bins,
-                    dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                        analysis.get_group(n_detector_1))
-                        ->time_histogram_properties.lower_edge_of_first_bin,
-                    dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                        analysis.get_group(n_detector_1))
-                        ->time_histogram_properties.upper_edge_of_last_bin));
+                time_vs_reference_time_histograms[n_detector_1].push_back(
+                    new TH1D(
+                        histogram_name.c_str(), histogram_name.c_str(),
+                        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                            analysis.get_group(n_detector_1))
+                            ->time_histogram_properties.n_bins,
+                        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                            analysis.get_group(n_detector_1))
+                            ->time_histogram_properties.lower_edge_of_first_bin,
+                        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+                            analysis.get_group(n_detector_1))
+                            ->time_histogram_properties
+                            .upper_edge_of_last_bin));
 
                 time_difference_histograms[n_detector_1][n_channel_1].push_back(
                     vector<TH1D *>());
@@ -250,12 +252,13 @@ int main(int argc, char **argv) {
                                 analysis.detectors[n_detector_1]
                                     ->channels[n_channel_1])
                                 ->energy_calibrated);
-                        time_vs_reference_time_histograms[n_detector_1][n_channel_1]
-                            ->Fill(dynamic_pointer_cast<
-                                       EnergySensitiveDetectorChannel>(
-                                       analysis.detectors[n_detector_1]
-                                           ->channels[n_channel_1])
-                                       ->time_vs_reference_time_calibrated);
+                        time_vs_reference_time_histograms
+                            [n_detector_1][n_channel_1]
+                                ->Fill(dynamic_pointer_cast<
+                                           EnergySensitiveDetectorChannel>(
+                                           analysis.detectors[n_detector_1]
+                                               ->channels[n_channel_1])
+                                           ->time_vs_reference_time_calibrated);
 
                         for (size_t n_channel_2 = n_channel_1 + 1;
                              n_channel_2 <
@@ -398,7 +401,8 @@ int main(int argc, char **argv) {
             histograms[n_detector_1][n_channel_1]->Write();
             if (analysis.detectors[n_detector_1]->type == energy_sensitive) {
                 directory->cd();
-                time_vs_reference_time_histograms[n_detector_1][n_channel_1]->Write();
+                time_vs_reference_time_histograms[n_detector_1][n_channel_1]
+                    ->Write();
 
                 for (size_t n_channel_2 = n_channel_1 + 1;
                      n_channel_2 <

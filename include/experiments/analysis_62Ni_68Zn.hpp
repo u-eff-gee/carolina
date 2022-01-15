@@ -77,7 +77,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[0], 1,
 
@@ -87,7 +89,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[0], 2,
 
@@ -97,7 +101,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[0], 3,
 
@@ -107,7 +113,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -123,7 +131,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[0], 5,
 
@@ -133,7 +143,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[0], 6,
 
@@ -143,7 +155,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[0], 7,
 
@@ -153,7 +167,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -169,7 +185,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[0], 9,
 
@@ -179,7 +197,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[0], 10,
 
@@ -189,7 +209,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[0], 11,
 
@@ -199,7 +221,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -215,7 +239,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[0], 13,
 
@@ -225,7 +251,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[0], 14,
 
@@ -235,7 +263,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[0], 15,
 
@@ -245,7 +275,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -261,7 +293,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[1], 1,
 
@@ -271,7 +305,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[1], 2,
 
@@ -281,7 +317,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[1], 3,
 
@@ -291,7 +329,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -307,7 +347,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[1], 5,
 
@@ -317,7 +359,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[1], 6,
 
@@ -327,7 +371,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[1], 7,
 
@@ -337,7 +383,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -353,7 +401,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[1], 9,
 
@@ -363,7 +413,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[1], 10,
 
@@ -373,7 +425,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[1], 11,
 
@@ -383,7 +437,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -399,7 +455,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E2", modules[1], 13,
 
@@ -409,7 +467,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E3", modules[1], 14,
 
@@ -419,7 +479,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
             {"E4", modules[1], 15,
 
@@ -429,7 +491,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         clover,
@@ -445,7 +509,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -461,7 +527,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -477,7 +545,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -493,7 +563,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -509,7 +581,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -525,7 +599,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -541,7 +617,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -557,7 +635,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -573,7 +653,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -589,7 +671,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -605,7 +689,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -621,7 +707,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         cebr,
@@ -637,7 +725,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         coaxial,
@@ -653,7 +743,9 @@ vector<EnergySensitiveDetector> detectors{
 
              []([[maybe_unused]] const double energy) { return 1.; },
 
-             []([[maybe_unused]] const double time_vs_reference_time) { return true; },
+             []([[maybe_unused]] const double time_vs_reference_time) {
+                 return true;
+             },
              5.},
         },
         labr,

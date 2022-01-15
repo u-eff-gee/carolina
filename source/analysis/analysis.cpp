@@ -96,7 +96,7 @@ double Analysis::get_time(const size_t n_detector,
 }
 
 double Analysis::get_reference_time(const size_t n_detector,
-                             const size_t n_channel) const {
+                                    const size_t n_channel) const {
     return dynamic_pointer_cast<DigitizerModule>(
                modules[detectors[n_detector]->channels[n_channel]->module])
         ->get_reference_time();
@@ -221,6 +221,14 @@ void Analysis::reset_raw_leaves() {
     }
 }
 
+void Analysis::add_counts(const size_t n_detector, const size_t n_channel,
+                          const long long counts) {
+    dynamic_pointer_cast<ScalerModule>(
+        modules[detectors[n_detector]->channels[n_channel]->module])
+        ->add_counts(detectors[n_detector]->channels[n_channel]->channel,
+                     counts);
+}
+
 void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
                              const double amplitude) {
     dynamic_pointer_cast<DigitizerModule>(
@@ -229,12 +237,10 @@ void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
                         amplitude);
 }
 
-void Analysis::add_counts(const size_t n_detector, const size_t n_channel,
-                          const long long counts) {
-    dynamic_pointer_cast<ScalerModule>(
-        modules[detectors[n_detector]->channels[n_channel]->module])
-        ->add_counts(detectors[n_detector]->channels[n_channel]->channel,
-                     counts);
+void Analysis::set_reference_time(const size_t n_module,
+                                  const double reference_time) {
+    dynamic_pointer_cast<DigitizerModule>(modules[n_module])
+        ->set_reference_time(reference_time);
 }
 
 void Analysis::set_time(const size_t n_detector, const size_t n_channel,
@@ -244,7 +250,7 @@ void Analysis::set_time(const size_t n_detector, const size_t n_channel,
         ->set_time(detectors[n_detector]->channels[n_channel]->channel, time);
 }
 
-void Analysis::set_reference_time(const size_t n_module, const double reference_time) {
+void Analysis::set_timestamp(const size_t n_module, const double timestamp) {
     dynamic_pointer_cast<DigitizerModule>(modules[n_module])
-        ->set_reference_time(reference_time);
+        ->set_timestamp(timestamp);
 }

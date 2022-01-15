@@ -37,7 +37,8 @@ CounterDetectorGroup scaler{
     "counter", {100000, -5., 1e6 - 5.}, {65536, 0, numeric_limits<int>::max()}};
 
 Analysis analysis(
-    {make_shared<MDPP16>("amplitude", "time", "reference_time", "timestamp", 0.024),
+    {make_shared<MDPP16>("amplitude", "time", "reference_time", "timestamp",
+                         0.024),
      make_shared<SIS3316>(0.125), make_shared<V830>(5.)},
     {make_shared<EnergySensitiveDetectorGroup>(single),
      make_shared<EnergySensitiveDetectorGroup>(segmented),
