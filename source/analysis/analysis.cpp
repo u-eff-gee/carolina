@@ -113,14 +113,16 @@ void Analysis::calibrate(const long long n_entry) {
     for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
         for (size_t n_channel = 0;
              n_channel < detectors[n_detector]->channels.size(); ++n_channel) {
-            if (dynamic_pointer_cast<EnergySensitiveDetector>(detectors[n_detector])) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                    detectors[n_detector])) {
                 calibrate_energy_sensitive_detector(n_entry, n_detector,
                                                     n_channel);
             } else {
                 calibrate_counter_detector(n_entry, n_detector, n_channel);
             }
         }
-        if (dynamic_pointer_cast<EnergySensitiveDetector>(detectors[n_detector]) &&
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                detectors[n_detector]) &&
             detectors[n_detector]->channels.size() > 1) {
             dynamic_pointer_cast<EnergySensitiveDetector>(detectors[n_detector])
                 ->addback();

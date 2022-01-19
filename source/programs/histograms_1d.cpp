@@ -68,7 +68,8 @@ int main(int argc, char **argv) {
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
-        if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_1]) &&
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                analysis.detectors[n_detector_1]) &&
             analysis.detectors[n_detector_1]->channels.size() > 1) {
             histogram_name =
                 analysis.detectors[n_detector_1]->name + "_addback";
@@ -100,7 +101,8 @@ int main(int argc, char **argv) {
                     ->histogram_properties.lower_edge_of_first_bin,
                 analysis.get_group(n_detector_1)
                     ->histogram_properties.upper_edge_of_last_bin));
-            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_1])) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                    analysis.detectors[n_detector_1])) {
                 histogram_name = analysis.detectors[n_detector_1]->name + "_" +
                                  analysis.detectors[n_detector_1]
                                      ->channels[n_channel_1]
@@ -156,7 +158,8 @@ int main(int argc, char **argv) {
                      n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
                     time_difference_histograms[n_detector_1][n_channel_1]
                         .push_back(vector<TH1D *>());
-                    if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_2])) {
+                    if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                            analysis.detectors[n_detector_2])) {
                         for (size_t n_channel_2 = 0;
                              n_channel_2 <
                              analysis.detectors[n_detector_2]->channels.size();
@@ -226,7 +229,8 @@ int main(int argc, char **argv) {
 
         for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
              ++n_detector_1) {
-            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_1])) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                    analysis.detectors[n_detector_1])) {
                 for (size_t n_channel_1 = 0;
                      n_channel_1 <
                      analysis.detectors[n_detector_1]->channels.size();
@@ -300,7 +304,8 @@ int main(int argc, char **argv) {
                         for (size_t n_detector_2 = n_detector_1 + 1;
                              n_detector_2 < analysis.detectors.size();
                              ++n_detector_2) {
-                            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_2])) {
+                            if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                                    analysis.detectors[n_detector_2])) {
                                 for (size_t n_channel_2 = 0;
                                      n_channel_2 <
                                      analysis.detectors[n_detector_2]
@@ -360,7 +365,8 @@ int main(int argc, char **argv) {
                             analysis.detectors[n_detector_1])
                             ->addback_energy);
                 }
-            } else if (dynamic_pointer_cast<CounterDetector>(analysis.detectors[n_detector_1])) {
+            } else if (dynamic_pointer_cast<CounterDetector>(
+                           analysis.detectors[n_detector_1])) {
                 for (size_t n_channel = 0;
                      n_channel <
                      analysis.detectors[n_detector_1]->channels.size();
@@ -382,11 +388,12 @@ int main(int argc, char **argv) {
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
-    TDirectory *directory;
+    TDirectory *directory = nullptr;
 
     for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
          ++n_detector_1) {
-        if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_1])) {
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                analysis.detectors[n_detector_1])) {
             directory = output_file.mkdir(
                 (analysis.detectors[n_detector_1]->name + "_tdiff").c_str());
             if (analysis.detectors[n_detector_1]->channels.size() > 1) {
@@ -397,7 +404,8 @@ int main(int argc, char **argv) {
              n_channel_1 < analysis.detectors[n_detector_1]->channels.size();
              ++n_channel_1) {
             histograms[n_detector_1][n_channel_1]->Write();
-            if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_1])) {
+            if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                    analysis.detectors[n_detector_1])) {
                 directory->cd();
                 time_vs_reference_time_histograms[n_detector_1][n_channel_1]
                     ->Write();
@@ -413,7 +421,8 @@ int main(int argc, char **argv) {
 
                 for (size_t n_detector_2 = n_detector_1 + 1;
                      n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
-                    if (dynamic_pointer_cast<EnergySensitiveDetector>(analysis.detectors[n_detector_2])) {
+                    if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                            analysis.detectors[n_detector_2])) {
                         for (size_t n_channel_2 = 0;
                              n_channel_2 <
                              analysis.detectors[n_detector_2]->channels.size();

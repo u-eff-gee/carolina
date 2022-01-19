@@ -30,8 +30,7 @@ using std::vector;
 #include "TTree.h"
 
 struct Detector {
-    Detector(const string name,
-             const vector<shared_ptr<Channel>> channels);
+    Detector(const string name, const vector<shared_ptr<Channel>> channels);
 
     const string name;
     vector<shared_ptr<Channel>> channels;
