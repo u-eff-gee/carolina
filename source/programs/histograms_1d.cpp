@@ -44,6 +44,11 @@ using std::endl;
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
+    command_line_parser.desc.add_options()(
+        "calibrate", "Assume that the input file contains raw data that need "
+                     "to be calibrated by 'histograms_1d'."
+                     "The default assumption is that the input file is "
+                     "output of the 'calibrate_tree' script.");
     int command_line_parser_status;
     command_line_parser(argc, argv, command_line_parser_status);
     if (command_line_parser_status) {
@@ -57,7 +62,11 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(first, last);
 
-    analysis.set_up_calibrated_branches_for_reading(tree);
+    if (vm.count("calibrate")) {
+        analysis.set_up_raw_branches_for_reading(tree);
+    } else {
+        analysis.set_up_calibrated_branches_for_reading(tree);
+    }
 
     vector<TH1D *> addback_histograms;
     vector<vector<TH1D *>> histograms;
@@ -226,6 +235,9 @@ int main(int argc, char **argv) {
 
     for (long long i = first; i <= last; ++i) {
         tree->GetEntry(i);
+        if (vm.count("calibrate")) {
+            analysis.calibrate(i);
+        }
 
         for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
              ++n_detector_1) {
@@ -383,6 +395,9 @@ int main(int argc, char **argv) {
                     }
                 }
             }
+        }
+        if (vm.count("calibrate")) {
+            analysis.reset_calibrated_leaves();
         }
         progress_printer(i);
     }
