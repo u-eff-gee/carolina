@@ -52,6 +52,7 @@ if(BUILD_TESTS)
     add_test(NAME history COMMAND history test_cal.log --output test_history.root --list)
     add_test(NAME text_files_single_column COMMAND histograms_1d_text test_1d.root --suffix single_column)
     add_test(NAME text_files_two_column COMMAND histograms_1d_text test_1d.root --separator " " --suffix two_column)
+    add_test(NAME polynomial COMMAND test_polynomial)
 endif(BUILD_TESTS)
 
 configure_file(include/io/split_tree.hpp.in include/io/split_tree.hpp)

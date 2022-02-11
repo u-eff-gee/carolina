@@ -13,6 +13,7 @@
 #    carolina. If not, see <https://www.gnu.org/licenses/>.
 
 include_directories(${CMAKE_SOURCE_DIR}/include/detectors)
+include_directories(${CMAKE_SOURCE_DIR}/include/io)
 
 # Abstract detector and channel
 add_library(channel channel.cpp)
@@ -25,7 +26,7 @@ add_library(counter_detector_channel counter_detector_channel.cpp)
 target_link_libraries(counter_detector_channel channel)
 
 add_library(energy_sensitive_detector_channel energy_sensitive_detector_channel.cpp)
-target_link_libraries(energy_sensitive_detector_channel channel)
+target_link_libraries(energy_sensitive_detector_channel channel polynomial)
 
 add_library(counter_detector counter_detector.cpp)
 target_link_libraries(counter_detector channel detector)

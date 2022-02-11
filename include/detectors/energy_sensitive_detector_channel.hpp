@@ -29,6 +29,10 @@ using std::numeric_limits;
 
 using std::string;
 
+#include <vector>
+
+using std::vector;
+
 #include "channel.hpp"
 
 struct EnergySensitiveDetectorChannel final : public Channel {
@@ -45,16 +49,27 @@ struct EnergySensitiveDetectorChannel final : public Channel {
         const function<bool(const double)> time_vs_reference_time_gate =
             []([[maybe_unused]] const double time_vs_reference_time) {
                 return true;
-            })
-        : Channel(name, module, channel),
-          energy_calibration(energy_calibration),
-          time_calibration(time_calibration),
-          time_vs_reference_time_gate(time_vs_reference_time_gate),
-          energy_calibrated(numeric_limits<double>::quiet_NaN()),
-          time_calibrated(numeric_limits<double>::quiet_NaN()),
-          timestamp_calibrated(numeric_limits<double>::quiet_NaN()),
-          time_vs_reference_time_calibrated(
-              numeric_limits<double>::quiet_NaN()) {}
+            });
+
+    EnergySensitiveDetectorChannel(
+        const string name, const size_t module, const size_t channel,
+        const vector<double> energy_calibration_parameters,
+        const function<double(const double)> time_calibration =
+            []([[maybe_unused]] const double energy) { return 1.; },
+        const function<bool(const double)> time_vs_reference_time_gate =
+            []([[maybe_unused]] const double time_vs_reference_time) {
+                return true;
+            });
+
+    EnergySensitiveDetectorChannel(
+        const string name, const size_t module, const size_t channel,
+        const string energy_calibration_parameters,
+        const function<double(const double)> time_calibration =
+            []([[maybe_unused]] const double energy) { return 1.; },
+        const function<bool(const double)> time_vs_reference_time_gate =
+            []([[maybe_unused]] const double time_vs_reference_time) {
+                return true;
+            });
 
     const function<double(const int, const double)> energy_calibration;
     const function<double(const double)> time_calibration;

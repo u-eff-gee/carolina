@@ -27,6 +27,8 @@ target_link_libraries(command_line_parser ${Boost_LIBRARIES} ${ROOT_LIBRARIES})
 add_executable(histograms_1d_text histograms_1d_text.cpp)
 target_link_libraries(histograms_1d_text ${Boost_LIBRARIES} command_line_parser ${ROOT_LIBRARIES} tfile_utilities)
 
+add_library(polynomial polynomial.cpp)
+
 add_library(progress_printer progress_printer.cpp)
 
 add_executable(split_tree split_tree.cpp)

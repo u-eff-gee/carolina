@@ -47,26 +47,12 @@ Analysis analysis(
          "sin",
          vector<shared_ptr<Channel>>{
              make_shared<EnergySensitiveDetectorChannel>(
-                 "E1", 0, 0,
-                 [](const double amplitude,
-                    [[maybe_unused]] const long long n_entry) {
-                     return 50. + 0.5 * amplitude;
-                 })}),
+                 "E1", 0, 0, vector<double>{50., 0.1})}),
      make_shared<EnergySensitiveDetector>(
          "seg",
          vector<shared_ptr<Channel>>{
-             make_shared<EnergySensitiveDetectorChannel>(
-                 "E1", 1, 0,
-                 [](const double amplitude,
-                    [[maybe_unused]] const long long n_entry) {
-                     return 60. + 0.6 * amplitude;
-                 }),
-             make_shared<EnergySensitiveDetectorChannel>(
-                 "E2", 1, 1,
-                 [](const double amplitude,
-                    [[maybe_unused]] const long long n_entry) {
-                     return 70. + 0.7 * amplitude;
-                 }),
+             make_shared<EnergySensitiveDetectorChannel>("E1", 1, 0, "60.,2."),
+             make_shared<EnergySensitiveDetectorChannel>("E2", 1, 1, "70. 0.7"),
              make_shared<EnergySensitiveDetectorChannel>(
                  "E3", 1, 2,
                  [](const double amplitude,

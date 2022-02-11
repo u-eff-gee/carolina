@@ -28,3 +28,6 @@ target_link_libraries(sampler analysis ${Boost_LIBRARIES} counter_detector count
 
 add_executable(test_tfile_utilities test_tfile_utilities.cpp)
 target_link_libraries(test_tfile_utilities tfile_utilities)
+
+add_executable(test_polynomial test_polynomial.cpp)
+target_link_libraries(test_polynomial polynomial)
