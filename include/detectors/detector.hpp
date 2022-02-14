@@ -26,14 +26,17 @@ using std::shared_ptr;
 using std::vector;
 
 #include "channel.hpp"
+#include "detector_group.hpp"
 
 #include "TTree.h"
 
 struct Detector {
-    Detector(const string name, const vector<shared_ptr<Channel>> channels);
+    Detector(const string name, const vector<shared_ptr<Channel>> channels,
+             const shared_ptr<DetectorGroup> group);
 
     const string name;
     vector<shared_ptr<Channel>> channels;
+    const shared_ptr<DetectorGroup> group;
 
     virtual void reset_calibrated_leaves() = 0;
     virtual void set_up_calibrated_branches_for_reading(TTree *tree) = 0;

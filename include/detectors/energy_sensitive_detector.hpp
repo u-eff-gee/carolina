@@ -32,10 +32,12 @@ using std::vector;
 #include "detector.hpp"
 
 struct EnergySensitiveDetector final : public Detector {
-    EnergySensitiveDetector(const string name,
-                            const vector<shared_ptr<Channel>> channels);
     EnergySensitiveDetector(
         const string name, const vector<shared_ptr<Channel>> channels,
+        const shared_ptr<EnergySensitiveDetectorGroup> group);
+    EnergySensitiveDetector(
+        const string name, const vector<shared_ptr<Channel>> channels,
+        const shared_ptr<EnergySensitiveDetectorGroup> group,
         const vector<vector<pair<double, double>>> addback_coincidence_windows);
 
     vector<vector<pair<double, double>>> addback_coincidence_windows;

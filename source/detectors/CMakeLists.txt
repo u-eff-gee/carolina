@@ -12,6 +12,7 @@
 #    You should have received a copy of the GNU General Public License along with 
 #    carolina. If not, see <https://www.gnu.org/licenses/>.
 
+include_directories(${CMAKE_SOURCE_DIR}/include/analysis)
 include_directories(${CMAKE_SOURCE_DIR}/include/detectors)
 include_directories(${CMAKE_SOURCE_DIR}/include/io)
 

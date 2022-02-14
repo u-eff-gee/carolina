@@ -25,7 +25,6 @@ using std::dynamic_pointer_cast;
 
 #include "analysis.hpp"
 #include "counter_detector_channel.hpp"
-#include "energy_sensitive_detector.hpp"
 #include "energy_sensitive_detector_channel.hpp"
 #include "vme.hpp"
 
@@ -34,7 +33,28 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
                    vector<shared_ptr<Detector>> detectors,
                    const vector<CoincidenceMatrix> coincidence_matrices)
     : modules(modules), detector_groups(detector_groups), detectors(detectors),
-      coincidence_matrices(coincidence_matrices) {}
+      coincidence_matrices(coincidence_matrices) {
+    for (auto detector : detectors) {
+        if (dynamic_pointer_cast<EnergySensitiveDetector>(detector)) {
+            energy_sensitive_detectors.push_back(
+                dynamic_pointer_cast<EnergySensitiveDetector>(detector));
+        }
+        if (dynamic_pointer_cast<CounterDetector>(detector)) {
+            counter_detectors.push_back(
+                dynamic_pointer_cast<CounterDetector>(detector));
+        }
+    }
+    for (auto module : modules) {
+        if (dynamic_pointer_cast<DigitizerModule>(module)) {
+            digitizer_modules.push_back(
+                dynamic_pointer_cast<DigitizerModule>(module));
+        }
+        if (dynamic_pointer_cast<ScalerModule>(module)) {
+            scaler_modules.push_back(
+                dynamic_pointer_cast<ScalerModule>(module));
+        }
+    }
+}
 
 void Analysis::set_up_raw_branches_for_reading(TTree *tree) {
     tree->SetBranchStatus("*", 0);
@@ -63,15 +83,13 @@ void Analysis::set_up_calibrated_branches_for_writing(TTree *tree) {
 
 double Analysis::get_amplitude(const size_t n_detector,
                                const size_t n_channel) const {
-    return dynamic_pointer_cast<DigitizerModule>(
-               modules[detectors[n_detector]->channels[n_channel]->module])
+    return digitizer_modules[detectors[n_detector]->channels[n_channel]->module]
         ->get_amplitude(detectors[n_detector]->channels[n_channel]->channel);
 }
 
 long long Analysis::get_counts(const size_t n_detector,
                                const size_t n_channel) const {
-    return dynamic_pointer_cast<ScalerModule>(
-               modules[detectors[n_detector]->channels[n_channel]->module])
+    return scaler_modules[detectors[n_detector]->channels[n_channel]->module]
         ->get_counts(detectors[n_detector]->channels[n_channel]->channel);
 }
 

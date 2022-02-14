@@ -25,19 +25,8 @@ using std::string;
 
 using std::vector;
 
-#include <iostream>
-
-using std::cout;
-using std::endl;
-
 struct Polynomial {
-    Polynomial(const vector<double> parameters) : parameters(parameters) {
-        cout << "Polynomial initialized with parameters: ";
-        for (auto p : parameters) {
-            cout << p << ", ";
-        }
-        cout << endl;
-    }
+    Polynomial(const vector<double> parameters) : parameters(parameters) {}
     Polynomial(const string parameter_string)
         : parameters(parse_string(parameter_string)) {}
     const vector<double> parameters;

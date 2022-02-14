@@ -18,5 +18,6 @@
 #include "detector.hpp"
 
 Detector::Detector(const string name,
-                   const vector<shared_ptr<Channel>> channels)
-    : name(name), channels(channels){};
+                   const vector<shared_ptr<Channel>> channels,
+                   const shared_ptr<DetectorGroup> group)
+    : name(name), channels(channels), group(group){};

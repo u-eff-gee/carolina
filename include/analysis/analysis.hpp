@@ -22,9 +22,11 @@
 using std::vector;
 
 #include "coincidence_matrix.hpp"
+#include "counter_detector.hpp"
 #include "detector.hpp"
 #include "detector_group.hpp"
 #include "digitizer_module.hpp"
+#include "energy_sensitive_detector.hpp"
 #include "scaler_module.hpp"
 
 struct Analysis {
@@ -34,9 +36,13 @@ struct Analysis {
              const vector<CoincidenceMatrix> coincidence_matrices);
 
     vector<shared_ptr<Module>> modules;
+    vector<shared_ptr<DigitizerModule>> digitizer_modules;
     const vector<shared_ptr<DetectorGroup>> detector_groups;
     vector<shared_ptr<Detector>> detectors;
+    vector<shared_ptr<CounterDetector>> counter_detectors;
+    vector<shared_ptr<EnergySensitiveDetector>> energy_sensitive_detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
+    vector<shared_ptr<ScalerModule>> scaler_modules;
 
     void calibrate(const long long n_entry);
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;

@@ -23,31 +23,31 @@ using std::make_shared;
 
 #include "analysis_include.hpp"
 
-EnergySensitiveDetectorGroup single{"single",
-                                    {65536, -0.125, 16384. - 0.125},
-                                    {65536, -0.5, 65536. - 0.5},
-                                    {2000, -1000. - 0.5, 1000. - 0.5},
-                                    {2000, -1000. - 0.5, 1000. - 0.5}};
-EnergySensitiveDetectorGroup segmented{"segmented",
-                                       {65536, -0.125, 16384. - 0.125},
-                                       {65536, -0.5, 65536. - 0.5},
-                                       {2000, -1000. - 0.5, 1000. - 0.5},
-                                       {2000, -1000. - 0.5, 1000. - 0.5}};
-CounterDetectorGroup scaler{
-    "counter", {100000, -5., 1e6 - 5.}, {65536, 0, numeric_limits<int>::max()}};
+auto single = make_shared<EnergySensitiveDetectorGroup>(
+    "single", Histogram{65536, -0.125, 16384. - 0.125},
+    Histogram{65536, -0.5, 65536. - 0.5},
+    Histogram{2000, -1000. - 0.5, 1000. - 0.5},
+    Histogram{2000, -1000. - 0.5, 1000. - 0.5});
+auto segmented = make_shared<EnergySensitiveDetectorGroup>(
+    "segmented", Histogram{65536, -0.125, 16384. - 0.125},
+    Histogram{65536, -0.5, 65536. - 0.5},
+    Histogram{2000, -1000. - 0.5, 1000. - 0.5},
+    Histogram{2000, -1000. - 0.5, 1000. - 0.5});
+auto scaler = make_shared<CounterDetectorGroup>(
+    "counter", Histogram{100000, -5., 1e6 - 5.},
+    Histogram{65536, 0, numeric_limits<int>::max()});
 
 Analysis analysis(
     {make_shared<MDPP16>("amplitude", "time", "reference_time", "timestamp",
                          0.024),
      make_shared<SIS3316>(0.125), make_shared<V830>(5.)},
-    {make_shared<EnergySensitiveDetectorGroup>(single),
-     make_shared<EnergySensitiveDetectorGroup>(segmented),
-     make_shared<CounterDetectorGroup>(scaler)},
+    {single, segmented, scaler},
     {make_shared<EnergySensitiveDetector>(
          "sin",
          vector<shared_ptr<Channel>>{
              make_shared<EnergySensitiveDetectorChannel>(
-                 "E1", 0, 0, vector<double>{50., 0.1})}),
+                 "E1", 0, 0, vector<double>{50., 0.1})},
+         single),
      make_shared<EnergySensitiveDetector>(
          "seg",
          vector<shared_ptr<Channel>>{
@@ -64,9 +64,11 @@ Analysis analysis(
                  [](const double amplitude,
                     [[maybe_unused]] const long long n_entry) {
                      return 90. + 0.9 * amplitude;
-                 })}),
+                 })},
+         segmented),
      make_shared<CounterDetector>(
          "cou",
          vector<shared_ptr<Channel>>{
-             make_shared<CounterDetectorChannel>("cts", 2, 0)})},
+             make_shared<CounterDetectorChannel>("cts", 2, 0)},
+         scaler)},
     {{"sin_vs_seg", {0}, {1}, {200, -5., 2000. - 5.}, {200, -5., 2000. - 5.}}});

@@ -52,59 +52,69 @@ int main(int argc, char **argv) {
 
     analysis.set_up_raw_branches_for_reading(tree);
 
-    vector<vector<TH1D *>> histograms;
+    vector<vector<TH1D *>> energy_sensitive_detector_histograms;
+    vector<vector<TH1D *>> counter_detector_histograms;
     string histogram_name;
 
-    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+    for (size_t n_detector = 0;
+         n_detector < analysis.energy_sensitive_detectors.size();
          ++n_detector) {
-        histograms.push_back(vector<TH1D *>());
-        for (size_t n_channel = 0;
-             n_channel < analysis.detectors[n_detector]->channels.size();
-             ++n_channel) {
+        energy_sensitive_detector_histograms.push_back(vector<TH1D *>());
+        for (auto channel :
+             analysis.energy_sensitive_detectors[n_detector]->channels) {
             histogram_name =
-                analysis.detectors[n_detector]->name + "_" +
-                analysis.detectors[n_detector]->channels[n_channel]->name;
-            if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                    analysis.detectors[n_detector])) {
-                histograms[n_detector].push_back(new TH1D(
-                    histogram_name.c_str(), histogram_name.c_str(),
-                    analysis.get_group(n_detector)
-                        ->raw_histogram_properties.n_bins,
-                    analysis.get_group(n_detector)
-                        ->raw_histogram_properties.lower_edge_of_first_bin,
-                    analysis.get_group(n_detector)
-                        ->raw_histogram_properties.upper_edge_of_last_bin));
-            } else if (dynamic_pointer_cast<CounterDetector>(
-                           analysis.detectors[n_detector])) {
-                histograms[n_detector].push_back(new TH1D(
-                    histogram_name.c_str(), histogram_name.c_str(),
-                    analysis.get_group(n_detector)
-                        ->raw_histogram_properties.n_bins,
-                    analysis.get_group(n_detector)
-                        ->raw_histogram_properties.lower_edge_of_first_bin,
-                    analysis.get_group(n_detector)
-                        ->raw_histogram_properties.upper_edge_of_last_bin));
-            }
+                analysis.energy_sensitive_detectors[n_detector]->name + "_" +
+                channel->name;
+            energy_sensitive_detector_histograms[n_detector].push_back(new TH1D(
+                histogram_name.c_str(), histogram_name.c_str(),
+                analysis.energy_sensitive_detectors[n_detector]
+                    ->group->raw_histogram_properties.n_bins,
+                analysis.energy_sensitive_detectors[n_detector]
+                    ->group->raw_histogram_properties.lower_edge_of_first_bin,
+                analysis.energy_sensitive_detectors[n_detector]
+                    ->group->raw_histogram_properties.upper_edge_of_last_bin));
+        }
+    }
+    for (size_t n_detector = 0; n_detector < analysis.counter_detectors.size();
+         ++n_detector) {
+        counter_detector_histograms.push_back(vector<TH1D *>());
+        for (auto channel :
+             analysis.energy_sensitive_detectors[n_detector]->channels) {
+            histogram_name = analysis.counter_detectors[n_detector]->name +
+                             "_" + channel->name;
+            counter_detector_histograms[n_detector].push_back(new TH1D(
+                histogram_name.c_str(), histogram_name.c_str(),
+                analysis.counter_detectors[n_detector]
+                    ->group->raw_histogram_properties.n_bins,
+                analysis.counter_detectors[n_detector]
+                    ->group->raw_histogram_properties.lower_edge_of_first_bin,
+                analysis.counter_detectors[n_detector]
+                    ->group->raw_histogram_properties.upper_edge_of_last_bin));
         }
     }
 
     for (long long i = first; i <= last; ++i) {
         tree->GetEntry(i);
 
-        for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+        for (size_t n_detector = 0;
+             n_detector < analysis.energy_sensitive_detectors.size();
              ++n_detector) {
             for (size_t n_channel = 0;
-                 n_channel < analysis.detectors[n_detector]->channels.size();
+                 n_channel < analysis.energy_sensitive_detectors[n_detector]
+                                 ->channels.size();
                  ++n_channel) {
-                if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                        analysis.detectors[n_detector])) {
-                    histograms[n_detector][n_channel]->Fill(
-                        analysis.get_amplitude(n_detector, n_channel));
-                } else if (dynamic_pointer_cast<CounterDetector>(
-                               analysis.detectors[n_detector])) {
-                    histograms[n_detector][n_channel]->Fill(
-                        analysis.get_counts(n_detector, n_channel));
-                }
+                energy_sensitive_detector_histograms[n_detector][n_channel]
+                    ->Fill(analysis.get_amplitude(n_detector, n_channel));
+            }
+        }
+        for (size_t n_detector = 0;
+             n_detector < analysis.counter_detectors.size(); ++n_detector) {
+            for (size_t n_channel = 0;
+                 n_channel <
+                 analysis.counter_detectors[n_detector]->channels.size();
+                 ++n_channel) {
+                counter_detector_histograms[n_detector][n_channel]->Fill(
+                    analysis.get_counts(n_detector, n_channel));
             }
         }
         progress_printer(i);
@@ -112,12 +122,14 @@ int main(int argc, char **argv) {
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
 
-    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
-         ++n_detector) {
-        for (size_t n_channel = 0;
-             n_channel < analysis.detectors[n_detector]->channels.size();
-             ++n_channel) {
-            histograms[n_detector][n_channel]->Write();
+    for (auto histogram_list : energy_sensitive_detector_histograms) {
+        for (auto histogram : histogram_list) {
+            histogram->Write();
+        }
+    }
+    for (auto histogram_list : counter_detector_histograms) {
+        for (auto histogram : histogram_list) {
+            histogram->Write();
         }
     }
 
