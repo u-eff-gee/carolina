@@ -31,11 +31,9 @@ using std::vector;
 #include "TTree.h"
 
 struct Detector {
-    Detector(const string name, const vector<shared_ptr<Channel>> channels,
-             const shared_ptr<DetectorGroup> group);
+    Detector(const string name, const shared_ptr<DetectorGroup> group);
 
     const string name;
-    vector<shared_ptr<Channel>> channels;
     const shared_ptr<DetectorGroup> group;
 
     virtual void reset_calibrated_leaves() = 0;

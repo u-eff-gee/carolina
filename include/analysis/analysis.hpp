@@ -47,7 +47,6 @@ struct Analysis {
     void calibrate(const long long n_entry);
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;
     long long get_counts(const size_t n_detector, const size_t n_channel) const;
-    shared_ptr<DetectorGroup> get_group(const size_t n_detector) const;
     double get_tdc_resolution(const size_t n_detector,
                               const size_t n_channel) const;
     double get_time(const size_t n_detector, const size_t n_channel) const;

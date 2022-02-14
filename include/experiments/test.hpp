@@ -44,31 +44,26 @@ Analysis analysis(
     {single, segmented, scaler},
     {make_shared<EnergySensitiveDetector>(
          "sin",
-         vector<shared_ptr<Channel>>{
-             make_shared<EnergySensitiveDetectorChannel>(
-                 "E1", 0, 0, vector<double>{50., 0.1})},
+         vector<EnergySensitiveDetectorChannel>{
+             {"E1", 0, 0, vector<double>{50., 0.1}}},
          single),
      make_shared<EnergySensitiveDetector>(
          "seg",
-         vector<shared_ptr<Channel>>{
-             make_shared<EnergySensitiveDetectorChannel>("E1", 1, 0, "60.,2."),
-             make_shared<EnergySensitiveDetectorChannel>("E2", 1, 1, "70. 0.7"),
-             make_shared<EnergySensitiveDetectorChannel>(
-                 "E3", 1, 2,
-                 [](const double amplitude,
-                    [[maybe_unused]] const long long n_entry) {
-                     return 80. + 0.8 * amplitude;
-                 }),
-             make_shared<EnergySensitiveDetectorChannel>(
-                 "E4", 1, 3,
-                 [](const double amplitude,
-                    [[maybe_unused]] const long long n_entry) {
-                     return 90. + 0.9 * amplitude;
-                 })},
+         vector<EnergySensitiveDetectorChannel>{
+             {"E1", 1, 0, "60.,2."},
+             {"E2", 1, 1, "70. 0.7"},
+             {"E3", 1, 2,
+              [](const double amplitude,
+                 [[maybe_unused]] const long long n_entry) {
+                  return 80. + 0.8 * amplitude;
+              }},
+             {"E4", 1, 3,
+              [](const double amplitude,
+                 [[maybe_unused]] const long long n_entry) {
+                  return 90. + 0.9 * amplitude;
+              }}},
          segmented),
-     make_shared<CounterDetector>(
-         "cou",
-         vector<shared_ptr<Channel>>{
-             make_shared<CounterDetectorChannel>("cts", 2, 0)},
-         scaler)},
+     make_shared<CounterDetector>("cou",
+                                  vector<CounterDetectorChannel>{{"cts", 2, 0}},
+                                  scaler)},
     {{"sin_vs_seg", {0}, {1}, {200, -5., 2000. - 5.}, {200, -5., 2000. - 5.}}});

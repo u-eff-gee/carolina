@@ -30,15 +30,20 @@ using std::pair;
 using std::vector;
 
 #include "detector.hpp"
+#include "energy_sensitive_detector_channel.hpp"
 
 struct EnergySensitiveDetector final : public Detector {
     EnergySensitiveDetector(
-        const string name, const vector<shared_ptr<Channel>> channels,
+        const string name,
+        const vector<EnergySensitiveDetectorChannel> channels,
         const shared_ptr<EnergySensitiveDetectorGroup> group);
     EnergySensitiveDetector(
-        const string name, const vector<shared_ptr<Channel>> channels,
+        const string name,
+        const vector<EnergySensitiveDetectorChannel> channels,
         const shared_ptr<EnergySensitiveDetectorGroup> group,
         const vector<vector<pair<double, double>>> addback_coincidence_windows);
+
+    vector<EnergySensitiveDetectorChannel> channels;
 
     vector<vector<pair<double, double>>> addback_coincidence_windows;
 

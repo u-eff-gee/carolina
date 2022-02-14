@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
              analysis.energy_sensitive_detectors[n_detector]->channels) {
             histogram_name =
                 analysis.energy_sensitive_detectors[n_detector]->name + "_" +
-                channel->name;
+                channel.name;
             energy_sensitive_detector_histograms[n_detector].push_back(new TH1D(
                 histogram_name.c_str(), histogram_name.c_str(),
                 analysis.energy_sensitive_detectors[n_detector]
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         for (auto channel :
              analysis.energy_sensitive_detectors[n_detector]->channels) {
             histogram_name = analysis.counter_detectors[n_detector]->name +
-                             "_" + channel->name;
+                             "_" + channel.name;
             counter_detector_histograms[n_detector].push_back(new TH1D(
                 histogram_name.c_str(), histogram_name.c_str(),
                 analysis.counter_detectors[n_detector]

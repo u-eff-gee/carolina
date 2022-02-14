@@ -17,12 +17,15 @@
 
 #pragma once
 
+#include "counter_detector_channel.hpp"
 #include "detector.hpp"
 
 struct CounterDetector final : public Detector {
     CounterDetector(const string name,
-                    const vector<shared_ptr<Channel>> channels,
+                    const vector<CounterDetectorChannel> channels,
                     const shared_ptr<CounterDetectorGroup> group);
+
+    vector<CounterDetectorChannel> channels;
 
     void set_up_calibrated_branches_for_reading(TTree *tree) override final;
     void set_up_calibrated_branches_for_writing(TTree *tree) override final;
