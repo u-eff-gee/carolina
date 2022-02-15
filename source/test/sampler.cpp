@@ -52,36 +52,36 @@ namespace po = boost::program_options;
 TGraph invert_energy_calibration(const size_t n_detector,
                                  const size_t n_channel) {
     function<double(const double, const long long)> calibration =
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            analysis.detectors[n_detector]->channels[n_channel])
-            ->energy_calibration;
+        analysis.energy_sensitive_detectors[n_detector]
+            ->channels[n_channel]
+            .energy_calibration;
     return invert_calibration<1000>(
         [&calibration](const double amplitude) {
             return calibration(amplitude, 0);
         },
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.get_group(n_detector))
+            analysis.energy_sensitive_detectors[n_detector])
             ->raw_histogram_properties.lower_edge_of_first_bin,
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.get_group(n_detector))
+            analysis.energy_sensitive_detectors[n_detector])
             ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 
 TGraph invert_time_calibration(const size_t n_detector, const size_t n_channel,
                                const double tdc_resolution) {
     function<double(const double)> calibration =
-        dynamic_pointer_cast<EnergySensitiveDetectorChannel>(
-            analysis.detectors[n_detector]->channels[n_channel])
-            ->time_calibration;
+        analysis.energy_sensitive_detectors[n_detector]
+            ->channels[n_channel]
+            .time_calibration;
     return invert_calibration<1000>(
         [&calibration, &tdc_resolution](const double energy) {
             return calibration(energy) / tdc_resolution;
         },
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.get_group(n_detector))
+            analysis.energy_sensitive_detectors[n_detector])
             ->raw_histogram_properties.lower_edge_of_first_bin,
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.get_group(n_detector))
+            analysis.energy_sensitive_detectors[n_detector])
             ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 
@@ -99,17 +99,16 @@ void increment_timestamp() {
 
 vector<vector<TGraph>> invert_energy_calibrations() {
     vector<vector<TGraph>> inverse_calibrations;
-    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+    for (size_t n_detector = 0;
+         n_detector < analysis.energy_sensitive_detectors.size();
          ++n_detector) {
         inverse_calibrations.push_back(vector<TGraph>());
-        if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                analysis.detectors[n_detector])) {
-            for (size_t n_channel = 0;
-                 n_channel < analysis.detectors[n_detector]->channels.size();
-                 ++n_channel) {
-                inverse_calibrations[n_detector].push_back(
-                    invert_energy_calibration(n_detector, n_channel));
-            }
+        for (size_t n_channel = 0;
+             n_channel <
+             analysis.energy_sensitive_detectors[n_detector]->channels.size();
+             ++n_channel) {
+            inverse_calibrations[n_detector].push_back(
+                invert_energy_calibration(n_detector, n_channel));
         }
     }
 
@@ -118,19 +117,17 @@ vector<vector<TGraph>> invert_energy_calibrations() {
 
 vector<vector<TGraph>> invert_time_calibrations() {
     vector<vector<TGraph>> inverse_calibrations;
-    for (size_t n_detector = 0; n_detector < analysis.detectors.size();
+    for (size_t n_detector = 0;
+         n_detector < analysis.energy_sensitive_detectors.size();
          ++n_detector) {
         inverse_calibrations.push_back(vector<TGraph>());
-        if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                analysis.detectors[n_detector])) {
-            for (size_t n_channel = 0;
-                 n_channel < analysis.detectors[n_detector]->channels.size();
-                 ++n_channel) {
-                inverse_calibrations[n_detector].push_back(
-                    invert_time_calibration(
-                        n_detector, n_channel,
-                        analysis.get_tdc_resolution(n_detector, n_channel)));
-            }
+        for (size_t n_channel = 0;
+             n_channel <
+             analysis.energy_sensitive_detectors[n_detector]->channels.size();
+             ++n_channel) {
+            inverse_calibrations[n_detector].push_back(invert_time_calibration(
+                n_detector, n_channel,
+                analysis.get_tdc_resolution(n_detector, n_channel)));
         }
     }
 
@@ -163,13 +160,14 @@ vector<double> split_up_energy(const double energy,
 
 void create_counter_event(const size_t n_detector, const size_t n_channel,
                           const long long counter_increment) {
-    analysis.add_counts(n_detector, n_channel,
-                        counter_increment /
-                            dynamic_pointer_cast<ScalerModule>(
-                                analysis.modules[analysis.detectors[n_detector]
-                                                     ->channels[n_channel]
-                                                     ->module])
-                                ->trigger_frequency);
+    analysis.add_counts(
+        n_detector, n_channel,
+        counter_increment /
+            dynamic_pointer_cast<ScalerModule>(
+                analysis.modules[analysis.counter_detectors[n_detector]
+                                     ->channels[n_channel]
+                                     .module])
+                ->trigger_frequency);
 }
 
 void create_single_event(const size_t n_detector, const size_t n_channel,
@@ -190,10 +188,12 @@ void create_single_event_with_addback(
     const vector<vector<TGraph>> time_calibration) {
     random_device ran_dev;
     vector<double> energy_depositions = split_up_energy(
-        gamma_energy, analysis.detectors[n_detector]->channels.size(),
+        gamma_energy,
+        analysis.energy_sensitive_detectors[n_detector]->channels.size(),
         ran_dev());
     for (size_t n_channel = 0;
-         n_channel < analysis.detectors[n_detector]->channels.size();
+         n_channel <
+         analysis.energy_sensitive_detectors[n_detector]->channels.size();
          ++n_channel) {
         analysis.set_amplitude(n_detector, n_channel,
                                energy_calibration[n_detector][n_channel].Eval(
@@ -242,58 +242,56 @@ int main(int argc, char **argv) {
                                      "sets of events");
 
     for (unsigned int n = 0; n < n_max; ++n) {
-        for (size_t n_detector_1 = 0; n_detector_1 < analysis.detectors.size();
+        for (size_t n_detector_1 = 0;
+             n_detector_1 < analysis.energy_sensitive_detectors.size();
              ++n_detector_1) {
-            if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                    analysis.detectors[n_detector_1])) {
-                // Generate single events that require addback.
-                create_single_event_with_addback(
-                    n_detector_1, gamma_energy, inverse_energy_calibrations,
-                    gamma_time, inverse_time_calibrations);
+            // Generate single events that require addback.
+            create_single_event_with_addback(
+                n_detector_1, gamma_energy, inverse_energy_calibrations,
+                gamma_time, inverse_time_calibrations);
+            tree->Fill();
+            analysis.reset_raw_leaves();
+            increment_timestamp();
+            // Generate events in which the entire gamma-ray energy is
+            // deposited in a single crystal.
+            for (size_t n_channel = 0;
+                 n_channel < analysis.energy_sensitive_detectors[n_detector_1]
+                                 ->channels.size();
+                 ++n_channel) {
+                create_single_event(n_detector_1, n_channel, gamma_energy,
+                                    inverse_energy_calibrations, gamma_time,
+                                    inverse_time_calibrations);
                 tree->Fill();
                 analysis.reset_raw_leaves();
                 increment_timestamp();
-                // Generate events in which the entire gamma-ray energy is
-                // deposited in a single crystal.
-                for (size_t n_channel = 0;
-                     n_channel <
-                     analysis.detectors[n_detector_1]->channels.size();
-                     ++n_channel) {
-                    create_single_event(n_detector_1, n_channel, gamma_energy,
-                                        inverse_energy_calibrations, gamma_time,
-                                        inverse_time_calibrations);
+            }
+
+            for (size_t n_detector_2 = n_detector_1 + 1;
+                 n_detector_2 < analysis.energy_sensitive_detectors.size();
+                 ++n_detector_2) {
+                if (dynamic_pointer_cast<EnergySensitiveDetector>(
+                        analysis.detectors[n_detector_2])) {
+                    // Create a coincident event in two detectors
+                    // that
+                    // requires addback.
+                    create_single_event_with_addback(
+                        n_detector_1, gamma_energy, inverse_energy_calibrations,
+                        gamma_time, inverse_time_calibrations);
+                    create_single_event_with_addback(
+                        n_detector_2, gamma_energy, inverse_energy_calibrations,
+                        gamma_time, inverse_time_calibrations);
                     tree->Fill();
                     analysis.reset_raw_leaves();
                     increment_timestamp();
                 }
-
-                for (size_t n_detector_2 = n_detector_1 + 1;
-                     n_detector_2 < analysis.detectors.size(); ++n_detector_2) {
-                    if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                            analysis.detectors[n_detector_2])) {
-                        // Create a coincident event in two detectors
-                        // that
-                        // requires addback.
-                        create_single_event_with_addback(
-                            n_detector_1, gamma_energy,
-                            inverse_energy_calibrations, gamma_time,
-                            inverse_time_calibrations);
-                        create_single_event_with_addback(
-                            n_detector_2, gamma_energy,
-                            inverse_energy_calibrations, gamma_time,
-                            inverse_time_calibrations);
-                        tree->Fill();
-                        analysis.reset_raw_leaves();
-                        increment_timestamp();
-                    }
-                }
-            } else if (dynamic_pointer_cast<CounterDetector>(
-                           analysis.detectors[n_detector_1])) {
+            }
+            for (size_t n_detector = 0;
+                 n_detector < analysis.counter_detectors.size(); ++n_detector) {
                 for (size_t n_channel = 0;
                      n_channel <
-                     analysis.detectors[n_detector_1]->channels.size();
+                     analysis.counter_detectors[n_detector]->channels.size();
                      ++n_channel) {
-                    create_counter_event(n_detector_1, n_channel,
+                    create_counter_event(n_detector, n_channel,
                                          counter_increment);
                 }
                 tree->Fill();
