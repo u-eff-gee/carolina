@@ -15,6 +15,10 @@
     carolina. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <array>
+
+using std::array;
+
 #include <iostream>
 
 using std::cout;
@@ -193,6 +197,30 @@ void create_single_event_with_addback(
     }
 }
 
+double
+sample_background_gamma_time(const pair<double, double> range_min_max,
+                             const pair<double, double> excluded_range_min_max,
+                             const array<double, 2> uniform_random_numbers) {
+    const double inverse_range =
+        (excluded_range_min_max.first - range_min_max.first) +
+        (range_min_max.second - excluded_range_min_max.second);
+    if (uniform_random_numbers[0] <
+        (excluded_range_min_max.first - range_min_max.first) * inverse_range) {
+        return range_min_max.first +
+               uniform_random_numbers[1] *
+                   (excluded_range_min_max.first - range_min_max.first);
+    }
+    return excluded_range_min_max.second +
+           uniform_random_numbers[1] *
+               (range_min_max.second - excluded_range_min_max.second);
+}
+
+void set_reference_time(const double reference_time) {
+    for (auto module : analysis.digitizer_modules) {
+        module->set_reference_time(reference_time / module->tdc_resolution);
+    }
+}
+
 int main(int argc, char **argv) {
     po::options_description desc(
         "Using the current analysis configuration, fill a TTree with test data "
@@ -224,7 +252,8 @@ int main(int argc, char **argv) {
     vector<vector<TGraph>> inverse_energy_calibrations =
         invert_energy_calibrations();
 
-    const double gamma_energy(1000.), gamma_time(0.), counter_increment(1000.);
+    const double background_gamma_energy(500.), counter_increment(1000.),
+        gamma_energy(1000.), gamma_time(20.), reference_time(10.);
 
     const unsigned int n_max = vm["n"].as<unsigned int>();
     ProgressPrinter progress_printer(0, n_max - 1, 0.01, "set of events",
@@ -257,6 +286,7 @@ int main(int argc, char **argv) {
                 n_detector_1, gamma_energy, inverse_energy_calibrations,
                 gamma_time, inverse_time_calibrations,
                 uniform_random_numbers[n_detector_1]);
+            set_reference_time(reference_time);
             tree->Fill();
             analysis.reset_raw_leaves();
             increment_timestamp();
@@ -269,6 +299,20 @@ int main(int argc, char **argv) {
                 create_single_event(n_detector_1, n_channel, gamma_energy,
                                     inverse_energy_calibrations, gamma_time,
                                     inverse_time_calibrations);
+                set_reference_time(reference_time);
+                tree->Fill();
+                analysis.reset_raw_leaves();
+                increment_timestamp();
+
+                create_single_event(n_detector_1, n_channel,
+                                    background_gamma_energy,
+                                    inverse_energy_calibrations,
+                                    sample_background_gamma_time(
+                                        {-100., 100.}, {-10., 10.},
+                                        {uniform_distribution(random_engine),
+                                         uniform_distribution(random_engine)}),
+                                    inverse_time_calibrations);
+                set_reference_time(reference_time);
                 tree->Fill();
                 analysis.reset_raw_leaves();
                 increment_timestamp();
@@ -299,23 +343,23 @@ int main(int argc, char **argv) {
                         n_detector_2, gamma_energy, inverse_energy_calibrations,
                         gamma_time, inverse_time_calibrations,
                         uniform_random_numbers[n_detector_2]);
+                    set_reference_time(reference_time);
                     tree->Fill();
                     analysis.reset_raw_leaves();
                     increment_timestamp();
                 }
             }
-            for (size_t n_detector = 0;
-                 n_detector < analysis.counter_detectors.size(); ++n_detector) {
-                for (size_t n_channel = 0;
-                     n_channel <
-                     analysis.counter_detectors[n_detector]->channels.size();
-                     ++n_channel) {
-                    create_counter_event(n_detector, n_channel,
-                                         counter_increment);
-                }
-                tree->Fill();
-                analysis.reset_raw_leaves();
+        }
+        for (size_t n_detector = 0;
+             n_detector < analysis.counter_detectors.size(); ++n_detector) {
+            for (size_t n_channel = 0;
+                 n_channel <
+                 analysis.counter_detectors[n_detector]->channels.size();
+                 ++n_channel) {
+                create_counter_event(n_detector, n_channel, counter_increment);
             }
+            tree->Fill();
+            analysis.reset_raw_leaves();
         }
         progress_printer(n);
     }
