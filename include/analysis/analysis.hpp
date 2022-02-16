@@ -43,6 +43,7 @@ struct Analysis {
     vector<shared_ptr<EnergySensitiveDetector>> energy_sensitive_detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
     vector<shared_ptr<ScalerModule>> scaler_modules;
+    vector<size_t> module_index;
 
     void calibrate(const long long n_entry);
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;
