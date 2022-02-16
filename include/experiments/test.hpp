@@ -65,5 +65,18 @@ Analysis analysis(
          segmented),
      make_shared<CounterDetector>("cou",
                                   vector<CounterDetectorChannel>{{"cts", 2, 0}},
-                                  scaler)},
-    {{"sin_vs_seg", {0}, {1}, {200, -5., 2000. - 5.}, {200, -5., 2000. - 5.}}});
+                                  scaler),
+     make_shared<EnergySensitiveDetector>(
+         "seg2",
+         vector<EnergySensitiveDetectorChannel>{
+             {"E1", 0, 2, vector<double>{33., 0.33}},
+             {"E2", 0, 3, vector<double>{44., 0.44}}},
+         segmented)},
+    {
+        {"sin_vs_seg",
+         {0},
+         {1},
+         {200, -5., 2000. - 5.},
+         {200, -5., 2000. - 5.}},
+        {"all", {0, 1, 3}, {}, {200, -5., 2000. - 5.}, {200, -5., 2000. - 5.}},
+    });

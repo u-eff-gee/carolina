@@ -86,14 +86,8 @@ TGraph invert_time_calibration(const size_t n_detector, const size_t n_channel,
 }
 
 void increment_timestamp() {
-    for (size_t n_module = 0; n_module < analysis.modules.size(); ++n_module) {
-        if (dynamic_pointer_cast<DigitizerModule>(analysis.modules[n_module])) {
-            dynamic_pointer_cast<DigitizerModule>(analysis.modules[n_module])
-                ->set_timestamp(dynamic_pointer_cast<DigitizerModule>(
-                                    analysis.modules[n_module])
-                                    ->get_timestamp() +
-                                1.);
-        }
+    for (auto module : analysis.digitizer_modules) {
+        module->set_timestamp(module->get_timestamp() + 1.);
     }
 }
 
@@ -136,18 +130,12 @@ vector<vector<TGraph>> invert_time_calibrations() {
 
 vector<double> split_up_energy(const double energy,
                                const unsigned int n_channels,
-                               const unsigned int seed = 0) {
+                               const vector<double> uniform_random_numbers) {
     if (n_channels == 1) {
         return {energy};
     }
-    vector<double> energies(n_channels), uniform_random_numbers(n_channels);
+    vector<double> energies(n_channels);
 
-    mt19937 random_engine(seed);
-    uniform_real_distribution<double> uni_dis;
-
-    for (unsigned int n_channel = 0; n_channel < n_channels; ++n_channel) {
-        uniform_random_numbers[n_channel] = uni_dis(random_engine);
-    }
     const double uniform_random_numbers_normalization =
         1. / accumulate(uniform_random_numbers.begin(),
                         uniform_random_numbers.end(), 0.);
@@ -185,12 +173,13 @@ void create_single_event(const size_t n_detector, const size_t n_channel,
 void create_single_event_with_addback(
     const size_t n_detector, const double gamma_energy,
     const vector<vector<TGraph>> energy_calibration, const double gamma_time,
-    const vector<vector<TGraph>> time_calibration) {
+    const vector<vector<TGraph>> time_calibration,
+    const vector<double> uniform_random_numbers) {
     random_device ran_dev;
     vector<double> energy_depositions = split_up_energy(
         gamma_energy,
         analysis.energy_sensitive_detectors[n_detector]->channels.size(),
-        ran_dev());
+        uniform_random_numbers);
     for (size_t n_channel = 0;
          n_channel <
          analysis.energy_sensitive_detectors[n_detector]->channels.size();
@@ -241,14 +230,33 @@ int main(int argc, char **argv) {
     ProgressPrinter progress_printer(0, n_max - 1, 0.01, "set of events",
                                      "sets of events");
 
+    mt19937 random_engine(0);
+    uniform_real_distribution<double> uniform_distribution;
+    // Create vectors to store the random numbers.
+    // This avoids recreating or resizing vectors in the event loop.
+    vector<vector<double>> uniform_random_numbers;
+    for (auto detector : analysis.energy_sensitive_detectors) {
+        uniform_random_numbers.push_back(
+            vector<double>(detector->channels.size()));
+    }
+
     for (unsigned int n = 0; n < n_max; ++n) {
         for (size_t n_detector_1 = 0;
              n_detector_1 < analysis.energy_sensitive_detectors.size();
              ++n_detector_1) {
+            // Sample random numbers.
+            for (size_t n_channel = 0;
+                 n_channel < analysis.energy_sensitive_detectors[n_detector_1]
+                                 ->channels.size();
+                 ++n_channel) {
+                uniform_random_numbers[n_detector_1][n_channel] =
+                    uniform_distribution(random_engine);
+            }
             // Generate single events that require addback.
             create_single_event_with_addback(
                 n_detector_1, gamma_energy, inverse_energy_calibrations,
-                gamma_time, inverse_time_calibrations);
+                gamma_time, inverse_time_calibrations,
+                uniform_random_numbers[n_detector_1]);
             tree->Fill();
             analysis.reset_raw_leaves();
             increment_timestamp();
@@ -269,6 +277,15 @@ int main(int argc, char **argv) {
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < analysis.energy_sensitive_detectors.size();
                  ++n_detector_2) {
+                // Sample random numbers.
+                for (size_t n_channel = 0;
+                     n_channel <
+                     analysis.energy_sensitive_detectors[n_detector_2]
+                         ->channels.size();
+                     ++n_channel) {
+                    uniform_random_numbers[n_detector_2][n_channel] =
+                        uniform_distribution(random_engine);
+                }
                 if (dynamic_pointer_cast<EnergySensitiveDetector>(
                         analysis.detectors[n_detector_2])) {
                     // Create a coincident event in two detectors
@@ -276,10 +293,12 @@ int main(int argc, char **argv) {
                     // requires addback.
                     create_single_event_with_addback(
                         n_detector_1, gamma_energy, inverse_energy_calibrations,
-                        gamma_time, inverse_time_calibrations);
+                        gamma_time, inverse_time_calibrations,
+                        uniform_random_numbers[n_detector_1]);
                     create_single_event_with_addback(
                         n_detector_2, gamma_energy, inverse_energy_calibrations,
-                        gamma_time, inverse_time_calibrations);
+                        gamma_time, inverse_time_calibrations,
+                        uniform_random_numbers[n_detector_2]);
                     tree->Fill();
                     analysis.reset_raw_leaves();
                     increment_timestamp();
