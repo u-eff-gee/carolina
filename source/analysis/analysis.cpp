@@ -106,14 +106,6 @@ long long Analysis::get_counts(const size_t n_detector,
             counter_detectors[n_detector]->channels[n_channel].channel);
 }
 
-double Analysis::get_tdc_resolution(const size_t n_detector,
-                                    const size_t n_channel) const {
-    return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
-                                              ->channels[n_channel]
-                                              .module]]
-        ->tdc_resolution;
-}
-
 double Analysis::get_time(const size_t n_detector,
                           const size_t n_channel) const {
     return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
@@ -198,19 +190,22 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
             .time_calibrated =
             energy_sensitive_detectors[n_detector]
                 ->channels[n_channel]
-                .time_calibration(energy_sensitive_detectors[n_detector]
+                .time_calibration(get_time(n_detector, n_channel),
+                                  energy_sensitive_detectors[n_detector]
                                       ->channels[n_channel]
-                                      .energy_calibrated) *
-            get_time(n_detector, n_channel) *
-            get_tdc_resolution(n_detector, n_channel);
+                                      .energy_calibrated);
         energy_sensitive_detectors[n_detector]
             ->channels[n_channel]
             .time_vs_reference_time_calibrated =
             energy_sensitive_detectors[n_detector]
                 ->channels[n_channel]
                 .time_calibrated -
-            get_reference_time(n_detector, n_channel) *
-                get_tdc_resolution(n_detector, n_channel);
+            energy_sensitive_detectors[n_detector]
+                ->channels[n_channel]
+                .time_calibration(get_reference_time(n_detector, n_channel),
+                                  energy_sensitive_detectors[n_detector]
+                                      ->channels[n_channel]
+                                      .energy_calibrated);
         if (energy_sensitive_detectors[n_detector]
                 ->channels[n_channel]
                 .apply_RF_gate()) {

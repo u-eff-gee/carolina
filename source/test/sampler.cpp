@@ -71,16 +71,14 @@ TGraph invert_energy_calibration(const size_t n_detector,
             ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 
-TGraph invert_time_calibration(const size_t n_detector, const size_t n_channel,
-                               const double tdc_resolution) {
-    function<double(const double)> calibration =
+TGraph invert_time_calibration(const size_t n_detector,
+                               const size_t n_channel) {
+    function<double(const double, const double)> calibration =
         analysis.energy_sensitive_detectors[n_detector]
             ->channels[n_channel]
             .time_calibration;
     return invert_calibration<1000>(
-        [&calibration, &tdc_resolution](const double energy) {
-            return calibration(energy) / tdc_resolution;
-        },
+        [&calibration](const double time) { return calibration(time, 0.); },
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
             analysis.energy_sensitive_detectors[n_detector]->group)
             ->raw_histogram_properties.lower_edge_of_first_bin,
@@ -123,9 +121,8 @@ vector<vector<TGraph>> invert_time_calibrations() {
              n_channel <
              analysis.energy_sensitive_detectors[n_detector]->channels.size();
              ++n_channel) {
-            inverse_calibrations[n_detector].push_back(invert_time_calibration(
-                n_detector, n_channel,
-                analysis.get_tdc_resolution(n_detector, n_channel)));
+            inverse_calibrations[n_detector].push_back(
+                invert_time_calibration(n_detector, n_channel));
         }
     }
 
@@ -202,8 +199,8 @@ sample_background_gamma_time(const pair<double, double> range_min_max,
                              const pair<double, double> excluded_range_min_max,
                              const array<double, 2> uniform_random_numbers) {
     const double inverse_range =
-        (excluded_range_min_max.first - range_min_max.first) +
-        (range_min_max.second - excluded_range_min_max.second);
+        1. / ((excluded_range_min_max.first - range_min_max.first) +
+              (range_min_max.second - excluded_range_min_max.second));
     if (uniform_random_numbers[0] <
         (excluded_range_min_max.first - range_min_max.first) * inverse_range) {
         return range_min_max.first +
@@ -215,9 +212,24 @@ sample_background_gamma_time(const pair<double, double> range_min_max,
                (range_min_max.second - excluded_range_min_max.second);
 }
 
-void set_reference_time(const double reference_time) {
-    for (auto module : analysis.digitizer_modules) {
-        module->set_reference_time(reference_time / module->tdc_resolution);
+void set_reference_time(const size_t n_detector, const size_t n_channel,
+                        const double reference_time,
+                        const vector<vector<TGraph>> time_calibration) {
+    if (isnan(analysis
+                  .digitizer_modules
+                      [analysis.module_index
+                           [analysis.energy_sensitive_detectors[n_detector]
+                                ->channels[n_channel]
+                                .module]]
+                  ->get_reference_time())) {
+        analysis
+            .digitizer_modules[analysis.module_index
+                                   [analysis
+                                        .energy_sensitive_detectors[n_detector]
+                                        ->channels[n_channel]
+                                        .module]]
+            ->set_reference_time(
+                time_calibration[n_detector][n_channel].Eval(reference_time));
     }
 }
 
@@ -286,7 +298,8 @@ int main(int argc, char **argv) {
                 n_detector_1, gamma_energy, inverse_energy_calibrations,
                 gamma_time, inverse_time_calibrations,
                 uniform_random_numbers[n_detector_1]);
-            set_reference_time(reference_time);
+            set_reference_time(n_detector_1, 0, reference_time,
+                               inverse_time_calibrations);
             tree->Fill();
             analysis.reset_raw_leaves();
             increment_timestamp();
@@ -299,7 +312,8 @@ int main(int argc, char **argv) {
                 create_single_event(n_detector_1, n_channel, gamma_energy,
                                     inverse_energy_calibrations, gamma_time,
                                     inverse_time_calibrations);
-                set_reference_time(reference_time);
+                set_reference_time(n_detector_1, n_channel, reference_time,
+                                   inverse_time_calibrations);
                 tree->Fill();
                 analysis.reset_raw_leaves();
                 increment_timestamp();
@@ -308,11 +322,12 @@ int main(int argc, char **argv) {
                                     background_gamma_energy,
                                     inverse_energy_calibrations,
                                     sample_background_gamma_time(
-                                        {-100., 100.}, {-10., 10.},
+                                        {-100., 100.}, {10., 30.},
                                         {uniform_distribution(random_engine),
                                          uniform_distribution(random_engine)}),
                                     inverse_time_calibrations);
-                set_reference_time(reference_time);
+                set_reference_time(n_detector_1, n_channel, reference_time,
+                                   inverse_time_calibrations);
                 tree->Fill();
                 analysis.reset_raw_leaves();
                 increment_timestamp();
@@ -343,7 +358,10 @@ int main(int argc, char **argv) {
                         n_detector_2, gamma_energy, inverse_energy_calibrations,
                         gamma_time, inverse_time_calibrations,
                         uniform_random_numbers[n_detector_2]);
-                    set_reference_time(reference_time);
+                    set_reference_time(n_detector_1, 0, reference_time,
+                                       inverse_time_calibrations);
+                    set_reference_time(n_detector_2, 0, reference_time,
+                                       inverse_time_calibrations);
                     tree->Fill();
                     analysis.reset_raw_leaves();
                     increment_timestamp();

@@ -22,9 +22,9 @@
 #include "digitizer_module.hpp"
 
 struct SIS3316 final : public DigitizerModule {
-    SIS3316(const double tdc_resolution)
-        : DigitizerModule(tdc_resolution, "reference_time", "timestamp"),
-          amplitude_e1("e1"), amplitude_e2("e2"), time("time") {}
+    SIS3316()
+        : DigitizerModule("reference_time", "timestamp"), amplitude_e1("e1"),
+          amplitude_e2("e2"), time("time") {}
 
     Branch<double, 8> amplitude_e1;
     Branch<double, 8> amplitude_e2;

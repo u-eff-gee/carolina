@@ -31,14 +31,10 @@ using std::vector;
 #include "module.hpp"
 
 struct DigitizerModule : Module {
-    DigitizerModule(const double tdc_resolution,
-                    const string reference_time_branch_name,
+    DigitizerModule(const string reference_time_branch_name,
                     const string timestamp_branch_name)
-        : tdc_resolution(tdc_resolution),
-          reference_time(reference_time_branch_name),
+        : reference_time(reference_time_branch_name),
           timestamp(timestamp_branch_name) {}
-
-    const double tdc_resolution;
 
     Branch<double, 1> reference_time;
     Branch<double, 1> timestamp;
