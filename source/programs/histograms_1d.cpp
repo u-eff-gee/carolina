@@ -252,17 +252,23 @@ int main(int argc, char **argv) {
             }
         }
     }
-    for(size_t n_detector = 0; n_detector < analysis.counter_detectors.size(); ++n_detector){
+    for (size_t n_detector = 0; n_detector < analysis.counter_detectors.size();
+         ++n_detector) {
         counter_detector_histograms.push_back(vector<TH1D *>());
-        for(auto channel: analysis.counter_detectors[n_detector]->channels){
-            histogram_name = analysis.counter_detectors[n_detector]->name + "_" + channel.name;
+        for (auto channel : analysis.counter_detectors[n_detector]->channels) {
+            histogram_name = analysis.counter_detectors[n_detector]->name +
+                             "_" + channel.name;
             counter_detector_histograms[n_detector].push_back(
                 new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                    dynamic_pointer_cast<CounterDetectorGroup>(analysis.counter_detectors[n_detector]->group)->histogram_properties.n_bins,
-                    dynamic_pointer_cast<CounterDetectorGroup>(analysis.counter_detectors[n_detector]->group)->histogram_properties.lower_edge_of_first_bin,
-                    dynamic_pointer_cast<CounterDetectorGroup>(analysis.counter_detectors[n_detector]->group)->histogram_properties.upper_edge_of_last_bin
-                )
-            );
+                         dynamic_pointer_cast<CounterDetectorGroup>(
+                             analysis.counter_detectors[n_detector]->group)
+                             ->histogram_properties.n_bins,
+                         dynamic_pointer_cast<CounterDetectorGroup>(
+                             analysis.counter_detectors[n_detector]->group)
+                             ->histogram_properties.lower_edge_of_first_bin,
+                         dynamic_pointer_cast<CounterDetectorGroup>(
+                             analysis.counter_detectors[n_detector]->group)
+                             ->histogram_properties.upper_edge_of_last_bin));
         }
     }
 

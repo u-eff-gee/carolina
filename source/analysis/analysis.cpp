@@ -89,36 +89,36 @@ void Analysis::set_up_calibrated_branches_for_writing(TTree *tree) {
 
 double Analysis::get_amplitude(const size_t n_detector,
                                const size_t n_channel) const {
-    return digitizer_modules
-        [module_index[energy_sensitive_detectors[n_detector]->channels[n_channel].module]]
-            ->get_amplitude(energy_sensitive_detectors[n_detector]
-                                ->channels[n_channel]
-                                .channel);
+    return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                              ->channels[n_channel]
+                                              .module]]
+        ->get_amplitude(energy_sensitive_detectors[n_detector]
+                            ->channels[n_channel]
+                            .channel);
 }
 
 long long Analysis::get_counts(const size_t n_detector,
                                const size_t n_channel) const {
-    return scaler_modules
-        [module_index[counter_detectors[n_detector]->channels[n_channel].module]]
-            ->get_counts(
-                counter_detectors[n_detector]->channels[n_channel].channel);
+    return scaler_modules[module_index[counter_detectors[n_detector]
+                                           ->channels[n_channel]
+                                           .module]]
+        ->get_counts(
+            counter_detectors[n_detector]->channels[n_channel].channel);
 }
 
 double Analysis::get_tdc_resolution(const size_t n_detector,
                                     const size_t n_channel) const {
-    return dynamic_pointer_cast<DigitizerModule>(
-               modules[energy_sensitive_detectors[n_detector]
-                           ->channels[n_channel]
-                           .module])
+    return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                              ->channels[n_channel]
+                                              .module]]
         ->tdc_resolution;
 }
 
 double Analysis::get_time(const size_t n_detector,
                           const size_t n_channel) const {
-    return dynamic_pointer_cast<DigitizerModule>(
-               modules[energy_sensitive_detectors[n_detector]
-                           ->channels[n_channel]
-                           .module])
+    return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                              ->channels[n_channel]
+                                              .module]]
         ->get_time(energy_sensitive_detectors[n_detector]
                        ->channels[n_channel]
                        .channel);
@@ -126,19 +126,17 @@ double Analysis::get_time(const size_t n_detector,
 
 double Analysis::get_reference_time(const size_t n_detector,
                                     const size_t n_channel) const {
-    return dynamic_pointer_cast<DigitizerModule>(
-               modules[energy_sensitive_detectors[n_detector]
-                           ->channels[n_channel]
-                           .module])
+    return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                              ->channels[n_channel]
+                                              .module]]
         ->get_reference_time();
 }
 
 double Analysis::get_timestamp(const size_t n_detector,
                                const size_t n_channel) const {
-    return dynamic_pointer_cast<DigitizerModule>(
-               modules[energy_sensitive_detectors[n_detector]
-                           ->channels[n_channel]
-                           .module])
+    return digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                              ->channels[n_channel]
+                                              .module]]
         ->get_timestamp();
 }
 
@@ -177,9 +175,9 @@ void Analysis::calibrate_counter_detector(const int n_entry,
             (get_counts(n_detector, n_channel) - counter_detectors[n_detector]
                                                      ->channels[n_channel]
                                                      .previous_counts) *
-            dynamic_pointer_cast<ScalerModule>(
-                modules
-                    [counter_detectors[n_detector]->channels[n_channel].module])
+            scaler_modules[module_index[counter_detectors[n_detector]
+                                            ->channels[n_channel]
+                                            .module]]
                 ->trigger_frequency;
         counter_detectors[n_detector]->channels[n_channel].previous_counts =
             get_counts(n_detector, n_channel);
@@ -256,16 +254,18 @@ void Analysis::reset_raw_leaves() {
 
 void Analysis::add_counts(const size_t n_detector, const size_t n_channel,
                           const long long counts) {
-    dynamic_pointer_cast<ScalerModule>(
-        modules[counter_detectors[n_detector]->channels[n_channel].module])
+    scaler_modules[module_index[counter_detectors[n_detector]
+                                    ->channels[n_channel]
+                                    .module]]
         ->add_counts(counter_detectors[n_detector]->channels[n_channel].channel,
                      counts);
 }
 
 void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
                              const double amplitude) {
-    dynamic_pointer_cast<DigitizerModule>(
-        modules[energy_sensitive_detectors[n_detector]->channels[n_channel].module])
+    digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                       ->channels[n_channel]
+                                       .module]]
         ->set_amplitude(
             energy_sensitive_detectors[n_detector]->channels[n_channel].channel,
             amplitude);
@@ -273,19 +273,19 @@ void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
 
 void Analysis::set_reference_time(const size_t n_module,
                                   const double reference_time) {
-    dynamic_pointer_cast<DigitizerModule>(modules[n_module])
-        ->set_reference_time(reference_time);
+    digitizer_modules[n_module]->set_reference_time(reference_time);
 }
 
 void Analysis::set_time(const size_t n_detector, const size_t n_channel,
                         const double time) {
-    dynamic_pointer_cast<DigitizerModule>(
-        modules[energy_sensitive_detectors[n_detector]->channels[n_channel].module])
-        ->set_time(energy_sensitive_detectors[n_detector]->channels[n_channel].channel,
-                   time);
+    digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                       ->channels[n_channel]
+                                       .module]]
+        ->set_time(
+            energy_sensitive_detectors[n_detector]->channels[n_channel].channel,
+            time);
 }
 
 void Analysis::set_timestamp(const size_t n_module, const double timestamp) {
-    dynamic_pointer_cast<DigitizerModule>(modules[n_module])
-        ->set_timestamp(timestamp);
+    digitizer_modules[n_module]->set_timestamp(timestamp);
 }
