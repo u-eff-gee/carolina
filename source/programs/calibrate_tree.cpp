@@ -70,11 +70,15 @@ int main(int argc, char **argv) {
             command_line_parser.set_up_tree(first, last, vm.count("list"));
         tree->SetBranchStatus("*", 0);
         analysis.set_up_raw_counter_detector_branches_for_reading(tree, {true});
-        analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(tree, {true, true, true, true});
+        analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(
+            tree, {true, true, true, true});
         TTree *tree_calibrated = new TTree(tree_calibrated_name.c_str(),
                                            tree_calibrated_name.c_str());
-        analysis.set_up_calibrated_counter_detector_branches_for_writing(tree_calibrated);
-        analysis.set_up_calibrated_energy_sensitive_detector_branches_for_writing(tree_calibrated);
+        analysis.set_up_calibrated_counter_detector_branches_for_writing(
+            tree_calibrated);
+        analysis
+            .set_up_calibrated_energy_sensitive_detector_branches_for_writing(
+                tree_calibrated);
 
         for (long long i = blocks[n_block].first; i <= blocks[n_block].second;
              ++i) {

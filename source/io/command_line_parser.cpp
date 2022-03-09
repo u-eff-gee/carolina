@@ -76,8 +76,14 @@ TChain *CommandLineParser::set_up_tree(long long &first, long long &last,
         tree->Add(input_file.c_str());
     }
 
+    const long long n_entries = tree->GetEntries();
+    if(n_entries == 0){
+        cout << "TTree::GetEntries() returned 0."
+        << endl;
+        abort();
+    }
     first = vm["first"].as<long long>();
-    last = vm["last"].as<long long>() == -1 ? tree->GetEntries() - 1
+    last = vm["last"].as<long long>() == -1 ? n_entries - 1
                                             : vm["last"].as<long long>();
 
     if (first > last) {

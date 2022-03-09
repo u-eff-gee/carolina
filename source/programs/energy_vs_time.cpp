@@ -59,7 +59,8 @@ int main(int argc, char **argv) {
 
     tree->SetBranchStatus("*", 0);
     analysis.set_up_calibrated_counter_detector_branches_for_reading(tree);
-    analysis.set_up_calibrated_energy_sensitive_detector_branches_for_reading(tree);
+    analysis.set_up_calibrated_energy_sensitive_detector_branches_for_reading(
+        tree);
 
     vector<vector<TH2D *>> energy_vs_time_histograms;
     string histogram_name;

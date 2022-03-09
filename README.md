@@ -14,12 +14,12 @@
 
 The `carolina` C++ library processes output in the [ROOT](https://root.cern) [1] format that is created by the [mesytec](https://www.mesytec.com/) [2] `mvme` data acquisition (DAQ) software.
 It provides scripts that create (calibrated) one- and two-dimensional histograms that can be further analyzed by other tools.
-The library is intended to be used for data from the 2020/2021 Clover Array [3] campaigns at the High-Intensity Gamma-Ray Source (HIγS) [4], but it can also process output from previous campaigns with the γ3 setup [5].
+The library is intended to be used for data from the 2020-2022 Clover Array [3] campaigns at the High-Intensity Gamma-Ray Source (HIγS) [4], but it can also process output from previous campaigns with the γ3 setup [5].
 A special focus of `carolina` is the inclusion of physically segmented clover-type high-purity germanium detectors, which often require photon-energy reconstruction ("addback").
 
 Experimental setups for nuclear-resonance-fluorescence and other photonuclear experiments at HIγS are usually optimized for the experiment at hand.
 This means that the detectors and readout electronics change often.
-The `carolina` library tries to be general enough to support many different setups and standard analysis procedures, but of course it will never be able to provide as much power and performance as an  analysis code that is taylored to a specific experiment.
+The `carolina` library tries to be general enough to support many different setups and standard analysis procedures, but of course it will never be able to provide as much power and performance as an analysis code that is taylored to a specific experiment.
 
 ## 2. Install
 
@@ -64,7 +64,7 @@ At this step, the user can select the desired analysis configuration by specifyi
 cmake -DANALYSIS=ANALYSIS_HEADER CAROLINA_SOURCE
 ```
 
-By convention, the analysis-configuration files are called `analysis_EXPERIMENT.hpp`, where `EXPERIMENT` is an identifier for an experiment, mostly probably the name of an isotope.
+By convention, the analysis-configuration files are called `EXPERIMENT.hpp`, where `EXPERIMENT` is an identifier for an experiment, mostly probably the name of an isotope.
 
 After configuring the build, compile the code using another `CMake` command:
 
