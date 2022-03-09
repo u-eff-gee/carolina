@@ -53,30 +53,6 @@ struct EnergySensitiveDetectorChannel final : public Channel {
                 return true;
             });
 
-    EnergySensitiveDetectorChannel(
-        const string name, const size_t module, const size_t channel,
-        const vector<double> energy_calibration_parameters,
-        const function<double(const double, const double)> time_calibration =
-            [](const double raw_time, [[maybe_unused]] const double energy) {
-                return raw_time;
-            },
-        const function<bool(const double)> time_vs_reference_time_gate =
-            []([[maybe_unused]] const double time_vs_reference_time) {
-                return true;
-            });
-
-    EnergySensitiveDetectorChannel(
-        const string name, const size_t module, const size_t channel,
-        const string energy_calibration_parameters,
-        const function<double(const double, const double)> time_calibration =
-            [](const double raw_time, [[maybe_unused]] const double energy) {
-                return raw_time;
-            },
-        const function<bool(const double)> time_vs_reference_time_gate =
-            []([[maybe_unused]] const double time_vs_reference_time) {
-                return true;
-            });
-
     const function<double(const int, const double)> energy_calibration;
     const function<double(const double, const double)> time_calibration;
     const function<bool(const double)> time_vs_reference_time_gate;

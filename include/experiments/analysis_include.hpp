@@ -18,6 +18,7 @@
 #pragma once
 
 #include "analysis.hpp"
+#include "calibration_function.hpp"
 #include "coincidence_matrix.hpp"
 #include "counter_detector.hpp"
 #include "counter_detector_channel.hpp"

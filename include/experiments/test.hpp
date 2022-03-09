@@ -44,13 +44,17 @@ Analysis analysis(
     {make_shared<EnergySensitiveDetector>(
          "sin",
          vector<EnergySensitiveDetectorChannel>{
-             {"E1", 0, 0, vector<double>{50., 0.1}}},
+             {"E1", 0, 0,
+              calibration_function<const double, const long long>(
+                  vector<double>{50., 0.1})}},
          single),
      make_shared<EnergySensitiveDetector>(
          "seg",
          vector<EnergySensitiveDetectorChannel>{
-             {"E1", 1, 0, "60.,2."},
-             {"E2", 1, 1, "70. 0.7"},
+             {"E1", 1, 0,
+              calibration_function<const double, const long long>("60.,0.6")},
+             {"E2", 1, 1,
+              calibration_function<const double, const long long>("70. 0.7")},
              {"E3", 1, 2,
               [](const double amplitude,
                  [[maybe_unused]] const long long n_entry) {
@@ -68,8 +72,12 @@ Analysis analysis(
      make_shared<EnergySensitiveDetector>(
          "seg2",
          vector<EnergySensitiveDetectorChannel>{
-             {"E1", 0, 2, vector<double>{33., 0.33}},
-             {"E2", 0, 3, vector<double>{44., 0.44}}},
+             {"E1", 0, 2,
+              calibration_function<const double, const long long>(
+                  vector<double>{33., 0.33})},
+             {"E2", 0, 3,
+              calibration_function<const double, const long long>(
+                  vector<double>{44., 0.44})}},
          segmented)},
     {
         {"sin_vs_seg",
