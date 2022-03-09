@@ -25,29 +25,54 @@ using std::to_string;
 
 #include "mdpp16.hpp"
 
-void MDPP16::reset_raw_leaves() {
+void MDPP16::reset_raw_amplitude_leaves() {
     for (size_t n_leaf = 0; n_leaf < 16; ++n_leaf) {
         amplitude.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
+    }
+}
+void MDPP16::reset_raw_time_leaves() {
+    for (size_t n_leaf = 0; n_leaf < 16; ++n_leaf) {
         time.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
     }
+}
+void MDPP16::reset_raw_reference_time_leaves() {
     reference_time.leaves[0] = numeric_limits<double>::quiet_NaN();
 }
 
-void MDPP16::set_up_raw_branches_for_reading(TTree *tree) {
-    tree->SetBranchStatus(amplitude.name.c_str(), 1);
-    tree->SetBranchStatus(time.name.c_str(), 1);
-    tree->SetBranchStatus(timestamp.name.c_str(), 1);
+void MDPP16::reset_raw_timestamp_leaves() {}
 
+void MDPP16::set_up_raw_amplitude_branches_for_reading(TTree *tree) {
+    tree->SetBranchStatus(amplitude.name.c_str(), 1);
     tree->SetBranchAddress(amplitude.name.c_str(), amplitude.leaves);
+}
+
+void MDPP16::set_up_raw_time_branches_for_reading(TTree *tree) {
+    tree->SetBranchStatus(time.name.c_str(), 1);
     tree->SetBranchAddress(time.name.c_str(), time.leaves);
+}
+
+void MDPP16::set_up_raw_reference_time_branches_for_reading([
+    [maybe_unused]] TTree *tree) {}
+
+void MDPP16::set_up_raw_timestamp_branches_for_reading(TTree *tree) {
+    tree->SetBranchStatus(timestamp.name.c_str(), 1);
     tree->SetBranchAddress(timestamp.name.c_str(), timestamp.leaves);
 }
 
-void MDPP16::set_up_raw_branches_for_writing(TTree *tree) {
+void MDPP16::set_up_raw_amplitude_branches_for_writing(TTree *tree) {
     tree->Branch(amplitude.name.c_str(), amplitude.leaves,
                  (amplitude.name + "[16]/D").c_str());
+}
+
+void MDPP16::set_up_raw_time_branches_for_writing(TTree *tree) {
     tree->Branch(time.name.c_str(), time.leaves,
                  (time.name + "[16]/D").c_str());
+}
+
+void MDPP16::set_up_raw_reference_time_branches_for_writing([
+    [maybe_unused]] TTree *tree) {}
+
+void MDPP16::set_up_raw_timestamp_branches_for_writing(TTree *tree) {
     tree->Branch(timestamp.name.c_str(), timestamp.leaves,
                  (timestamp.name + "[1]/D").c_str());
 }

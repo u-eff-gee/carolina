@@ -46,7 +46,20 @@ struct MDPP16 final : public DigitizerModule {
         time.leaves[leaf] = t;
     }
 
-    void reset_raw_leaves() override final;
-    void set_up_raw_branches_for_reading(TTree *tree) override final;
-    void set_up_raw_branches_for_writing(TTree *tree) override final;
+    void reset_raw_amplitude_leaves() override final;
+    void reset_raw_time_leaves() override final;
+    void reset_raw_reference_time_leaves() override final;
+    void reset_raw_timestamp_leaves() override final;
+
+    void set_up_raw_amplitude_branches_for_reading(TTree *tree) override final;
+    void set_up_raw_time_branches_for_reading(TTree *tree) override final;
+    void
+    set_up_raw_reference_time_branches_for_reading(TTree *tree) override final;
+    void set_up_raw_timestamp_branches_for_reading(TTree *tree) override final;
+
+    void set_up_raw_amplitude_branches_for_writing(TTree *tree) override final;
+    void set_up_raw_time_branches_for_writing(TTree *tree) override final;
+    void
+    set_up_raw_reference_time_branches_for_writing(TTree *tree) override final;
+    void set_up_raw_timestamp_branches_for_writing(TTree *tree) override final;
 };

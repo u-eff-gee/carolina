@@ -62,28 +62,59 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
     }
 }
 
-void Analysis::set_up_raw_branches_for_reading(TTree *tree) {
-    tree->SetBranchStatus("*", 0);
-    for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->set_up_raw_branches_for_reading(tree);
+void Analysis::set_up_raw_counter_detector_branches_for_reading(
+    TTree *tree, const vector<bool> counter_values) {
+    for (auto module : scaler_modules) {
+        module->set_up_raw_branches_for_reading(tree, counter_values);
     }
 }
 
-void Analysis::set_up_raw_branches_for_writing(TTree *tree) {
-    for (size_t i = 0; i < modules.size(); ++i) {
-        modules[i]->set_up_raw_branches_for_writing(tree);
+void Analysis::set_up_raw_counter_detector_branches_for_writing(
+    TTree *tree, const vector<bool> counter_values) {
+    for (auto module : scaler_modules) {
+        module->set_up_raw_branches_for_writing(tree, counter_values);
     }
 }
 
-void Analysis::set_up_calibrated_branches_for_reading(TTree *tree) {
-    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
-        detectors[n_detector]->set_up_calibrated_branches_for_reading(tree);
+void Analysis::set_up_raw_energy_sensitive_detector_branches_for_reading(
+    TTree *tree, const vector<bool> amp_t_tref_ts) {
+    for (auto module : digitizer_modules) {
+        module->set_up_raw_branches_for_reading(tree, amp_t_tref_ts);
     }
 }
 
-void Analysis::set_up_calibrated_branches_for_writing(TTree *tree) {
-    for (size_t n_detector = 0; n_detector < detectors.size(); ++n_detector) {
-        detectors[n_detector]->set_up_calibrated_branches_for_writing(tree);
+void Analysis::set_up_raw_energy_sensitive_detector_branches_for_writing(
+    TTree *tree, const vector<bool> amp_t_tref_ts) {
+    for (auto module : digitizer_modules) {
+        module->set_up_raw_branches_for_writing(tree, amp_t_tref_ts);
+    }
+}
+
+void Analysis::set_up_calibrated_counter_detector_branches_for_reading(
+    TTree *tree) {
+    for (auto detector : counter_detectors) {
+        detector->set_up_calibrated_branches_for_reading(tree);
+    }
+}
+
+void Analysis::set_up_calibrated_counter_detector_branches_for_writing(
+    TTree *tree) {
+    for (auto detector : counter_detectors) {
+        detector->set_up_calibrated_branches_for_writing(tree);
+    }
+}
+
+void Analysis::set_up_calibrated_energy_sensitive_detector_branches_for_reading(
+    TTree *tree) {
+    for (auto detector : energy_sensitive_detectors) {
+        detector->set_up_calibrated_branches_for_reading(tree);
+    }
+}
+
+void Analysis::set_up_calibrated_energy_sensitive_detector_branches_for_writing(
+    TTree *tree) {
+    for (auto detector : energy_sensitive_detectors) {
+        detector->set_up_calibrated_branches_for_writing(tree);
     }
 }
 
@@ -241,9 +272,17 @@ void Analysis::reset_calibrated_leaves() {
     }
 }
 
-void Analysis::reset_raw_leaves() {
-    for (auto module : modules) {
-        module->reset_raw_leaves();
+void Analysis::reset_raw_counter_detector_leaves(
+    const vector<bool> counter_values) {
+    for (auto module : scaler_modules) {
+        module->reset_raw_leaves(counter_values);
+    }
+}
+
+void Analysis::reset_raw_energy_sensitive_detector_leaves(
+    const vector<bool> amp_t_tref_ts) {
+    for (auto module : digitizer_modules) {
+        module->reset_raw_leaves(amp_t_tref_ts);
     }
 }
 

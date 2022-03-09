@@ -17,6 +17,10 @@
 
 #pragma once
 
+#include <vector>
+
+using std::vector;
+
 #include "module.hpp"
 
 struct ScalerModule : Module {
@@ -25,6 +29,18 @@ struct ScalerModule : Module {
         : trigger_frequency(trigger_frequency){};
 
     const double trigger_frequency;
+
+    void reset_raw_leaves(const vector<bool> counter_values = {
+                              false}) override final;
+    void set_up_raw_branches_for_reading(TTree *tree,
+                                         const vector<bool> counter_values = {
+                                             false}) override final;
+    void set_up_raw_branches_for_writing(TTree *tree,
+                                         const vector<bool> counter_values = {
+                                             false}) override final;
+    virtual void reset_raw_counter_leaves() = 0;
+    virtual void set_up_raw_counter_branches_for_reading(TTree *tree) = 0;
+    virtual void set_up_raw_counter_branches_for_writing(TTree *tree) = 0;
 
     virtual long long get_counts(const size_t leaf) = 0;
     virtual void add_counts(const size_t leaf, const long long counts) = 0;

@@ -70,9 +70,27 @@ struct Analysis {
                                              const size_t n_detector,
                                              const size_t n_channel);
     void reset_calibrated_leaves();
-    void reset_raw_leaves();
-    void set_up_calibrated_branches_for_reading(TTree *tree);
-    void set_up_calibrated_branches_for_writing(TTree *tree);
-    void set_up_raw_branches_for_reading(TTree *tree);
-    void set_up_raw_branches_for_writing(TTree *tree);
+    void reset_raw_energy_sensitive_detector_leaves(
+        const vector<bool> amp_t_tref_ts = {false, false, false, false});
+    void set_up_calibrated_energy_sensitive_detector_branches_for_reading(
+        TTree *tree);
+    void set_up_calibrated_energy_sensitive_detector_branches_for_writing(
+        TTree *tree);
+    void set_up_raw_energy_sensitive_detector_branches_for_reading(
+        TTree *tree,
+        const vector<bool> amp_t_tref_ts = {false, false, false, false});
+    void set_up_raw_energy_sensitive_detector_branches_for_writing(
+        TTree *tree,
+        const vector<bool> amp_t_tref_ts = {false, false, false, false});
+
+    void reset_raw_counter_detector_leaves(const vector<bool> amp_t_tref_ts = {
+                                               false, false, false, false});
+    void set_up_calibrated_counter_detector_branches_for_reading(TTree *tree);
+    void set_up_calibrated_counter_detector_branches_for_writing(TTree *tree);
+    void set_up_raw_counter_detector_branches_for_reading(
+        TTree *tree,
+        const vector<bool> amp_t_tref_ts = {false, false, false, false});
+    void set_up_raw_counter_detector_branches_for_writing(
+        TTree *tree,
+        const vector<bool> amp_t_tref_ts = {false, false, false, false});
 };

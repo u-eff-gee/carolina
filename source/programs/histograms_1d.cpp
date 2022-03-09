@@ -62,10 +62,13 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(first, last);
 
+    tree->SetBranchStatus("*", 0);
     if (vm.count("calibrate")) {
-        analysis.set_up_raw_branches_for_reading(tree);
+        analysis.set_up_raw_counter_detector_branches_for_reading(tree, {true});
+        analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(tree, {true, true, true, true});
     } else {
-        analysis.set_up_calibrated_branches_for_reading(tree);
+        analysis.set_up_calibrated_counter_detector_branches_for_reading(tree);
+        analysis.set_up_calibrated_energy_sensitive_detector_branches_for_reading(tree);
     }
 
     vector<TH1D *> addback_histograms;

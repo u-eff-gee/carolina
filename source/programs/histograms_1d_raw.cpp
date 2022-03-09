@@ -50,7 +50,9 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(first, last);
 
-    analysis.set_up_raw_branches_for_reading(tree);
+    tree->SetBranchStatus("*", 0);
+    analysis.set_up_raw_counter_detector_branches_for_reading(tree, {true});
+    analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(tree, {true, false, false, false});
 
     vector<vector<TH1D *>> energy_sensitive_detector_histograms;
     vector<vector<TH1D *>> counter_detector_histograms;

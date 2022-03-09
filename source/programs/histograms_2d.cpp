@@ -63,7 +63,9 @@ int main(int argc, char **argv) {
 
     ProgressPrinter progress_printer(first, last);
 
-    analysis.set_up_calibrated_branches_for_reading(tree);
+    tree->SetBranchStatus("*", 0);
+    analysis.set_up_calibrated_counter_detector_branches_for_reading(tree);
+    analysis.set_up_calibrated_energy_sensitive_detector_branches_for_reading(tree);
 
     vector<vector<pair<size_t, size_t>>> coincidence_pairs;
     vector<TH2I *> coincidence_histograms;

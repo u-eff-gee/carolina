@@ -39,6 +39,32 @@ struct DigitizerModule : Module {
     Branch<double, 1> reference_time;
     Branch<double, 1> timestamp;
 
+    void reset_raw_leaves(const vector<bool> amp_t_tref_ts = {
+                              false, false, false, false}) override final;
+    void set_up_raw_branches_for_reading(TTree *tree,
+                                         const vector<bool> amp_t_tref_ts = {
+                                             false, false, false,
+                                             false}) override final;
+    void set_up_raw_branches_for_writing(TTree *tree,
+                                         const vector<bool> amp_t_tref_ts = {
+                                             false, false, false,
+                                             false}) override final;
+
+    virtual void reset_raw_amplitude_leaves() = 0;
+    virtual void reset_raw_time_leaves() = 0;
+    virtual void reset_raw_reference_time_leaves() = 0;
+    virtual void reset_raw_timestamp_leaves() = 0;
+    virtual void set_up_raw_amplitude_branches_for_reading(TTree *tree) = 0;
+    virtual void set_up_raw_time_branches_for_reading(TTree *tree) = 0;
+    virtual void
+    set_up_raw_reference_time_branches_for_reading(TTree *tree) = 0;
+    virtual void set_up_raw_timestamp_branches_for_reading(TTree *tree) = 0;
+    virtual void set_up_raw_amplitude_branches_for_writing(TTree *tree) = 0;
+    virtual void set_up_raw_time_branches_for_writing(TTree *tree) = 0;
+    virtual void
+    set_up_raw_reference_time_branches_for_writing(TTree *tree) = 0;
+    virtual void set_up_raw_timestamp_branches_for_writing(TTree *tree) = 0;
+
     virtual double get_amplitude(const size_t leaf) const = 0;
     virtual double get_time(const size_t leaf) const = 0;
     double get_reference_time() const { return reference_time.leaves[0]; };

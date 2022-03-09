@@ -256,8 +256,10 @@ int main(int argc, char **argv) {
         new TFile(vm["output"].as<string>().c_str(), "RECREATE");
     TTree *tree = new TTree("test", "test");
 
-    analysis.set_up_raw_branches_for_writing(tree);
-    analysis.reset_raw_leaves();
+    analysis.set_up_raw_counter_detector_branches_for_writing(tree, {true});
+    analysis.set_up_raw_energy_sensitive_detector_branches_for_writing(tree, {true});
+    analysis.reset_raw_counter_detector_leaves();
+    analysis.reset_raw_energy_sensitive_detector_leaves();
 
     vector<vector<TGraph>> inverse_time_calibrations =
         invert_time_calibrations();
@@ -301,7 +303,8 @@ int main(int argc, char **argv) {
             set_reference_time(n_detector_1, 0, reference_time,
                                inverse_time_calibrations);
             tree->Fill();
-            analysis.reset_raw_leaves();
+            analysis.reset_raw_counter_detector_leaves();
+            analysis.reset_raw_energy_sensitive_detector_leaves();
             increment_timestamp();
             // Generate events in which the entire gamma-ray energy is
             // deposited in a single crystal.
@@ -315,7 +318,8 @@ int main(int argc, char **argv) {
                 set_reference_time(n_detector_1, n_channel, reference_time,
                                    inverse_time_calibrations);
                 tree->Fill();
-                analysis.reset_raw_leaves();
+                analysis.reset_raw_counter_detector_leaves();
+                analysis.reset_raw_energy_sensitive_detector_leaves();
                 increment_timestamp();
 
                 create_single_event(n_detector_1, n_channel,
@@ -329,7 +333,8 @@ int main(int argc, char **argv) {
                 set_reference_time(n_detector_1, n_channel, reference_time,
                                    inverse_time_calibrations);
                 tree->Fill();
-                analysis.reset_raw_leaves();
+                analysis.reset_raw_counter_detector_leaves();
+                analysis.reset_raw_energy_sensitive_detector_leaves();
                 increment_timestamp();
             }
 
@@ -363,7 +368,8 @@ int main(int argc, char **argv) {
                     set_reference_time(n_detector_2, 0, reference_time,
                                        inverse_time_calibrations);
                     tree->Fill();
-                    analysis.reset_raw_leaves();
+                    analysis.reset_raw_counter_detector_leaves();
+                    analysis.reset_raw_energy_sensitive_detector_leaves();
                     increment_timestamp();
                 }
             }
@@ -377,7 +383,8 @@ int main(int argc, char **argv) {
                 create_counter_event(n_detector, n_channel, counter_increment);
             }
             tree->Fill();
-            analysis.reset_raw_leaves();
+            analysis.reset_raw_counter_detector_leaves();
+            analysis.reset_raw_energy_sensitive_detector_leaves();
         }
         progress_printer(n);
     }

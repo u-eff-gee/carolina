@@ -16,3 +16,50 @@
 */
 
 #include "digitizer_module.hpp"
+
+void DigitizerModule::reset_raw_leaves(const vector<bool> amp_t_tref_ts) {
+    if (amp_t_tref_ts[0]) {
+        reset_raw_amplitude_leaves();
+    }
+    if (amp_t_tref_ts[1]) {
+        reset_raw_time_leaves();
+    }
+    if (amp_t_tref_ts[2]) {
+        reset_raw_reference_time_leaves();
+    }
+    if (amp_t_tref_ts[3]) {
+        reset_raw_timestamp_leaves();
+    }
+}
+
+void DigitizerModule::set_up_raw_branches_for_reading(
+    TTree *tree, const vector<bool> amp_t_tref_ts) {
+    if (amp_t_tref_ts[0]) {
+        set_up_raw_amplitude_branches_for_reading(tree);
+    }
+    if (amp_t_tref_ts[1]) {
+        set_up_raw_time_branches_for_reading(tree);
+    }
+    if (amp_t_tref_ts[2]) {
+        set_up_raw_reference_time_branches_for_reading(tree);
+    }
+    if (amp_t_tref_ts[3]) {
+        set_up_raw_timestamp_branches_for_reading(tree);
+    }
+}
+
+void DigitizerModule::set_up_raw_branches_for_writing(
+    TTree *tree, const vector<bool> amp_t_tref_ts) {
+    if (amp_t_tref_ts[0]) {
+        set_up_raw_amplitude_branches_for_writing(tree);
+    }
+    if (amp_t_tref_ts[1]) {
+        set_up_raw_time_branches_for_writing(tree);
+    }
+    if (amp_t_tref_ts[2]) {
+        set_up_raw_reference_time_branches_for_writing(tree);
+    }
+    if (amp_t_tref_ts[3]) {
+        set_up_raw_timestamp_branches_for_writing(tree);
+    }
+}
