@@ -96,6 +96,8 @@ int main(int argc, char **argv) {
         }
     }
 
+    double amplitude;
+
     for (long long i = first; i <= last; ++i) {
         tree->GetEntry(i);
 
@@ -106,8 +108,11 @@ int main(int argc, char **argv) {
                  n_channel < analysis.energy_sensitive_detectors[n_detector]
                                  ->channels.size();
                  ++n_channel) {
-                energy_sensitive_detector_histograms[n_detector][n_channel]
-                    ->Fill(analysis.get_amplitude(n_detector, n_channel));
+                amplitude = analysis.get_amplitude(n_detector, n_channel);
+                if(!isnan(amplitude)){
+                    energy_sensitive_detector_histograms[n_detector][n_channel]
+                        ->Fill(amplitude);
+                }
             }
         }
         for (size_t n_detector = 0;
