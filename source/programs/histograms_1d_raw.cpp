@@ -81,8 +81,7 @@ int main(int argc, char **argv) {
     for (size_t n_detector = 0; n_detector < analysis.counter_detectors.size();
          ++n_detector) {
         counter_detector_histograms.push_back(vector<TH1D *>());
-        for (auto channel :
-             analysis.energy_sensitive_detectors[n_detector]->channels) {
+        for (auto channel : analysis.counter_detectors[n_detector]->channels) {
             histogram_name = analysis.counter_detectors[n_detector]->name +
                              "_" + channel.name;
             counter_detector_histograms[n_detector].push_back(new TH1D(
@@ -109,7 +108,7 @@ int main(int argc, char **argv) {
                                  ->channels.size();
                  ++n_channel) {
                 amplitude = analysis.get_amplitude(n_detector, n_channel);
-                if(!isnan(amplitude)){
+                if (!isnan(amplitude)) {
                     energy_sensitive_detector_histograms[n_detector][n_channel]
                         ->Fill(amplitude);
                 }
