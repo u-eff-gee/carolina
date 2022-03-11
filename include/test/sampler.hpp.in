@@ -15,4 +15,49 @@
     carolina. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <memory>
+
+using std::dynamic_pointer_cast;
+
 #include "@ANALYSIS@"
+
+#include "inverse_calibration.hpp"
+
+const double gamma_energy(1000.), background_gamma_energy(300.),
+    counter_increment(1000.), gamma_time(20.), reference_time(10.);
+
+TGraph invert_energy_calibration(const size_t n_detector,
+                                 const size_t n_channel) {
+    function<double(const double, const long long)> calibration =
+        analysis.energy_sensitive_detectors[n_detector]
+            ->channels[n_channel]
+            .energy_calibration;
+    return invert_calibration<1000>(
+        [&calibration](const double amplitude) {
+            return calibration(amplitude, 0);
+        },
+        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+            analysis.energy_sensitive_detectors[n_detector]->group)
+            ->raw_histogram_properties.lower_edge_of_first_bin,
+        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
+            analysis.energy_sensitive_detectors[n_detector]->group)
+            ->raw_histogram_properties.upper_edge_of_last_bin);
+}
+
+vector<vector<TGraph>> invert_energy_calibrations() {
+    vector<vector<TGraph>> inverse_calibrations;
+    for (size_t n_detector = 0;
+         n_detector < analysis.energy_sensitive_detectors.size();
+         ++n_detector) {
+        inverse_calibrations.push_back(vector<TGraph>());
+        for (size_t n_channel = 0;
+             n_channel <
+             analysis.energy_sensitive_detectors[n_detector]->channels.size();
+             ++n_channel) {
+            inverse_calibrations[n_detector].push_back(
+                invert_energy_calibration(n_detector, n_channel));
+        }
+    }
+
+    return inverse_calibrations;
+}

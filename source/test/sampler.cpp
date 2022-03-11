@@ -53,24 +53,6 @@ namespace po = boost::program_options;
 #include "progress_printer.hpp"
 #include "sampler.hpp"
 
-TGraph invert_energy_calibration(const size_t n_detector,
-                                 const size_t n_channel) {
-    function<double(const double, const long long)> calibration =
-        analysis.energy_sensitive_detectors[n_detector]
-            ->channels[n_channel]
-            .energy_calibration;
-    return invert_calibration<1000>(
-        [&calibration](const double amplitude) {
-            return calibration(amplitude, 0);
-        },
-        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.energy_sensitive_detectors[n_detector]->group)
-            ->raw_histogram_properties.lower_edge_of_first_bin,
-        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.energy_sensitive_detectors[n_detector]->group)
-            ->raw_histogram_properties.upper_edge_of_last_bin);
-}
-
 TGraph invert_time_calibration(const size_t n_detector,
                                const size_t n_channel) {
     function<double(const double, const double)> calibration =
@@ -91,24 +73,6 @@ void increment_timestamp() {
     for (auto module : analysis.digitizer_modules) {
         module->set_timestamp(module->get_timestamp() + 1.);
     }
-}
-
-vector<vector<TGraph>> invert_energy_calibrations() {
-    vector<vector<TGraph>> inverse_calibrations;
-    for (size_t n_detector = 0;
-         n_detector < analysis.energy_sensitive_detectors.size();
-         ++n_detector) {
-        inverse_calibrations.push_back(vector<TGraph>());
-        for (size_t n_channel = 0;
-             n_channel <
-             analysis.energy_sensitive_detectors[n_detector]->channels.size();
-             ++n_channel) {
-            inverse_calibrations[n_detector].push_back(
-                invert_energy_calibration(n_detector, n_channel));
-        }
-    }
-
-    return inverse_calibrations;
 }
 
 vector<vector<TGraph>> invert_time_calibrations() {
@@ -238,8 +202,13 @@ int main(int argc, char **argv) {
         "Using the current analysis configuration, fill a TTree with test data "
         "and write it to a ROOT file.");
     desc.add_options()("help", "Produce help message.")(
-        "n", po::value<unsigned int>()->default_value(1))(
-        "output", po::value<string>()->default_value("test.root"));
+        "n", po::value<unsigned int>()->default_value(1),
+        "Number of event loops. Note that single event loop creates multiple "
+        "events (single gamma, coincident gamma, background) in the detectors "
+        "with different characteristics.")(
+        "output", po::value<string>()->default_value("test.root"),
+        "Output file name.")(
+        "random", "Generate pseudo-random instead of deterministic results.");
     ;
 
     po::variables_map vm;
@@ -257,17 +226,16 @@ int main(int argc, char **argv) {
     TTree *tree = new TTree("test", "test");
 
     analysis.set_up_raw_counter_detector_branches_for_writing(tree, {true});
-    analysis.set_up_raw_energy_sensitive_detector_branches_for_writing(tree, {true});
-    analysis.reset_raw_counter_detector_leaves();
-    analysis.reset_raw_energy_sensitive_detector_leaves();
+    analysis.set_up_raw_energy_sensitive_detector_branches_for_writing(
+        tree, {true, true, true, true});
+    analysis.reset_raw_counter_detector_leaves({true});
+    analysis.reset_raw_energy_sensitive_detector_leaves(
+        {true, true, true, true});
 
     vector<vector<TGraph>> inverse_time_calibrations =
         invert_time_calibrations();
     vector<vector<TGraph>> inverse_energy_calibrations =
         invert_energy_calibrations();
-
-    const double background_gamma_energy(500.), counter_increment(1000.),
-        gamma_energy(1000.), gamma_time(20.), reference_time(10.);
 
     const unsigned int n_max = vm["n"].as<unsigned int>();
     ProgressPrinter progress_printer(0, n_max - 1, 0.01, "set of events",
@@ -292,8 +260,14 @@ int main(int argc, char **argv) {
                  n_channel < analysis.energy_sensitive_detectors[n_detector_1]
                                  ->channels.size();
                  ++n_channel) {
-                uniform_random_numbers[n_detector_1][n_channel] =
-                    uniform_distribution(random_engine);
+                if (vm.count("random")) {
+                    uniform_random_numbers[n_detector_1][n_channel] =
+                        uniform_distribution(random_engine);
+                } else {
+                    uniform_random_numbers[n_detector_1][n_channel] =
+                        1. / analysis.energy_sensitive_detectors[n_detector_1]
+                                 ->channels.size();
+                }
             }
             // Generate single events that require addback.
             create_single_event_with_addback(
@@ -303,11 +277,12 @@ int main(int argc, char **argv) {
             set_reference_time(n_detector_1, 0, reference_time,
                                inverse_time_calibrations);
             tree->Fill();
-            analysis.reset_raw_counter_detector_leaves();
-            analysis.reset_raw_energy_sensitive_detector_leaves();
+            analysis.reset_raw_counter_detector_leaves({true});
+            analysis.reset_raw_energy_sensitive_detector_leaves(
+                {true, true, true, true});
             increment_timestamp();
-            // Generate events in which the entire gamma-ray energy is
-            // deposited in a single crystal.
+            // Generate events in which the
+            // entire gamma-ray energy is deposited in a single crystal.
             for (size_t n_channel = 0;
                  n_channel < analysis.energy_sensitive_detectors[n_detector_1]
                                  ->channels.size();
@@ -318,8 +293,9 @@ int main(int argc, char **argv) {
                 set_reference_time(n_detector_1, n_channel, reference_time,
                                    inverse_time_calibrations);
                 tree->Fill();
-                analysis.reset_raw_counter_detector_leaves();
-                analysis.reset_raw_energy_sensitive_detector_leaves();
+                analysis.reset_raw_counter_detector_leaves({true});
+                analysis.reset_raw_energy_sensitive_detector_leaves(
+                    {true, true, true, true});
                 increment_timestamp();
 
                 create_single_event(n_detector_1, n_channel,
@@ -333,45 +309,66 @@ int main(int argc, char **argv) {
                 set_reference_time(n_detector_1, n_channel, reference_time,
                                    inverse_time_calibrations);
                 tree->Fill();
-                analysis.reset_raw_counter_detector_leaves();
-                analysis.reset_raw_energy_sensitive_detector_leaves();
+                analysis.reset_raw_counter_detector_leaves({true});
+                analysis.reset_raw_energy_sensitive_detector_leaves(
+                    {true, true, true, true});
                 increment_timestamp();
             }
 
             for (size_t n_detector_2 = n_detector_1 + 1;
                  n_detector_2 < analysis.energy_sensitive_detectors.size();
                  ++n_detector_2) {
-                // Sample random numbers.
+                // Sample random numbers for both detectors.
+                for (size_t n_channel = 0;
+                     n_channel <
+                     analysis.energy_sensitive_detectors[n_detector_1]
+                         ->channels.size();
+                     ++n_channel) {
+                    if (vm.count("random")) {
+                        uniform_random_numbers[n_detector_1][n_channel] =
+                            uniform_distribution(random_engine);
+                    } else {
+                        uniform_random_numbers[n_detector_1][n_channel] =
+                            1. /
+                            analysis.energy_sensitive_detectors[n_detector_1]
+                                ->channels.size();
+                    }
+                }
                 for (size_t n_channel = 0;
                      n_channel <
                      analysis.energy_sensitive_detectors[n_detector_2]
                          ->channels.size();
                      ++n_channel) {
-                    uniform_random_numbers[n_detector_2][n_channel] =
-                        uniform_distribution(random_engine);
+                    if (vm.count("random")) {
+                        uniform_random_numbers[n_detector_2][n_channel] =
+                            uniform_distribution(random_engine);
+                    } else {
+                        uniform_random_numbers[n_detector_2][n_channel] =
+                            1. /
+                            analysis.energy_sensitive_detectors[n_detector_2]
+                                ->channels.size();
+                    }
                 }
-                if (dynamic_pointer_cast<EnergySensitiveDetector>(
-                        analysis.detectors[n_detector_2])) {
-                    // Create a coincident event in two detectors
-                    // that
-                    // requires addback.
-                    create_single_event_with_addback(
-                        n_detector_1, gamma_energy, inverse_energy_calibrations,
-                        gamma_time, inverse_time_calibrations,
-                        uniform_random_numbers[n_detector_1]);
-                    create_single_event_with_addback(
-                        n_detector_2, gamma_energy, inverse_energy_calibrations,
-                        gamma_time, inverse_time_calibrations,
-                        uniform_random_numbers[n_detector_2]);
-                    set_reference_time(n_detector_1, 0, reference_time,
-                                       inverse_time_calibrations);
-                    set_reference_time(n_detector_2, 0, reference_time,
-                                       inverse_time_calibrations);
-                    tree->Fill();
-                    analysis.reset_raw_counter_detector_leaves();
-                    analysis.reset_raw_energy_sensitive_detector_leaves();
-                    increment_timestamp();
-                }
+                // Create a coincident event in two detectors
+                // that
+                // requires addback.
+                create_single_event_with_addback(
+                    n_detector_1, gamma_energy, inverse_energy_calibrations,
+                    gamma_time, inverse_time_calibrations,
+                    uniform_random_numbers[n_detector_1]);
+                create_single_event_with_addback(
+                    n_detector_2, gamma_energy, inverse_energy_calibrations,
+                    gamma_time, inverse_time_calibrations,
+                    uniform_random_numbers[n_detector_2]);
+                set_reference_time(n_detector_1, 0, reference_time,
+                                   inverse_time_calibrations);
+                set_reference_time(n_detector_2, 0, reference_time,
+                                   inverse_time_calibrations);
+                tree->Fill();
+                analysis.reset_raw_counter_detector_leaves({true});
+                analysis.reset_raw_energy_sensitive_detector_leaves(
+                    {true, true, true, true});
+                increment_timestamp();
             }
         }
         for (size_t n_detector = 0;
@@ -383,8 +380,9 @@ int main(int argc, char **argv) {
                 create_counter_event(n_detector, n_channel, counter_increment);
             }
             tree->Fill();
-            analysis.reset_raw_counter_detector_leaves();
-            analysis.reset_raw_energy_sensitive_detector_leaves();
+            analysis.reset_raw_counter_detector_leaves({true});
+            analysis.reset_raw_energy_sensitive_detector_leaves(
+                {true, true, true, true});
         }
         progress_printer(n);
     }

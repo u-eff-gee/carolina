@@ -62,6 +62,14 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
     }
 }
 
+size_t Analysis::get_n_energy_sensitive_detector_channels() const {
+    size_t n_energy_sensitive_detector_channels = 0;
+    for (auto detector : energy_sensitive_detectors) {
+        n_energy_sensitive_detector_channels += detector->channels.size();
+    }
+    return n_energy_sensitive_detector_channels;
+}
+
 void Analysis::set_up_raw_counter_detector_branches_for_reading(
     TTree *tree, const vector<bool> counter_values) {
     for (auto module : scaler_modules) {
