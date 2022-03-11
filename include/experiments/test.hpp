@@ -46,25 +46,40 @@ Analysis analysis(
          vector<EnergySensitiveDetectorChannel>{
              {"E1", 0, 0,
               calibration_function<const double, const long long>(
-                  vector<double>{50., 0.1})}},
+                  vector<double>{50., 0.1}),
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              gate(10., 30.)}},
          single),
      make_shared<EnergySensitiveDetector>(
          "seg",
          vector<EnergySensitiveDetectorChannel>{
              {"E1", 1, 0,
-              calibration_function<const double, const long long>("60.,0.6")},
+              calibration_function<const double, const long long>("60.,0.6"),
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              gate(10., 30.)},
              {"E2", 1, 1,
-              calibration_function<const double, const long long>("70. 0.7")},
+              calibration_function<const double, const long long>("70. 0.7"),
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              gate(10., 30.)},
              {"E3", 1, 2,
               [](const double amplitude,
                  [[maybe_unused]] const long long n_entry) {
                   return 80. + 0.8 * amplitude;
-              }},
+              },
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              gate(10., 30.)},
              {"E4", 1, 3,
               [](const double amplitude,
                  [[maybe_unused]] const long long n_entry) {
                   return 90. + 0.9 * amplitude;
-              }}},
+              },
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              gate(10., 30.)}},
          segmented),
      make_shared<CounterDetector>("cou",
                                   vector<CounterDetectorChannel>{{"cts", 2, 0}},
@@ -74,10 +89,19 @@ Analysis analysis(
          vector<EnergySensitiveDetectorChannel>{
              {"E1", 0, 2,
               calibration_function<const double, const long long>(
-                  vector<double>{33., 0.33})},
+                  vector<double>{33., 0.33}),
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              gate(10., 30.)},
              {"E2", 0, 3,
               calibration_function<const double, const long long>(
-                  vector<double>{44., 0.44})}},
+                  vector<double>{44., 0.44}),
+              calibration_function<const double, const double>(vector<double>{
+                  0., 1.}),
+              [](const double time_vs_reference_time) {
+                  return (time_vs_reference_time > 10.) &&
+                         (time_vs_reference_time < 30.);
+              }}},
          segmented)},
     {
         {"sin_vs_seg",

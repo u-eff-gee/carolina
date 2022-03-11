@@ -17,14 +17,24 @@
 
 #pragma once
 
-#include "analysis.hpp"
-#include "calibration_function.hpp"
-#include "coincidence_matrix.hpp"
-#include "counter_detector.hpp"
-#include "counter_detector_channel.hpp"
-#include "energy_sensitive_detector.hpp"
-#include "energy_sensitive_detector_channel.hpp"
-#include "gate.hpp"
-#include "mdpp16.hpp"
-#include "sis3316.hpp"
-#include "v830.hpp"
+#include <functional>
+
+using std::function;
+
+struct Gate {
+    Gate(const double lower_limit, const double upper_limit):lower_limit(lower_limit), upper_limit(upper_limit) {}
+
+    bool operator()(const double x) const {return (x > lower_limit) && (x < upper_limit);}
+
+    const double lower_limit;
+    const double upper_limit;
+};
+
+function<bool(const double)> gate(const function<bool(const double)> function) {
+    return function;
+}
+
+function<bool(const double)> gate(const double lower_limit,
+                                  const double upper_limit) {
+    return Gate(lower_limit, upper_limit);
+}
