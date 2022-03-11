@@ -77,9 +77,8 @@ TChain *CommandLineParser::set_up_tree(long long &first, long long &last,
     }
 
     const long long n_entries = tree->GetEntries();
-    if(n_entries == 0){
-        cout << "TTree::GetEntries() returned 0."
-        << endl;
+    if (n_entries == 0) {
+        cout << "TTree::GetEntries() returned 0." << endl;
         abort();
     }
     first = vm["first"].as<long long>();

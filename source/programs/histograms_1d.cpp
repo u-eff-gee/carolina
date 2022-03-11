@@ -294,14 +294,13 @@ int main(int argc, char **argv) {
                  ++n_channel_1) {
                 if (!isnan(analysis.energy_sensitive_detectors[n_detector_1]
                                ->channels[n_channel_1]
-                               .energy_calibrated &&
-                           analysis.energy_sensitive_detectors[n_detector_1]
-                               ->channels[n_channel_1]
-                               .time_vs_reference_time_gate(
-                                   analysis
-                                       .energy_sensitive_detectors[n_detector_1]
-                                       ->channels[n_channel_1]
-                                       .time_vs_reference_time_calibrated))) {
+                               .energy_calibrated) &&
+                    analysis.energy_sensitive_detectors[n_detector_1]
+                        ->channels[n_channel_1]
+                        .time_vs_reference_time_gate(
+                            analysis.energy_sensitive_detectors[n_detector_1]
+                                ->channels[n_channel_1]
+                                .time_vs_reference_time_calibrated)) {
                     energy_sensitive_detector_histograms
                         [n_detector_1][n_channel_1]
                             ->Fill(analysis
