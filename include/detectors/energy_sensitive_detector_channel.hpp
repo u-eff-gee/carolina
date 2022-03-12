@@ -60,8 +60,5 @@ struct EnergySensitiveDetectorChannel final : public Channel {
     double energy_calibrated, time_calibrated, timestamp_calibrated,
         time_vs_reference_time_calibrated;
 
-    bool apply_RF_gate() {
-        return time_vs_reference_time_gate(time_calibrated);
-    };
     void reset_calibrated_leaves() override final;
 };

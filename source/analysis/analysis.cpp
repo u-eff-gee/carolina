@@ -247,7 +247,10 @@ void Analysis::calibrate_energy_sensitive_detector(const int n_entry,
                                       .energy_calibrated);
         if (energy_sensitive_detectors[n_detector]
                 ->channels[n_channel]
-                .apply_RF_gate()) {
+                .time_vs_reference_time_gate(
+                    energy_sensitive_detectors[n_detector]
+                        ->channels[n_channel]
+                        .time_vs_reference_time_calibrated)) {
 
             energy_sensitive_detectors[n_detector]
                 ->channels[n_channel]

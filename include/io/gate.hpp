@@ -22,9 +22,12 @@
 using std::function;
 
 struct Gate {
-    Gate(const double lower_limit, const double upper_limit):lower_limit(lower_limit), upper_limit(upper_limit) {}
+    Gate(const double lower_limit, const double upper_limit)
+        : lower_limit(lower_limit), upper_limit(upper_limit) {}
 
-    bool operator()(const double x) const {return (x > lower_limit) && (x < upper_limit);}
+    bool operator()(const double x) const {
+        return (x > lower_limit) && (x < upper_limit);
+    }
 
     const double lower_limit;
     const double upper_limit;
