@@ -92,15 +92,15 @@ Analysis analysis(
                   vector<double>{33., 0.33}),
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(10., 30.)},
+              gate(0., 20.)},
              {"E2", 0, 3,
               calibration_function<const double, const long long>(
                   vector<double>{44., 0.44}),
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
               [](const double time_vs_reference_time) {
-                  return (time_vs_reference_time > 10.) &&
-                         (time_vs_reference_time < 30.);
+                  return (time_vs_reference_time > 0.) &&
+                         (time_vs_reference_time < 20.);
               }}},
          segmented)},
     {

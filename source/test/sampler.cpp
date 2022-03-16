@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
                                  ->channels.size();
                 }
             }
-            // Generate single events that require addback.
+            // Single events that require addback.
             create_single_event_with_addback(
                 n_detector_1, gamma_energy, inverse_energy_calibrations,
                 gamma_time, inverse_time_calibrations,
@@ -270,12 +270,13 @@ int main(int argc, char **argv) {
             analysis.reset_raw_energy_sensitive_detector_leaves(
                 {true, true, true, true});
             increment_timestamp();
-            // Generate events in which the
+            // Events in which the
             // entire gamma-ray energy is deposited in a single crystal.
             for (size_t n_channel = 0;
                  n_channel < analysis.energy_sensitive_detectors[n_detector_1]
                                  ->channels.size();
                  ++n_channel) {
+                // Event of interest
                 create_single_event(n_detector_1, n_channel, gamma_energy,
                                     inverse_energy_calibrations, gamma_time,
                                     inverse_time_calibrations);
@@ -287,6 +288,7 @@ int main(int argc, char **argv) {
                     {true, true, true, true});
                 increment_timestamp();
 
+                // Background event
                 create_single_event(n_detector_1, n_channel,
                                     background_gamma_energy,
                                     inverse_energy_calibrations,
@@ -302,6 +304,32 @@ int main(int argc, char **argv) {
                 analysis.reset_raw_energy_sensitive_detector_leaves(
                     {true, true, true, true});
                 increment_timestamp();
+
+                // Event in which two gamma rays from events of interest hit two
+                // different segments of the detector with a time difference
+                // that is a) small enough not to be discarded by the
+                // reference-time gate b) large enough to be discarded by the
+                // time gate for the addback
+                for (size_t n_channel_2 = n_channel + 1;
+                     n_channel_2 <
+                     analysis.energy_sensitive_detectors[n_detector_1]
+                         ->channels.size();
+                     ++n_channel_2) {
+                    create_single_event(n_detector_1, n_channel, gamma_energy,
+                                        inverse_energy_calibrations, gamma_time,
+                                        inverse_time_calibrations);
+                    create_single_event(n_detector_1, n_channel_2, gamma_energy,
+                                        inverse_energy_calibrations,
+                                        delayed_gamma_time,
+                                        inverse_time_calibrations);
+                    set_reference_time(n_detector_1, 0, reference_time,
+                                       inverse_time_calibrations);
+                    tree->Fill();
+                    analysis.reset_raw_counter_detector_leaves({true});
+                    analysis.reset_raw_energy_sensitive_detector_leaves(
+                        {true, true, true, true});
+                    increment_timestamp();
+                }
             }
 
             for (size_t n_detector_2 = n_detector_1 + 1;
@@ -338,9 +366,7 @@ int main(int argc, char **argv) {
                                 ->channels.size();
                     }
                 }
-                // Create a coincident event in two detectors
-                // that
-                // requires addback.
+                // Coincident event in two detectors that requires addback.
                 create_single_event_with_addback(
                     n_detector_1, gamma_energy, inverse_energy_calibrations,
                     gamma_time, inverse_time_calibrations,

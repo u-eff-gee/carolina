@@ -116,14 +116,18 @@ int main(int argc, char **argv) {
                 histogram->FindBin(raw_background_gamma_energy);
             expected_entries =
                 vm["n"].as<unsigned int>() *
-                (3 + (analysis.energy_sensitive_detectors.size() - 1));
+                (3 + (analysis.energy_sensitive_detectors.size() - 1) +
+                 (analysis.energy_sensitive_detectors[n_detector]
+                      ->channels.size() -
+                  1));
             if (analysis.energy_sensitive_detectors[n_detector]
                     ->channels.size() == 1) {
                 expected_fep_entries =
                     vm["n"].as<unsigned int>() *
                     (2 + (analysis.energy_sensitive_detectors.size() - 1));
             } else {
-                expected_fep_entries = vm["n"].as<unsigned int>();
+                expected_fep_entries = vm["n"].as<unsigned int>() * analysis.energy_sensitive_detectors[n_detector]
+                      ->channels.size();
             }
 
             cout << "Detector channel: " << histogram_name << endl;
@@ -151,7 +155,7 @@ int main(int argc, char **argv) {
                  << vm["n"].as<unsigned int>() << " events with an energy of "
                  << gamma_energy << "), " << vm["n"].as<unsigned int>()
                  << " background events with an energy of "
-                 << background_gamma_energy << ", and "
+                 << background_gamma_energy << ", " << (analysis.energy_sensitive_detectors[n_detector]->channels.size()-1) * vm["n"].as<unsigned int>() << " events where an energy of " << gamma_energy << " is deposited twice in two different channels of the same detector ('random coincidence'), and "
                  << (analysis.energy_sensitive_detectors.size() - 1) *
                         vm["n"].as<unsigned int>()
                  << " events for coincidences with the other "
@@ -168,12 +172,12 @@ int main(int argc, char **argv) {
                  << ") = " << histogram->GetBinContent(raw_gamma_energy_bin);
             if (analysis.energy_sensitive_detectors[n_detector]
                     ->channels.size() > 1) {
-                cout << " (Expect " << vm["n"].as<unsigned int>()
-                     << " Events with an energy deposition of " << gamma_energy
-                     << ")";
+                cout << " (Expect " << expected_fep_entries
+                     << " events with an energy deposition of " << gamma_energy
+                     << ": " << vm["n"].as<unsigned int>() << " events where the total energy of " << gamma_energy << " is deposited in this channel only, and " << vm["n"].as<unsigned int>() * (analysis.energy_sensitive_detectors[n_detector]->channels.size()-1) << " random-coincidence events where this channel is one out of two channels of this detector that are hit quasi simultaneously)";
             } else {
                 cout << " [Expect " << expected_fep_entries
-                     << " Events with an energy deposition of " << gamma_energy
+                     << " events with an energy deposition of " << gamma_energy
                      << ". Same as the output of TH1::GetEntries(), but "
                         "without the "
                      << vm["n"].as<unsigned int>()
@@ -199,7 +203,7 @@ int main(int argc, char **argv) {
                            raw_gamma_energy_bin) == expected_fep_entries);
             } else {
                 assert((unsigned int)histogram->GetBinContent(
-                           raw_gamma_energy_bin) == vm["n"].as<unsigned int>());
+                           raw_gamma_energy_bin) == expected_fep_entries);
             }
         }
     }
@@ -224,6 +228,11 @@ int main(int argc, char **argv) {
                          // N-1 + N-2 + ... + 1 = N*(N-1)/2
                  + 1     // Counter events
                 );
+            for(size_t n_energy_sensitive_detector = 0; n_energy_sensitive_detector < analysis.energy_sensitive_detectors.size(); ++n_energy_sensitive_detector){
+                if(analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size() > 1){
+                    expected_entries += vm["n"].as<unsigned int>()*analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size()*(analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size()-1)/2; // Number of random coincidences between the individual channels of a single detector. Completely analog to the coincidences between different detectors above.
+                }
+            }
             histogram_name = analysis.counter_detectors[n_detector]->name +
                              "_" +
                              analysis.counter_detectors[n_detector]
@@ -242,7 +251,13 @@ int main(int argc, char **argv) {
                  << n_energy_sensitive_detector_channels << " x "
                  << vm["n"].as<unsigned int>() << " background events, "
                  << analysis.energy_sensitive_detectors.size() << " x "
-                 << vm["n"].as<unsigned int>() << " addback events, and "
+                 << vm["n"].as<unsigned int>() << " addback events, ";
+            for(size_t n_energy_sensitive_detector = 0; n_energy_sensitive_detector < analysis.energy_sensitive_detectors.size(); ++n_energy_sensitive_detector){
+                if(analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size() > 1){
+                    cout << vm["n"].as<unsigned int>()*analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size()*(analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size()-1)/2 << " random coincidences between the " << analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->channels.size() << "  channels of detector '" << analysis.energy_sensitive_detectors[n_energy_sensitive_detector]->name << "', ";
+                }
+            }
+            cout << "and "
                  << (analysis.energy_sensitive_detectors.size() - 1) *
                         analysis.energy_sensitive_detectors.size() / 2
                  << " (number of unique coincidences between detectors) x "
