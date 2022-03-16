@@ -88,7 +88,8 @@ int main(int argc, char **argv) {
         if (analysis.energy_sensitive_detectors[n_detector_1]->channels.size() >
             1) {
             histogram_name =
-                analysis.energy_sensitive_detectors[n_detector_1]->name + "_addback";
+                analysis.energy_sensitive_detectors[n_detector_1]->name +
+                "_addback";
             addback_histograms.push_back(new TH1D(
                 histogram_name.c_str(), histogram_name.c_str(),
                 analysis.energy_sensitive_detectors[n_detector_1]

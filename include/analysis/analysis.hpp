@@ -58,7 +58,7 @@ struct Analysis {
                     const long long counts);
     void set_amplitude(const size_t n_detector, const size_t n_channel,
                        const double amplitude);
-    void set_reference_time(const size_t n_module,
+    void set_reference_time(const size_t n_detector, const size_t n_channel,
                             const double time_vs_reference_time);
     void set_time(const size_t n_detector, const size_t n_channel,
                   const double time);

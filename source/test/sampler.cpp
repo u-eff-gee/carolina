@@ -179,21 +179,10 @@ sample_background_gamma_time(const pair<double, double> range_min_max,
 void set_reference_time(const size_t n_detector, const size_t n_channel,
                         const double reference_time,
                         const vector<vector<TGraph>> time_calibration) {
-    if (isnan(analysis
-                  .digitizer_modules
-                      [analysis.module_index
-                           [analysis.energy_sensitive_detectors[n_detector]
-                                ->channels[n_channel]
-                                .module]]
-                  ->get_reference_time())) {
-        analysis
-            .digitizer_modules[analysis.module_index
-                                   [analysis
-                                        .energy_sensitive_detectors[n_detector]
-                                        ->channels[n_channel]
-                                        .module]]
-            ->set_reference_time(
-                time_calibration[n_detector][n_channel].Eval(reference_time));
+    if (isnan(analysis.get_reference_time(n_detector, n_channel))) {
+        analysis.set_reference_time(
+            n_detector, n_channel,
+            time_calibration[n_detector][n_channel].Eval(reference_time));
     }
 }
 

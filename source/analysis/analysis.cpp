@@ -316,9 +316,13 @@ void Analysis::set_amplitude(const size_t n_detector, const size_t n_channel,
             amplitude);
 }
 
-void Analysis::set_reference_time(const size_t n_module,
+void Analysis::set_reference_time(const size_t n_detector,
+                                  const size_t n_channel,
                                   const double reference_time) {
-    digitizer_modules[n_module]->set_reference_time(reference_time);
+    digitizer_modules[module_index[energy_sensitive_detectors[n_detector]
+                                       ->channels[n_channel]
+                                       .module]]
+        ->set_reference_time(reference_time);
 }
 
 void Analysis::set_time(const size_t n_detector, const size_t n_channel,
