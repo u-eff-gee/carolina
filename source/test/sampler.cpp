@@ -289,14 +289,15 @@ int main(int argc, char **argv) {
                 increment_timestamp();
 
                 // Background event
-                create_single_event(n_detector_1, n_channel,
-                                    background_gamma_energy,
-                                    inverse_energy_calibrations,
-                                    sample_background_gamma_time(
-                                        {-100., 100.}, {10., 30.},
-                                        {uniform_distribution(random_engine),
-                                         uniform_distribution(random_engine)}),
-                                    inverse_time_calibrations);
+                create_single_event(
+                    n_detector_1, n_channel, background_gamma_energy,
+                    inverse_energy_calibrations,
+                    sample_background_gamma_time(
+                        background_gamma_time_range_min_max,
+                        background_gamma_time_excluded_range_min_max,
+                        {uniform_distribution(random_engine),
+                         uniform_distribution(random_engine)}),
+                    inverse_time_calibrations);
                 set_reference_time(n_detector_1, n_channel, reference_time,
                                    inverse_time_calibrations);
                 tree->Fill();
