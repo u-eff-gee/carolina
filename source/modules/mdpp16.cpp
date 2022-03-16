@@ -52,8 +52,9 @@ void MDPP16::set_up_raw_time_branches_for_reading(TTree *tree) {
 }
 
 void MDPP16::set_up_raw_reference_time_branches_for_reading(TTree *tree) {
-    tree->SetBranchStatus(reference_time.name.c_str(), 1);
-    tree->SetBranchStatus(reference_time.name.c_str(), reference_time.leaves);
+    tree->SetBranchStatus((reference_time.name).c_str(), 1);
+    tree->SetBranchAddress((reference_time.name).c_str(),
+                           &reference_time.leaves[0]);
 }
 
 void MDPP16::set_up_raw_timestamp_branches_for_reading(TTree *tree) {
@@ -72,8 +73,7 @@ void MDPP16::set_up_raw_time_branches_for_writing(TTree *tree) {
 }
 
 void MDPP16::set_up_raw_reference_time_branches_for_writing(TTree *tree) {
-    tree->Branch(reference_time.name.c_str(), reference_time.leaves,
-                 (reference_time.name + "[1]/D").c_str());
+    tree->Branch(reference_time.name.c_str(), &reference_time.leaves[0]);
 }
 
 void MDPP16::set_up_raw_timestamp_branches_for_writing(TTree *tree) {
