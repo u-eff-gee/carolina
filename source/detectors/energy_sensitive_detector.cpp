@@ -36,52 +36,42 @@ using std::to_string;
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<EnergySensitiveDetectorChannel> channels,
-    const shared_ptr<EnergySensitiveDetectorGroup> group)
+    const shared_ptr<EnergySensitiveDetectorGroup> group, const vector<vector<pair<double, double>>> add_coi_win)
     : Detector(name, group), channels(channels),
       addback_energy(numeric_limits<double>::quiet_NaN()),
       addback_time(numeric_limits<double>::quiet_NaN()) {
 
-    for (size_t n_c_0 = 0; n_c_0 < channels.size(); ++n_c_0) {
-        addback_coincidence_windows.push_back(vector<pair<double, double>>());
-        for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); n_c_1++) {
-            addback_coincidence_windows[n_c_0].push_back(
-                {-numeric_limits<double>::max(),
-                 numeric_limits<double>::max()});
+    if(!add_coi_win.size()){
+        for (size_t n_c_0 = 0; n_c_0 < channels.size()-1; ++n_c_0) {
+            addback_coincidence_windows.push_back(vector<pair<double, double>>());
+            for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); n_c_1++) {
+                addback_coincidence_windows[n_c_0].push_back(
+                    {-numeric_limits<double>::max(),
+                    numeric_limits<double>::max()});
+            }
         }
+    } else {
+        addback_coincidence_windows = add_coi_win;
     }
 
-    skip_channel = vector<bool>(channels.size(), false);
-    addback_energies =
-        vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
-    addback_times =
-        vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
-}
-
-EnergySensitiveDetector::EnergySensitiveDetector(
-    const string name, const vector<EnergySensitiveDetectorChannel> channels,
-    const shared_ptr<EnergySensitiveDetectorGroup> group,
-    const vector<vector<pair<double, double>>> addback_coincidence_windows)
-    : Detector(name, group), channels(channels),
-      addback_coincidence_windows(addback_coincidence_windows),
-      addback_energy(numeric_limits<double>::quiet_NaN()),
-      addback_time(numeric_limits<double>::quiet_NaN()) {
-
-    if (addback_coincidence_windows.size() != channels.size() - 1) {
-        throw invalid_argument(
-            "With " + to_string(channels.size()) +
-            " channels, the matrix that contains the coincidence windows for "
-            "the addback must have exactly " +
-            to_string(channels.size() - 1) + " lines.");
-    }
-
-    for (size_t n_c_0 = 0; n_c_0 < channels.size() - 1; ++n_c_0) {
-        if (addback_coincidence_windows[n_c_0].size() !=
-            channels.size() - n_c_0 - 1) {
+    if(channels.size() > 1){
+        if (addback_coincidence_windows.size() != channels.size() - 1) {
             throw invalid_argument(
-                "Line number " + to_string(n_c_0) +
-                " of the matrix that contains the coincidence windows for the "
-                "addback must have exactly " +
-                to_string(channels.size() - n_c_0 - 1) + " entries.");
+                "With " + to_string(channels.size()) +
+                " channels, the matrix that contains the coincidence windows for "
+                "the addback must have exactly " +
+                to_string(channels.size() - 1) + " lines.");
+        }
+
+        for (size_t n_c_0 = 0; n_c_0 < channels.size() - 1; ++n_c_0) {
+            if (addback_coincidence_windows[n_c_0].size() !=
+                channels.size() - n_c_0 - 1) {
+                throw invalid_argument(
+                    "Line number " + to_string(n_c_0) +
+                    " of the matrix that contains the coincidence windows for the "
+                    "addback must have exactly " +
+                    to_string(channels.size() - n_c_0 - 1) + " entries.");
+            }
         }
     }
 

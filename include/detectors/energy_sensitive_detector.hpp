@@ -36,12 +36,8 @@ struct EnergySensitiveDetector final : public Detector {
     EnergySensitiveDetector(
         const string name,
         const vector<EnergySensitiveDetectorChannel> channels,
-        const shared_ptr<EnergySensitiveDetectorGroup> group);
-    EnergySensitiveDetector(
-        const string name,
-        const vector<EnergySensitiveDetectorChannel> channels,
         const shared_ptr<EnergySensitiveDetectorGroup> group,
-        const vector<vector<pair<double, double>>> addback_coincidence_windows);
+        const vector<vector<pair<double, double>>> addback_coincidence_windows = {});
 
     vector<EnergySensitiveDetectorChannel> channels;
 
