@@ -102,7 +102,8 @@ Analysis analysis(
                   return (time_vs_reference_time > 0.) &&
                          (time_vs_reference_time < 20.);
               }}},
-         segmented)},
+         segmented,
+         vector<vector<function<bool(const double)>>>{{gate(-2.5, 2.5)}})},
     {
         {"sin_vs_seg",
          {0},

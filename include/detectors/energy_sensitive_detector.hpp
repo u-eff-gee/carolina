@@ -37,11 +37,12 @@ struct EnergySensitiveDetector final : public Detector {
         const string name,
         const vector<EnergySensitiveDetectorChannel> channels,
         const shared_ptr<EnergySensitiveDetectorGroup> group,
-        const vector<vector<pair<double, double>>> addback_coincidence_windows = {});
+        const vector<vector<function<bool(const double)>>>
+            addback_coincidence_gates = {});
 
     vector<EnergySensitiveDetectorChannel> channels;
 
-    vector<vector<pair<double, double>>> addback_coincidence_windows;
+    vector<vector<function<bool(const double)>>> addback_coincidence_gates;
 
     vector<bool> skip_channel;
     vector<double> addback_energies;
@@ -54,8 +55,6 @@ struct EnergySensitiveDetector final : public Detector {
     void addback();
     void filter_addback();
     double get_calibrated_and_RF_gated_energy() const;
-    bool inside_addback_coincidence_window(const size_t n_channel_1,
-                                           const size_t n_channel_2);
     void reset_calibrated_leaves() override final;
     void set_up_calibrated_branches_for_reading(TTree *tree) override final;
     void set_up_calibrated_branches_for_writing(TTree *tree) override final;

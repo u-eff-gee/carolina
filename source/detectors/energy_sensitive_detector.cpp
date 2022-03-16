@@ -36,41 +36,43 @@ using std::to_string;
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<EnergySensitiveDetectorChannel> channels,
-    const shared_ptr<EnergySensitiveDetectorGroup> group, const vector<vector<pair<double, double>>> add_coi_win)
+    const shared_ptr<EnergySensitiveDetectorGroup> group,
+    const vector<vector<function<bool(const double)>>> add_coi_win)
     : Detector(name, group), channels(channels),
       addback_energy(numeric_limits<double>::quiet_NaN()),
       addback_time(numeric_limits<double>::quiet_NaN()) {
 
-    if(!add_coi_win.size()){
-        for (size_t n_c_0 = 0; n_c_0 < channels.size()-1; ++n_c_0) {
-            addback_coincidence_windows.push_back(vector<pair<double, double>>());
+    if (!add_coi_win.size()) {
+        for (size_t n_c_0 = 0; n_c_0 < channels.size() - 1; ++n_c_0) {
+            addback_coincidence_gates.push_back(
+                vector<function<bool(const double)>>());
             for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); n_c_1++) {
-                addback_coincidence_windows[n_c_0].push_back(
-                    {-numeric_limits<double>::max(),
-                    numeric_limits<double>::max()});
+                addback_coincidence_gates[n_c_0].push_back(
+                    [](const double) { return true; });
             }
         }
     } else {
-        addback_coincidence_windows = add_coi_win;
+        addback_coincidence_gates = add_coi_win;
     }
 
-    if(channels.size() > 1){
-        if (addback_coincidence_windows.size() != channels.size() - 1) {
-            throw invalid_argument(
-                "With " + to_string(channels.size()) +
-                " channels, the matrix that contains the coincidence windows for "
-                "the addback must have exactly " +
-                to_string(channels.size() - 1) + " lines.");
+    if (channels.size() > 1) {
+        if (addback_coincidence_gates.size() != channels.size() - 1) {
+            throw invalid_argument("With " + to_string(channels.size()) +
+                                   " channels, the matrix that contains the "
+                                   "coincidence windows for "
+                                   "the addback must have exactly " +
+                                   to_string(channels.size() - 1) + " lines.");
         }
 
         for (size_t n_c_0 = 0; n_c_0 < channels.size() - 1; ++n_c_0) {
-            if (addback_coincidence_windows[n_c_0].size() !=
+            if (addback_coincidence_gates[n_c_0].size() !=
                 channels.size() - n_c_0 - 1) {
-                throw invalid_argument(
-                    "Line number " + to_string(n_c_0) +
-                    " of the matrix that contains the coincidence windows for the "
-                    "addback must have exactly " +
-                    to_string(channels.size() - n_c_0 - 1) + " entries.");
+                throw invalid_argument("Line number " + to_string(n_c_0) +
+                                       " of the matrix that contains the "
+                                       "coincidence windows for the "
+                                       "addback must have exactly " +
+                                       to_string(channels.size() - n_c_0 - 1) +
+                                       " entries.");
             }
         }
     }
@@ -80,19 +82,6 @@ EnergySensitiveDetector::EnergySensitiveDetector(
         vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
     addback_times =
         vector<double>(channels.size(), numeric_limits<double>::quiet_NaN());
-}
-
-bool EnergySensitiveDetector::inside_addback_coincidence_window(
-    const size_t n_channel_1, const size_t n_channel_2) {
-    return addback_coincidence_windows[n_channel_1][n_channel_2 - n_channel_1 -
-                                                    1]
-                   .first <= channels[n_channel_1].time_calibrated -
-                                 channels[n_channel_2].time_calibrated &&
-           channels[n_channel_1].time_calibrated -
-                   channels[n_channel_2].time_calibrated <=
-               addback_coincidence_windows[n_channel_1]
-                                          [n_channel_2 - n_channel_1 - 1]
-                                              .second;
 }
 
 void EnergySensitiveDetector::filter_addback() {
@@ -119,7 +108,9 @@ void EnergySensitiveDetector::addback() {
             for (size_t n_c_1 = n_c_0 + 1; n_c_1 < channels.size(); ++n_c_1) {
                 if (!isnan(channels[n_c_1].energy_calibrated) &&
                     !skip_channel[n_c_1] &&
-                    inside_addback_coincidence_window(n_c_0, n_c_1)) {
+                    addback_coincidence_gates[n_c_0][n_c_1 - n_c_0 - 1](
+                        channels[n_c_0].time_calibrated -
+                        channels[n_c_1].time_calibrated)) {
                     addback_energies[n_c_0] +=
                         channels[n_c_1].energy_calibrated;
                     skip_channel[n_c_1] = true;
@@ -128,8 +119,6 @@ void EnergySensitiveDetector::addback() {
                         channels[n_c_0].energy_calibrated) {
                         maximum_energy_deposition_index = n_c_1;
                     }
-                } else {
-                    skip_channel[n_c_1] = true;
                 }
             }
             addback_times[n_c_0] =
