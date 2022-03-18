@@ -82,7 +82,7 @@ Analysis analysis(
               gate(0., 20.)}},
          segmented,
          vector<vector<function<bool(const double)>>>{
-             {gate(-2.5, 2.5), gate(-2.5, 2.5), gate(-2.5, 2.5)},
+             {gate([](const double time_difference){ return (time_difference > -2.5) && (time_difference < 2.5); }), gate(-2.5, 2.5), gate(-2.5, 2.5)},
              {gate(-2.5, 2.5), gate(-2.5, 2.5)},
              {gate(-2.5, 2.5)}}),
      make_shared<CounterDetector>("cou",

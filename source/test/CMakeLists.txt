@@ -35,3 +35,7 @@ target_link_libraries(test_polynomial polynomial)
 add_executable(test_histograms_1d_raw test_histograms_1d_raw.cpp)
 target_include_directories(test_histograms_1d_raw PUBLIC ${CMAKE_BINARY_DIR}/include/test)
 target_link_libraries(test_histograms_1d_raw analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel digitizer_module energy_sensitive_detector energy_sensitive_detector_channel mdpp16 ${ROOT_LIBRARIES} sis3316 v830)
+
+add_executable(test_histograms_1d test_histograms_1d.cpp)
+target_include_directories(test_histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include/test)
+target_link_libraries(test_histograms_1d analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel digitizer_module energy_sensitive_detector energy_sensitive_detector_channel mdpp16 ${ROOT_LIBRARIES} scaler_module sis3316 v830)

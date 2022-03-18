@@ -145,12 +145,14 @@ unsigned int expected_single_events(const unsigned int n,
     return n;
 }
 
-unsigned int expected_energy_sensitive_detector_events(const unsigned int n,
-                                                       const size_t n_detector,
-                                                       const size_t n_channel) {
+unsigned int expected_energy_sensitive_detector_events(
+    const unsigned int n, const size_t n_detector, const size_t n_channel,
+    const bool reference_time_gate) {
     unsigned int exp_eve = 0;
     exp_eve += expected_addback_events(n, n_detector, n_channel);
-    exp_eve += expected_background_events(n, n_detector, n_channel);
+    if (!reference_time_gate) {
+        exp_eve += expected_background_events(n, n_detector, n_channel);
+    }
     exp_eve += expected_coincidence_events(n, n_detector, n_channel);
     if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
         exp_eve += expected_random_coincidence_events(n, n_detector, n_channel);
@@ -163,6 +165,40 @@ unsigned int expected_energy_sensitive_detector_events(const unsigned int n,
                 ->channels[n_channel]
                 .name
          << "': " << exp_eve << endl;
+    return exp_eve;
+}
+
+unsigned int expected_energy_sensitive_detector_events_with_addback(
+    const unsigned int n, const size_t n_detector,
+    const bool reference_time_gate) {
+    unsigned int exp_eve = 0;
+    exp_eve += expected_addback_events(n, n_detector, 0);
+    if (!reference_time_gate) {
+        exp_eve += expected_background_events(n, n_detector, 0);
+    }
+    exp_eve += expected_coincidence_events(n, n_detector, 0);
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
+        exp_eve +=
+            expected_random_coincidence_events(n, n_detector, 0) *
+            analysis.energy_sensitive_detectors[n_detector]->channels.size() /
+            2;
+        // If multiple channels have recorded an energy deposition, but they are
+        // not coincident (as defined by
+        // EnergySensitiveDetector::addback_coincidence_gates), then the current
+        // addback code sets EnergySensitiveDetector::addback_energy (and the
+        // corresponding time formation) to the highest of the energy
+        // depositions. This means that for the 'random coincidence' test event,
+        // one of the two hits is always discarded. Consequently, the expected
+        // number of random-coincidence events is equal to the number of unique
+        // channel pairs, which is given by N(N-1)/2, where N is the number of
+        // channels. Since expected_random_coincidence_events already applies
+        // the factor N-1, this function has to multiply by N/2.
+    }
+    exp_eve += expected_single_events(n, n_detector, 0) *
+               analysis.energy_sensitive_detectors[n_detector]->channels.size();
+    cout << "-> Number of expected events for detector '"
+         << analysis.energy_sensitive_detectors[n_detector]->name
+         << "' (addback): " << exp_eve << endl;
     return exp_eve;
 }
 
@@ -205,9 +241,10 @@ unsigned int expected_background_radiation_events(const unsigned int n,
 
 void check_expected_energy_sensitive_detector_events(
     TH1D *histogram, const unsigned int n, const size_t n_detector,
-    const size_t n_channel, const bool ignore_errors = false) {
-    const unsigned int exp_eve =
-        expected_energy_sensitive_detector_events(n, n_detector, n_channel);
+    const size_t n_channel, const bool ignore_errors = false,
+    const bool reference_time_gate = false) {
+    const unsigned int exp_eve = expected_energy_sensitive_detector_events(
+        n, n_detector, n_channel, reference_time_gate);
     const unsigned int entries = histogram->GetEntries();
     const unsigned int integral = histogram->Integral();
     cout << histogram->GetName() << "->GetEntries() = " << entries << endl;
@@ -222,11 +259,38 @@ void check_expected_full_energy_events(TH1D *histogram, const unsigned int n,
                                        const size_t n_detector,
                                        const size_t n_channel,
                                        const int fep_bin,
-                                       const bool ignore_errors = false) {
+                                       const bool ignore_errors = false,
+                                       const int bin_tolerance = 0) {
     const unsigned int exp_eve =
         expected_full_energy_events(n, n_detector, n_channel);
-    const unsigned int fep_eve = histogram->GetBinContent(fep_bin);
-    cout << histogram->GetName() << "->GetBinContent(" << fep_bin
+    const unsigned int fep_eve =
+        histogram->Integral(fep_bin - bin_tolerance, fep_bin + bin_tolerance);
+    cout << histogram->GetName() << "->Integral(" << fep_bin << " - "
+         << bin_tolerance << ", " << fep_bin << " + " << bin_tolerance
+         << ") = " << fep_eve << endl;
+
+    if (!ignore_errors) {
+        assert(fep_eve == exp_eve);
+    }
+}
+
+void check_expected_full_energy_events_with_addback(
+    TH1D *histogram, const unsigned int n, const size_t n_detector,
+    const int fep_bin, const bool ignore_errors = false,
+    const int bin_tolerance = 0, const bool reference_time_gate = false) {
+    const unsigned int exp_eve =
+        expected_energy_sensitive_detector_events_with_addback(
+            n, n_detector,
+            reference_time_gate); // By construction, the addback spectra should
+                                  // not contain fragmented energies and
+                                  // background events any more, i.e. all events
+                                  // of the histogram should be in the
+                                  // full-energy peak (which is potentially
+                                  // fragmented due to numerical errors).
+    const unsigned int fep_eve =
+        histogram->Integral(fep_bin - bin_tolerance, fep_bin + bin_tolerance);
+    cout << histogram->GetName() << "->Integral(" << fep_bin << " - "
+         << bin_tolerance << ", " << fep_bin << " + " << bin_tolerance
          << ") = " << fep_eve << endl;
 
     if (!ignore_errors) {
@@ -346,6 +410,51 @@ void check_expected_counter_detector_events(TH1D *histogram,
 
     if (!ignore_errors) {
         assert(entries == exp_eve);
+    }
+}
+
+void check_expected_counter_detector_rate(TH1D *histogram,
+                                            const unsigned int n,
+                                            const size_t n_detector,
+                                            const size_t n_channel,
+                                            const int rate_bin,
+                                            const bool ignore_errors = false, const int bin_tolerance = 0){
+    const unsigned int exp_eve = n;
+    cout << "\t- " << n << " 'counter' events in which the counter of channel '" << analysis.counter_detectors[n_detector]->channels[n_channel].name << "' is incremented." << endl;
+    cout << "-> Number of expected events for detector '"
+         << analysis.counter_detectors[n_detector]->name << "', channel '"
+         << analysis.counter_detectors[n_detector]->channels[n_channel].name
+         << "': " << exp_eve << endl;
+    const unsigned int entries = histogram->GetEntries();
+    cout << histogram->GetName() << "->GetEntries() = " << entries << endl;
+
+    cout << "-> Number of expected events for detector '"
+         << analysis.counter_detectors[n_detector]->name << "', channel '"
+         << analysis.counter_detectors[n_detector]->channels[n_channel].name
+         << "' for the expected rate: " << exp_eve << endl;
+    const unsigned int integral = histogram->Integral(rate_bin - bin_tolerance, rate_bin + bin_tolerance);
+    cout << histogram->GetName() << "->Integral(" << rate_bin << " - "
+         << bin_tolerance << ", " << rate_bin << " + " << bin_tolerance
+         << ") = " << integral << endl;
+
+    if (!ignore_errors) {
+        assert(entries == exp_eve && integral == exp_eve);
+    }
+}
+
+void check_expected_energy_sensitive_detector_events_with_addback(
+    TH1D *histogram, const unsigned int n, const size_t n_detector,
+    const bool ignore_errors = false, const bool reference_time_gate = false) {
+    const unsigned int exp_eve =
+        expected_energy_sensitive_detector_events_with_addback(
+            n, n_detector, reference_time_gate);
+    const unsigned int entries = histogram->GetEntries();
+    const unsigned int integral = histogram->Integral();
+    cout << histogram->GetName() << "->GetEntries() = " << entries << endl;
+    cout << histogram->GetName() << "->Integral()   = " << integral << endl;
+
+    if (!ignore_errors) {
+        assert(entries == exp_eve && integral == exp_eve);
     }
 }
 
