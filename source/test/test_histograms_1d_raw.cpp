@@ -41,9 +41,11 @@ int main(int argc, char **argv) {
         "Check whether output of the 'sampler' script has been processed "
         "correctly by the 'histograms_1d_raw' script.");
     po::positional_options_description p;
-    desc.add_options()("help", "Produce help message.")(
-        "input_file", po::value<string>(),
-        "Input file name.")("n", po::value<unsigned int>()->default_value(1));
+    desc.add_options()("ignore_errors",
+                       "Do not raise an error if one of the tests fails.")(
+        "help", "Produce help message.")("input_file", po::value<string>(),
+                                         "Input file name.")(
+        "n", po::value<unsigned int>()->default_value(1));
     ;
     p.add("input_file", -1);
 
@@ -71,9 +73,6 @@ int main(int argc, char **argv) {
 
     double raw_gamma_energy, raw_background_gamma_energy;
     int raw_gamma_energy_bin, raw_background_gamma_energy_bin;
-    unsigned int expected_entries, expected_fep_entries;
-    const size_t n_energy_sensitive_detector_channels =
-        analysis.get_n_energy_sensitive_detector_channels();
     string histogram_name;
     TH1D *histogram;
 
@@ -99,6 +98,13 @@ int main(int argc, char **argv) {
              n_channel <
              analysis.energy_sensitive_detectors[n_detector]->channels.size();
              ++n_channel) {
+            cout << "\nDetector '"
+                 << analysis.energy_sensitive_detectors[n_detector]->name
+                 << "', channel '"
+                 << analysis.energy_sensitive_detectors[n_detector]
+                        ->channels[n_channel]
+                        .name
+                 << "':" << endl;
             histogram_name =
                 analysis.energy_sensitive_detectors[n_detector]->name + "_" +
                 analysis.energy_sensitive_detectors[n_detector]
@@ -114,221 +120,51 @@ int main(int argc, char **argv) {
                     background_gamma_energy);
             raw_background_gamma_energy_bin =
                 histogram->FindBin(raw_background_gamma_energy);
-            expected_entries =
-                vm["n"].as<unsigned int>() *
-                (3 + (analysis.energy_sensitive_detectors.size() - 1) +
-                 (analysis.energy_sensitive_detectors[n_detector]
-                      ->channels.size() -
-                  1));
-            if (analysis.energy_sensitive_detectors[n_detector]
-                    ->channels.size() == 1) {
-                expected_fep_entries =
-                    vm["n"].as<unsigned int>() *
-                    (2 + (analysis.energy_sensitive_detectors.size() - 1));
-            } else {
-                expected_fep_entries =
-                    vm["n"].as<unsigned int>() *
-                    analysis.energy_sensitive_detectors[n_detector]
-                        ->channels.size();
-            }
-
-            cout << "Detector channel: " << histogram_name << endl;
+            check_expected_energy_sensitive_detector_events(
+                histogram, vm["n"].as<unsigned int>(), n_detector, n_channel,
+                vm.count("ignore_errors"));
             cout << "Nominal gamma energy of " << gamma_energy << " appears as "
                  << raw_gamma_energy
                  << " in this channel, which would be sorted into histogram "
                     "bin #"
                  << raw_gamma_energy_bin << "." << endl;
+            check_expected_full_energy_events(
+                histogram, vm["n"].as<unsigned int>(), n_detector, n_channel,
+                raw_gamma_energy_bin, vm.count("ignore_errors"));
             cout << "Nominal background gamma energy of "
                  << background_gamma_energy << " appears as "
                  << raw_background_gamma_energy
                  << " in this channel, which would be sorted into histogram "
                     "bin #"
                  << raw_background_gamma_energy_bin << "." << endl;
-            cout << "\t" << histogram_name
-                 << "->GetEntries() = " << histogram->GetEntries()
-                 << " [Expect " << expected_entries << ": "
-                 << vm["n"].as<unsigned int>()
-                 << " events where the total energy of " << gamma_energy
-                 << " is deposited in this channel, "
-                 << vm["n"].as<unsigned int>()
-                 << " events where the same energy is split between the "
-                    "channels of the detector (if it has multiple channels, "
-                    "otherwise they are just another "
-                 << vm["n"].as<unsigned int>() << " events with an energy of "
-                 << gamma_energy << "), " << vm["n"].as<unsigned int>()
-                 << " background events with an energy of "
-                 << background_gamma_energy << ", "
-                 << (analysis.energy_sensitive_detectors[n_detector]
-                         ->channels.size() -
-                     1) *
-                        vm["n"].as<unsigned int>()
-                 << " events where an energy of " << gamma_energy
-                 << " is deposited twice in two different channels of the same "
-                    "detector ('random coincidence'), and "
-                 << (analysis.energy_sensitive_detectors.size() - 1) *
-                        vm["n"].as<unsigned int>()
-                 << " events for coincidences with the other "
-                 << analysis.energy_sensitive_detectors.size() - 1
-                 << " detectors]" << endl;
-            cout << "\t" << histogram_name
-                 << "->Integral() = " << histogram->Integral() << " (Expect "
-                 << expected_entries
-                 << " events due to the same reasoning as "
-                    "above)"
-                 << endl;
-            cout << "\t" << histogram_name << "->GetBinContent("
-                 << raw_gamma_energy_bin
-                 << ") = " << histogram->GetBinContent(raw_gamma_energy_bin);
-            if (analysis.energy_sensitive_detectors[n_detector]
-                    ->channels.size() > 1) {
-                cout << " (Expect " << expected_fep_entries
-                     << " events with an energy deposition of " << gamma_energy
-                     << ": " << vm["n"].as<unsigned int>()
-                     << " events where the total energy of " << gamma_energy
-                     << " is deposited in this channel only, and "
-                     << vm["n"].as<unsigned int>() *
-                            (analysis.energy_sensitive_detectors[n_detector]
-                                 ->channels.size() -
-                             1)
-                     << " random-coincidence events where this channel is one "
-                        "out of two channels of this detector that are hit "
-                        "quasi simultaneously)";
-            } else {
-                cout << " [Expect " << expected_fep_entries
-                     << " events with an energy deposition of " << gamma_energy
-                     << ". Same as the output of TH1::GetEntries(), but "
-                        "without the "
-                     << vm["n"].as<unsigned int>()
-                     << " background events that have a different energy ("
-                     << background_gamma_energy << ")].";
-            }
-            cout << endl;
-            cout << "\t" << histogram_name << "->GetBinContent("
-                 << raw_background_gamma_energy_bin << ") = "
-                 << histogram->GetBinContent(raw_background_gamma_energy_bin)
-                 << " (Expect " << vm["n"].as<unsigned int>()
-                 << " background events with an energy deposition of "
-                 << background_gamma_energy << ")\n"
-                 << endl;
-            assert(histogram->GetEntries() == expected_entries);
-            assert((unsigned int)histogram->Integral() == expected_entries);
-            assert((unsigned int)histogram->GetBinContent(
-                       raw_background_gamma_energy_bin) ==
-                   vm["n"].as<unsigned int>());
-            if (analysis.energy_sensitive_detectors[n_detector]
-                    ->channels.size() == 1) {
-                assert((unsigned int)histogram->GetBinContent(
-                           raw_gamma_energy_bin) == expected_fep_entries);
-            } else {
-                assert((unsigned int)histogram->GetBinContent(
-                           raw_gamma_energy_bin) == expected_fep_entries);
-            }
+            check_expected_background_events(
+                histogram, vm["n"].as<unsigned int>(), n_detector, n_channel,
+                raw_background_gamma_energy_bin, vm.count("ignore_errors"));
         }
     }
-    cout << "Counter histograms for counter detectors:" << endl;
+    cout << "\nCounter histograms for counter detectors:" << endl;
     for (size_t n_detector = 0; n_detector < analysis.counter_detectors.size();
          ++n_detector) {
         for (size_t n_channel = 0;
              n_channel <
              analysis.counter_detectors[n_detector]->channels.size();
              ++n_channel) {
-            expected_entries =
-                vm["n"].as<unsigned int>() *
-                (n_energy_sensitive_detector_channels   // Single-channel events
-                 + n_energy_sensitive_detector_channels // Background events
-                 + analysis.energy_sensitive_detectors.size() // Addback events
-                 + (analysis.energy_sensitive_detectors.size() - 1) *
-                       analysis.energy_sensitive_detectors.size() /
-                       2 // Number of possible coincidences. The first of N
-                         // detectors has N-1 coincidence partners, the second
-                         // has N-2 partners, i.e. the number of coincidences is
-                         // the sum (arithmetic progression)
-                         // N-1 + N-2 + ... + 1 = N*(N-1)/2
-                 + 1     // Counter events
-                );
-            for (size_t n_energy_sensitive_detector = 0;
-                 n_energy_sensitive_detector <
-                 analysis.energy_sensitive_detectors.size();
-                 ++n_energy_sensitive_detector) {
-                if (analysis
-                        .energy_sensitive_detectors[n_energy_sensitive_detector]
-                        ->channels.size() > 1) {
-                    expected_entries +=
-                        vm["n"].as<unsigned int>() *
-                        analysis
-                            .energy_sensitive_detectors
-                                [n_energy_sensitive_detector]
-                            ->channels.size() *
-                        (analysis
-                             .energy_sensitive_detectors
-                                 [n_energy_sensitive_detector]
-                             ->channels.size() -
-                         1) /
-                        2; // Number of random coincidences between the
-                           // individual channels of a single detector.
-                           // Completely analog to the coincidences between
-                           // different detectors above.
-                }
-            }
+            cout << "\nDetector '"
+                 << analysis.counter_detectors[n_detector]->name
+                 << "', channel '"
+                 << analysis.counter_detectors[n_detector]
+                        ->channels[n_channel]
+                        .name
+                 << "':" << endl;
             histogram_name = analysis.counter_detectors[n_detector]->name +
                              "_" +
                              analysis.counter_detectors[n_detector]
                                  ->channels[n_channel]
                                  .name;
-            cout << "Detector channel: " << histogram_name << endl;
             histogram = (TH1D *)file->Get(histogram_name.c_str());
-            cout << "\t" << histogram_name
-                 << "->GetEntries() = " << histogram->GetEntries()
-                 << " [Expect " << expected_entries
-                 << " entries: The counter value is recorded each time one of "
-                    "the energy-sensitive detector events is recorded, "
-                    "resulting in "
-                 << n_energy_sensitive_detector_channels << " x "
-                 << vm["n"].as<unsigned int>() << " single-channel events, "
-                 << n_energy_sensitive_detector_channels << " x "
-                 << vm["n"].as<unsigned int>() << " background events, "
-                 << analysis.energy_sensitive_detectors.size() << " x "
-                 << vm["n"].as<unsigned int>() << " addback events, ";
-            for (size_t n_energy_sensitive_detector = 0;
-                 n_energy_sensitive_detector <
-                 analysis.energy_sensitive_detectors.size();
-                 ++n_energy_sensitive_detector) {
-                if (analysis
-                        .energy_sensitive_detectors[n_energy_sensitive_detector]
-                        ->channels.size() > 1) {
-                    cout << vm["n"].as<unsigned int>() *
-                                analysis
-                                    .energy_sensitive_detectors
-                                        [n_energy_sensitive_detector]
-                                    ->channels.size() *
-                                (analysis
-                                     .energy_sensitive_detectors
-                                         [n_energy_sensitive_detector]
-                                     ->channels.size() -
-                                 1) /
-                                2
-                         << " random coincidences between the "
-                         << analysis
-                                .energy_sensitive_detectors
-                                    [n_energy_sensitive_detector]
-                                ->channels.size()
-                         << "  channels of detector '"
-                         << analysis
-                                .energy_sensitive_detectors
-                                    [n_energy_sensitive_detector]
-                                ->name
-                         << "', ";
-                }
-            }
-            cout << "and "
-                 << (analysis.energy_sensitive_detectors.size() - 1) *
-                        analysis.energy_sensitive_detectors.size() / 2
-                 << " (number of unique coincidences between detectors) x "
-                 << vm["n"].as<unsigned int>()
-                 << " coincident events. In addition, there are "
-                 << vm["n"].as<unsigned int>()
-                 << " events in which only the counter is increased.]" << endl;
-            assert(histogram->GetEntries() == expected_entries);
+            check_expected_counter_detector_events(
+                histogram, vm["n"].as<unsigned int>(), n_detector, n_channel,
+                vm.count("ignore_errors"));
         }
     }
 }

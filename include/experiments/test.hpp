@@ -80,7 +80,11 @@ Analysis analysis(
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
               gate(0., 20.)}},
-         segmented),
+         segmented,
+         vector<vector<function<bool(const double)>>>{
+             {gate(-2.5, 2.5), gate(-2.5, 2.5), gate(-2.5, 2.5)},
+             {gate(-2.5, 2.5), gate(-2.5, 2.5)},
+             {gate(-2.5, 2.5)}}),
      make_shared<CounterDetector>("cou",
                                   vector<CounterDetectorChannel>{{"cts", 2, 0}},
                                   scaler),

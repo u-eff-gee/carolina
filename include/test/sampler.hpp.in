@@ -15,9 +15,16 @@
     carolina. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 #include <memory>
 
 using std::dynamic_pointer_cast;
+
+#include "TH1.h"
 
 #include "@ANALYSIS@"
 
@@ -46,6 +53,300 @@ TGraph invert_energy_calibration(const size_t n_detector,
         dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
             analysis.energy_sensitive_detectors[n_detector]->group)
             ->raw_histogram_properties.upper_edge_of_last_bin);
+}
+
+unsigned int expected_addback_events(const unsigned int n,
+                                     const size_t n_detector,
+                                     [[maybe_unused]] const size_t n_channel) {
+    cout << "\t- " << n << " 'addback' events";
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
+        cout << " in which the total energy of " << gamma_energy
+             << " arb. units is distributed among the "
+             << analysis.energy_sensitive_detectors[n_detector]->channels.size()
+             << " channels of this detector." << endl;
+    } else {
+        cout
+            << ". Since this detector only has a single channel, the total "
+               "energy of "
+            << gamma_energy << " arb. units is deposited in channel '"
+            << analysis.energy_sensitive_detectors[n_detector]->channels[0].name
+            << "'." << endl;
+    }
+
+    return n;
+}
+
+unsigned int expected_background_events(const unsigned int n,
+                                        const size_t n_detector,
+                                        const size_t n_channel) {
+    cout << "\t- " << n << " 'background' events in which the total energy of "
+         << background_gamma_energy << " arb. units is deposited in channel '"
+         << analysis.energy_sensitive_detectors[n_detector]
+                ->channels[n_channel]
+                .name
+         << "'." << endl;
+
+    return n;
+}
+
+unsigned int
+expected_coincidence_events(const unsigned int n, const size_t n_detector,
+                            [[maybe_unused]] const size_t n_channel) {
+    const unsigned int exp_eve =
+        n * (analysis.energy_sensitive_detectors.size() - 1);
+    cout << "\t- " << exp_eve
+         << " 'coincidence' events in which the total energy of "
+         << gamma_energy << " arb. units is ";
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
+        cout << "distributed among the "
+             << analysis.energy_sensitive_detectors[n_detector]->channels.size()
+             << " channels of this detector, ";
+    } else {
+        cout << "deposited in this detector, ";
+    }
+    cout << "and the same energy is also distributed among the channels of any "
+            "one of the other detectors."
+         << endl;
+    return exp_eve;
+}
+
+unsigned int expected_random_coincidence_events(const unsigned int n,
+                                                const size_t n_detector,
+                                                const size_t n_channel) {
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
+        const unsigned int exp_eve =
+            n *
+            (analysis.energy_sensitive_detectors[n_detector]->channels.size() -
+             1);
+        cout << "\t- " << exp_eve
+             << " 'random coincidence' events in which a total energy of "
+             << gamma_energy << " arb. units is deposited in channel '"
+             << analysis.energy_sensitive_detectors[n_detector]
+                    ->channels[n_channel]
+                    .name
+             << " and in any one of the other channels of detector '"
+             << analysis.energy_sensitive_detectors[n_detector]->name << "'."
+             << endl;
+        return exp_eve;
+    }
+    return 0;
+}
+
+unsigned int expected_single_events(const unsigned int n,
+                                    const size_t n_detector,
+                                    const size_t n_channel) {
+    cout << "\t- " << n << " 'single' events in which the total energy of "
+         << gamma_energy << " arb. units is deposited in channel '"
+         << analysis.energy_sensitive_detectors[n_detector]
+                ->channels[n_channel]
+                .name
+         << "'." << endl;
+
+    return n;
+}
+
+unsigned int expected_energy_sensitive_detector_events(const unsigned int n,
+                                                       const size_t n_detector,
+                                                       const size_t n_channel) {
+    unsigned int exp_eve = 0;
+    exp_eve += expected_addback_events(n, n_detector, n_channel);
+    exp_eve += expected_background_events(n, n_detector, n_channel);
+    exp_eve += expected_coincidence_events(n, n_detector, n_channel);
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
+        exp_eve += expected_random_coincidence_events(n, n_detector, n_channel);
+    }
+    exp_eve += expected_single_events(n, n_detector, n_channel);
+    cout << "-> Number of expected events for detector '"
+         << analysis.energy_sensitive_detectors[n_detector]->name
+         << "', channel '"
+         << analysis.energy_sensitive_detectors[n_detector]
+                ->channels[n_channel]
+                .name
+         << "': " << exp_eve << endl;
+    return exp_eve;
+}
+
+unsigned int expected_full_energy_events(const unsigned int n,
+                                         const size_t n_detector,
+                                         const size_t n_channel) {
+    unsigned int exp_eve = 0;
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() == 1) {
+        exp_eve += expected_addback_events(n, n_detector, n_channel);
+        exp_eve += expected_coincidence_events(n, n_detector, n_channel);
+    }
+    if (analysis.energy_sensitive_detectors[n_detector]->channels.size() > 1) {
+        exp_eve += expected_random_coincidence_events(n, n_detector, n_channel);
+    }
+    exp_eve += expected_single_events(n, n_detector, n_channel);
+    cout << "-> Number of expected full-energy events for detector '"
+         << analysis.energy_sensitive_detectors[n_detector]->name
+         << "', channel '"
+         << analysis.energy_sensitive_detectors[n_detector]
+                ->channels[n_channel]
+                .name
+         << "': " << exp_eve << endl;
+    return exp_eve;
+}
+
+unsigned int expected_background_radiation_events(const unsigned int n,
+                                                  const size_t n_detector,
+                                                  const size_t n_channel) {
+    unsigned int exp_eve = 0;
+    exp_eve += expected_background_events(n, n_detector, n_channel);
+    cout << "-> Number of expected background events for detector '"
+         << analysis.energy_sensitive_detectors[n_detector]->name
+         << "', channel '"
+         << analysis.energy_sensitive_detectors[n_detector]
+                ->channels[n_channel]
+                .name
+         << "': " << exp_eve << endl;
+    return exp_eve;
+}
+
+void check_expected_energy_sensitive_detector_events(
+    TH1D *histogram, const unsigned int n, const size_t n_detector,
+    const size_t n_channel, const bool ignore_errors = false) {
+    const unsigned int exp_eve =
+        expected_energy_sensitive_detector_events(n, n_detector, n_channel);
+    const unsigned int entries = histogram->GetEntries();
+    const unsigned int integral = histogram->Integral();
+    cout << histogram->GetName() << "->GetEntries() = " << entries << endl;
+    cout << histogram->GetName() << "->Integral()   = " << integral << endl;
+
+    if (!ignore_errors) {
+        assert(entries == exp_eve && integral == exp_eve);
+    }
+}
+
+void check_expected_full_energy_events(TH1D *histogram, const unsigned int n,
+                                       const size_t n_detector,
+                                       const size_t n_channel,
+                                       const int fep_bin,
+                                       const bool ignore_errors = false) {
+    const unsigned int exp_eve =
+        expected_full_energy_events(n, n_detector, n_channel);
+    const unsigned int fep_eve = histogram->GetBinContent(fep_bin);
+    cout << histogram->GetName() << "->GetBinContent(" << fep_bin
+         << ") = " << fep_eve << endl;
+
+    if (!ignore_errors) {
+        assert(fep_eve == exp_eve);
+    }
+}
+
+void check_expected_background_events(TH1D *histogram, const unsigned int n,
+                                      const size_t n_detector,
+                                      const size_t n_channel, const int bkg_bin,
+                                      const bool ignore_errors = false) {
+    const unsigned int exp_eve =
+        expected_background_radiation_events(n, n_detector, n_channel);
+    const unsigned int bkg_eve = histogram->GetBinContent(bkg_bin);
+    cout << histogram->GetName() << "->GetBinContent(" << bkg_bin
+         << ") = " << bkg_eve << endl;
+
+    if (!ignore_errors) {
+        assert(bkg_eve == exp_eve);
+    }
+}
+
+unsigned int expected_counter_events(const unsigned int n,
+                                     const size_t n_detector,
+                                     const size_t n_channel) {
+    cout << "\t- " << n << " 'counter' events in which the counter of channel '"
+         << analysis.counter_detectors[n_detector]->channels[n_channel].name
+         << "' is incremented." << endl;
+    return n;
+}
+
+unsigned int expected_total_addback_events(const unsigned int n) {
+    const unsigned int exp_eve = n * analysis.energy_sensitive_detectors.size();
+    cout << "\t- " << exp_eve
+         << " 'addback' events in which the total energy of " << gamma_energy
+         << " arb. units is distributed between the channels of each "
+            "energy-sensitive detector."
+         << endl;
+
+    return exp_eve;
+}
+
+unsigned int expected_total_background_events(const unsigned int n) {
+    const unsigned int exp_eve =
+        n * analysis.get_n_energy_sensitive_detector_channels();
+    cout << "\t- " << exp_eve
+         << " 'background' events in which the total energy of "
+         << background_gamma_energy
+         << " arb. units is deposited in each detector channel." << endl;
+    return exp_eve;
+}
+
+unsigned int expected_total_coincidence_events(const unsigned int n) {
+    const unsigned int exp_eve =
+        n * analysis.energy_sensitive_detectors.size() *
+        (analysis.energy_sensitive_detectors.size() - 1) / 2;
+    cout << "\t- " << exp_eve
+         << " 'coincidence' events in which the total energy of "
+         << gamma_energy << " arb. units is deposited in 2 of the "
+         << analysis.energy_sensitive_detectors.size()
+         << " energy-sensitive detectors." << endl;
+    return exp_eve;
+}
+
+unsigned int expected_total_random_coincidence_events(const unsigned int n) {
+    unsigned int exp_eve = 0;
+    for (auto detector : analysis.energy_sensitive_detectors) {
+        if (detector->channels.size() > 1) {
+            exp_eve += n * detector->channels.size() *
+                       (detector->channels.size() - 1) / 2;
+        }
+    }
+    cout << "\t- " << exp_eve
+         << " 'random coincidence' events in which the total energy of "
+         << gamma_energy
+         << " arb. units is deposited in two channels of the same detector."
+         << endl;
+    return exp_eve;
+}
+
+unsigned int expected_total_single_events(const unsigned int n) {
+    const unsigned int exp_eve =
+        n * analysis.get_n_energy_sensitive_detector_channels();
+    cout << "\t- " << exp_eve
+         << " 'single' events in which the total energy of " << gamma_energy
+         << " arb. units is deposited in a single detector channel." << endl;
+    return exp_eve;
+}
+
+unsigned int expected_counter_detector_events(const unsigned int n,
+                                              const size_t n_detector,
+                                              const size_t n_channel) {
+    unsigned int exp_eve = 0;
+    exp_eve += expected_counter_events(n, n_detector, n_channel);
+    exp_eve += expected_total_addback_events(n);
+    exp_eve += expected_total_background_events(n);
+    exp_eve += expected_total_coincidence_events(n);
+    exp_eve += expected_total_random_coincidence_events(n);
+    exp_eve += expected_total_single_events(n);
+    cout << "-> Number of expected events for detector '"
+         << analysis.counter_detectors[n_detector]->name << "', channel '"
+         << analysis.counter_detectors[n_detector]->channels[n_channel].name
+         << "': " << exp_eve << endl;
+    return exp_eve;
+}
+
+void check_expected_counter_detector_events(TH1D *histogram,
+                                            const unsigned int n,
+                                            const size_t n_detector,
+                                            const size_t n_channel,
+                                            const bool ignore_errors = false) {
+
+    const unsigned int exp_eve =
+        expected_counter_detector_events(n, n_detector, n_channel);
+    const unsigned int entries = histogram->GetEntries();
+    cout << histogram->GetName() << "->GetEntries() = " << entries << endl;
+
+    if (!ignore_errors) {
+        assert(entries == exp_eve);
+    }
 }
 
 vector<vector<TGraph>> invert_energy_calibrations() {
