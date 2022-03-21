@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     if (command_line_parser_status) {
         return 0;
     }
-    po::variables_map vm = command_line_parser.get_variables_map();
+    const po::variables_map vm = command_line_parser.get_variables_map();
 
     long long first, last;
     TChain *t = command_line_parser.set_up_tree(first, last, vm.count("list"));
