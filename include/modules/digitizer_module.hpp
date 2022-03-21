@@ -31,9 +31,10 @@ using std::vector;
 #include "module.hpp"
 
 struct DigitizerModule : Module {
-    DigitizerModule(const string reference_time_branch_name,
+    DigitizerModule(const unsigned int address,
+                    const string reference_time_branch_name,
                     const string timestamp_branch_name)
-        : reference_time(reference_time_branch_name),
+        : Module(address), reference_time(reference_time_branch_name),
           timestamp(timestamp_branch_name) {}
 
     Branch<double, 1> reference_time;

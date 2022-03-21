@@ -21,8 +21,9 @@
 #include "scaler_module.hpp"
 
 struct V830 final : public ScalerModule {
-    V830(const double trigger_frequency)
-        : ScalerModule(trigger_frequency), counter_values("counter_values") {
+    V830(const unsigned int address, const double trigger_frequency)
+        : ScalerModule(address, trigger_frequency),
+          counter_values("counter_values") {
         for (size_t i = 0; i < 32; ++i) {
             counter_values.leaves[i] = 0.;
         }

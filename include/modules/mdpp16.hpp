@@ -22,10 +22,12 @@
 #include "digitizer_module.hpp"
 
 struct MDPP16 final : public DigitizerModule {
-    MDPP16(const string amplitude_branch_name, const string time_branch_name,
+    MDPP16(const unsigned int address, const string amplitude_branch_name,
+           const string time_branch_name,
            const string reference_time_branch_name,
            const string timestamp_branch_name)
-        : DigitizerModule(reference_time_branch_name, timestamp_branch_name),
+        : DigitizerModule(address, reference_time_branch_name,
+                          timestamp_branch_name),
           amplitude(amplitude_branch_name), time(time_branch_name) {}
 
     Branch<double, 16> amplitude;

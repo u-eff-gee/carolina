@@ -413,14 +413,16 @@ void check_expected_counter_detector_events(TH1D *histogram,
     }
 }
 
-void check_expected_counter_detector_rate(TH1D *histogram,
-                                            const unsigned int n,
-                                            const size_t n_detector,
-                                            const size_t n_channel,
-                                            const int rate_bin,
-                                            const bool ignore_errors = false, const int bin_tolerance = 0){
+void check_expected_counter_detector_rate(TH1D *histogram, const unsigned int n,
+                                          const size_t n_detector,
+                                          const size_t n_channel,
+                                          const int rate_bin,
+                                          const bool ignore_errors = false,
+                                          const int bin_tolerance = 0) {
     const unsigned int exp_eve = n;
-    cout << "\t- " << n << " 'counter' events in which the counter of channel '" << analysis.counter_detectors[n_detector]->channels[n_channel].name << "' is incremented." << endl;
+    cout << "\t- " << n << " 'counter' events in which the counter of channel '"
+         << analysis.counter_detectors[n_detector]->channels[n_channel].name
+         << "' is incremented." << endl;
     cout << "-> Number of expected events for detector '"
          << analysis.counter_detectors[n_detector]->name << "', channel '"
          << analysis.counter_detectors[n_detector]->channels[n_channel].name
@@ -432,7 +434,8 @@ void check_expected_counter_detector_rate(TH1D *histogram,
          << analysis.counter_detectors[n_detector]->name << "', channel '"
          << analysis.counter_detectors[n_detector]->channels[n_channel].name
          << "' for the expected rate: " << exp_eve << endl;
-    const unsigned int integral = histogram->Integral(rate_bin - bin_tolerance, rate_bin + bin_tolerance);
+    const unsigned int integral =
+        histogram->Integral(rate_bin - bin_tolerance, rate_bin + bin_tolerance);
     cout << histogram->GetName() << "->Integral(" << rate_bin << " - "
          << bin_tolerance << ", " << rate_bin << " + " << bin_tolerance
          << ") = " << integral << endl;

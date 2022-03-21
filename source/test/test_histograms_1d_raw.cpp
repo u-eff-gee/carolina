@@ -41,11 +41,10 @@ int main(int argc, char **argv) {
         "Check whether output of the 'sampler' script has been processed "
         "correctly by the 'histograms_1d_raw' script.");
     po::positional_options_description p;
-    desc.add_options()("ignore_errors",
-                       "Do not raise an error if one of the tests fails.")(
-        "help", "Produce help message.")("input_file", po::value<string>(),
-                                         "Input file name.")(
-        "n", po::value<unsigned int>()->default_value(1));
+    desc.add_options()("help", "Produce help message.")(
+        "ignore_errors", "Do not raise an error if one of the tests fails.")(
+        "input_file", po::value<string>(),
+        "Input file name.")("n", po::value<unsigned int>()->default_value(1));
     ;
     p.add("input_file", -1);
 

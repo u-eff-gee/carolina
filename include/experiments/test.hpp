@@ -38,8 +38,9 @@ auto scaler = make_shared<CounterDetectorGroup>(
     Histogram{65536, 0, numeric_limits<int>::max()});
 
 Analysis analysis(
-    {make_shared<MDPP16>("amplitude", "time", "reference_time", "timestamp"),
-     make_shared<SIS3316>(), make_shared<V830>(5.)},
+    {make_shared<MDPP16>(0x0, "amplitude", "time", "reference_time",
+                         "timestamp"),
+     make_shared<SIS3316>(0x1), make_shared<V830>(0x2, 5.)},
     {single, segmented, scaler},
     {make_shared<EnergySensitiveDetector>(
          "sin",
@@ -82,7 +83,10 @@ Analysis analysis(
               gate(0., 20.)}},
          segmented,
          vector<vector<function<bool(const double)>>>{
-             {gate([](const double time_difference){ return (time_difference > -2.5) && (time_difference < 2.5); }), gate(-2.5, 2.5), gate(-2.5, 2.5)},
+             {gate([](const double time_difference) {
+                  return (time_difference > -2.5) && (time_difference < 2.5);
+              }),
+              gate(-2.5, 2.5), gate(-2.5, 2.5)},
              {gate(-2.5, 2.5), gate(-2.5, 2.5)},
              {gate(-2.5, 2.5)}}),
      make_shared<CounterDetector>("cou",

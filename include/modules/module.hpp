@@ -20,6 +20,8 @@
 #include "TTree.h"
 
 struct Module {
+    Module(const unsigned int address) : address(address) {}
+    const unsigned int address;
     virtual void reset_raw_leaves(const vector<bool> flags) = 0;
     virtual void set_up_raw_branches_for_reading(TTree *tree,
                                                  const vector<bool> flags) = 0;

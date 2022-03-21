@@ -25,8 +25,8 @@ using std::vector;
 
 struct ScalerModule : Module {
 
-    ScalerModule(const double trigger_frequency)
-        : trigger_frequency(trigger_frequency){};
+    ScalerModule(const unsigned int address, const double trigger_frequency)
+        : Module(address), trigger_frequency(trigger_frequency){};
 
     const double trigger_frequency;
 
