@@ -29,15 +29,16 @@ struct Gate {
         return (x > lower_limit) && (x < upper_limit);
     }
 
+    static function<bool(const double)>
+    gate(const function<bool(const double)> function) {
+        return function;
+    }
+
+    static function<bool(const double)> gate(const double lower_limit,
+                                             const double upper_limit) {
+        return Gate(lower_limit, upper_limit);
+    }
+
     const double lower_limit;
     const double upper_limit;
 };
-
-function<bool(const double)> gate(const function<bool(const double)> function) {
-    return function;
-}
-
-function<bool(const double)> gate(const double lower_limit,
-                                  const double upper_limit) {
-    return Gate(lower_limit, upper_limit);
-}

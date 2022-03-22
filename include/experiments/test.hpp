@@ -50,7 +50,7 @@ Analysis analysis(
                   vector<double>{50., 0.1}),
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(0., 20.)}},
+              Gate::gate(0., 20.)}},
          single),
      make_shared<EnergySensitiveDetector>(
          "seg",
@@ -59,12 +59,12 @@ Analysis analysis(
               calibration_function<const double, const long long>("60.,0.6"),
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(0., 20.)},
+              Gate::gate(0., 20.)},
              {"E2", 1, 1,
               calibration_function<const double, const long long>("70. 0.7"),
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(0., 20.)},
+              Gate::gate(0., 20.)},
              {"E3", 1, 2,
               [](const double amplitude,
                  [[maybe_unused]] const long long n_entry) {
@@ -72,7 +72,7 @@ Analysis analysis(
               },
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(0., 20.)},
+              Gate::gate(0., 20.)},
              {"E4", 1, 3,
               [](const double amplitude,
                  [[maybe_unused]] const long long n_entry) {
@@ -80,15 +80,15 @@ Analysis analysis(
               },
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(0., 20.)}},
+              Gate::gate(0., 20.)}},
          segmented,
          vector<vector<function<bool(const double)>>>{
-             {gate([](const double time_difference) {
+             {Gate::gate([](const double time_difference) {
                   return (time_difference > -2.5) && (time_difference < 2.5);
               }),
-              gate(-2.5, 2.5), gate(-2.5, 2.5)},
-             {gate(-2.5, 2.5), gate(-2.5, 2.5)},
-             {gate(-2.5, 2.5)}}),
+              Gate::gate(-2.5, 2.5), Gate::gate(-2.5, 2.5)},
+             {Gate::gate(-2.5, 2.5), Gate::gate(-2.5, 2.5)},
+             {Gate::gate(-2.5, 2.5)}}),
      make_shared<CounterDetector>("cou",
                                   vector<CounterDetectorChannel>{{"cts", 2, 0}},
                                   scaler),
@@ -100,7 +100,7 @@ Analysis analysis(
                   vector<double>{33., 0.33}),
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
-              gate(0., 20.)},
+              Gate::gate(0., 20.)},
              {"E2", 0, 3,
               calibration_function<const double, const long long>(
                   vector<double>{44., 0.44}),
@@ -111,7 +111,8 @@ Analysis analysis(
                          (time_vs_reference_time < 20.);
               }}},
          segmented,
-         vector<vector<function<bool(const double)>>>{{gate(-2.5, 2.5)}})},
+         vector<vector<function<bool(const double)>>>{
+             {Gate::gate(-2.5, 2.5)}})},
     {
         {"sin_vs_seg",
          {0},
