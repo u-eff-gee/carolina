@@ -89,9 +89,7 @@ struct Analysis {
     void set_up_calibrated_counter_detector_branches_for_reading(TTree *tree);
     void set_up_calibrated_counter_detector_branches_for_writing(TTree *tree);
     void set_up_raw_counter_detector_branches_for_reading(
-        TTree *tree,
-        const vector<bool> amp_t_tref_ts = {false, false, false, false});
+        TTree *tree, const vector<bool> counter_values = {false});
     void set_up_raw_counter_detector_branches_for_writing(
-        TTree *tree,
-        const vector<bool> amp_t_tref_ts = {false, false, false, false});
+        TTree *tree, const vector<bool> counter_values = {false});
 };
