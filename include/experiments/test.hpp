@@ -38,8 +38,8 @@ auto scaler = make_shared<CounterDetectorGroup>(
     Histogram{65536, 0, numeric_limits<int>::max()});
 
 Analysis analysis(
-    {make_shared<MDPP16>(0x0, "amplitude", "time", "reference_time",
-                         "timestamp"),
+    {make_shared<MDPP16_SCP>(0x0, "amplitude", "time", "reference_time",
+                             "timestamp"),
      make_shared<SIS3316>(0x1), make_shared<V830>(0x2, 5.)},
     {single, segmented, scaler},
     {make_shared<EnergySensitiveDetector>(

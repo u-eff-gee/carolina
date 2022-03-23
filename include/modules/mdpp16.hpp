@@ -21,7 +21,7 @@
 
 #include "digitizer_module.hpp"
 
-struct MDPP16 final : public DigitizerModule {
+struct MDPP16 : public DigitizerModule {
     MDPP16(const unsigned int address, const string amplitude_branch_name,
            const string time_branch_name,
            const string reference_time_branch_name,
@@ -48,6 +48,7 @@ struct MDPP16 final : public DigitizerModule {
         time.leaves[leaf] = t;
     }
 
+    void process_data_word(const u_int32_t word) = 0;
     void reset_raw_amplitude_leaves() override final;
     void reset_raw_time_leaves() override final;
     void reset_raw_reference_time_leaves() override final;

@@ -15,17 +15,6 @@
     carolina. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "mdpp16_scp.hpp"
 
-#include "TTree.h"
-
-struct Module {
-    Module(const unsigned int address) : address(address) {}
-    const unsigned int address;
-    virtual void process_data_word(const uint32_t word) = 0;
-    virtual void reset_raw_leaves(const vector<bool> flags) = 0;
-    virtual void set_up_raw_branches_for_reading(TTree *tree,
-                                                 const vector<bool> flags) = 0;
-    virtual void set_up_raw_branches_for_writing(TTree *tree,
-                                                 const vector<bool> flags) = 0;
-};
+void MDPP16_SCP::process_data_word(const u_int32_t word){};

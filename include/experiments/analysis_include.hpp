@@ -25,6 +25,7 @@
 #include "energy_sensitive_detector.hpp"
 #include "energy_sensitive_detector_channel.hpp"
 #include "gate.hpp"
-#include "mdpp16.hpp"
+#include "mdpp16_qdc.hpp"
+#include "mdpp16_scp.hpp"
 #include "sis3316.hpp"
 #include "v830.hpp"

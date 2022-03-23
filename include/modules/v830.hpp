@@ -40,6 +40,8 @@ struct V830 final : public ScalerModule {
         counter_values.leaves[leaf] += (double)counts;
     }
 
+    void process_data_word([
+        [maybe_unused]] const u_int32_t word) override final{};
     void reset_raw_counter_leaves() override final;
     void set_up_raw_counter_branches_for_reading(TTree *tree) override final;
     void set_up_raw_counter_branches_for_writing(TTree *tree) override final;

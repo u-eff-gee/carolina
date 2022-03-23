@@ -40,6 +40,7 @@ struct DigitizerModule : Module {
     Branch<double, 1> reference_time;
     Branch<double, 1> timestamp;
 
+    void process_data_word(const u_int32_t word) = 0;
     void reset_raw_leaves(const vector<bool> amp_t_tref_ts = {
                               false, false, false, false}) override final;
     void set_up_raw_branches_for_reading(TTree *tree,

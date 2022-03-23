@@ -17,15 +17,15 @@
 
 #pragma once
 
-#include "TTree.h"
+#include "mdpp16.hpp"
 
-struct Module {
-    Module(const unsigned int address) : address(address) {}
-    const unsigned int address;
-    virtual void process_data_word(const uint32_t word) = 0;
-    virtual void reset_raw_leaves(const vector<bool> flags) = 0;
-    virtual void set_up_raw_branches_for_reading(TTree *tree,
-                                                 const vector<bool> flags) = 0;
-    virtual void set_up_raw_branches_for_writing(TTree *tree,
-                                                 const vector<bool> flags) = 0;
+struct MDPP16_SCP : public MDPP16 {
+    MDPP16_SCP(const unsigned int address, const string amplitude_branch_name,
+               const string time_branch_name,
+               const string reference_time_branch_name,
+               const string timestamp_branch_name)
+        : MDPP16(address, amplitude_branch_name, time_branch_name,
+                 reference_time_branch_name, timestamp_branch_name) {}
+
+    void process_data_word(const u_int32_t word);
 };

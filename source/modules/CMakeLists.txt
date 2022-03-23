@@ -25,6 +25,12 @@ target_link_libraries(scaler_module ${ROOT_LIBRARIES})
 add_library(mdpp16 mdpp16.cpp)
 target_link_libraries(mdpp16 digitizer_module ${ROOT_LIBRARIES})
 
+add_library(mdpp16_qdc mdpp16_qdc.cpp)
+target_link_libraries(mdpp16_qdc digitizer_module mdpp16 ${ROOT_LIBRARIES})
+
+add_library(mdpp16_scp mdpp16_scp.cpp)
+target_link_libraries(mdpp16_scp digitizer_module mdpp16 ${ROOT_LIBRARIES})
+
 add_library(sis3316 sis3316.cpp)
 target_link_libraries(sis3316 digitizer_module ${ROOT_LIBRARIES})
 
