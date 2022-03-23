@@ -17,6 +17,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include/detectors)
 include_directories(${CMAKE_SOURCE_DIR}/include/experiments)
 include_directories(${CMAKE_SOURCE_DIR}/include/io)
 include_directories(${CMAKE_SOURCE_DIR}/include/modules)
+include_directories(${CMAKE_SOURCE_DIR}/include/reader)
 
 add_executable(calibrate_tree calibrate_tree.cpp)
 target_include_directories(calibrate_tree PUBLIC ${CMAKE_BINARY_DIR}/include/programs)
@@ -35,8 +36,8 @@ target_include_directories(histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include/prog
 target_link_libraries(histograms_1d analysis ${Boost_LIBRARIES} command_line_parser counter_detector counter_detector_channel energy_sensitive_detector energy_sensitive_detector_channel mdpp16 progress_printer ${ROOT_LIBRARIES} sis3316 tfile_utilities v830)
 
 add_executable(histograms_1d_raw histograms_1d_raw.cpp)
-target_include_directories(histograms_1d_raw PUBLIC ${CMAKE_BINARY_DIR}/include/programs)
-target_link_libraries(histograms_1d_raw analysis ${Boost_LIBRARIES} command_line_parser counter_detector counter_detector_channel energy_sensitive_detector energy_sensitive_detector_channel mdpp16 progress_printer ${ROOT_LIBRARIES} sis3316 tfile_utilities v830)
+target_include_directories(histograms_1d_raw PUBLIC ${CMAKE_BINARY_DIR}/include/programs ${CMAKE_BINARY_DIR}/include/reader)
+target_link_libraries(histograms_1d_raw analysis ${Boost_LIBRARIES} command_line_parser counter_detector counter_detector_channel energy_sensitive_detector energy_sensitive_detector_channel mdpp16 progress_printer tree ${ROOT_LIBRARIES} sis3316 tfile_utilities v830)
 
 add_executable(histograms_2d histograms_2d.cpp)
 target_include_directories(histograms_2d PUBLIC ${CMAKE_BINARY_DIR}/include/programs)

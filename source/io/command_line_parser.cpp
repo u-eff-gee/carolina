@@ -61,8 +61,10 @@ void CommandLineParser::operator()(int argc, char *argv[], int &status) {
     }
 }
 
-TChain *CommandLineParser::set_up_tree(long long &first, long long &last,
-                                       const bool log_file) const {
+[[deprecated(
+    "Will be replaced by a Reader class in a future version.")]] TChain *
+CommandLineParser::set_up_tree(long long &first, long long &last,
+                               const bool log_file) const {
     vector<string> input_files;
     if (!log_file) {
         input_files = vm["input"].as<vector<string>>();

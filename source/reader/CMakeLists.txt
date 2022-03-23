@@ -12,25 +12,13 @@
 #    You should have received a copy of the GNU General Public License along with 
 #    carolina. If not, see <https://www.gnu.org/licenses/>.
 
-FILES=\
-`ls include/analysis/*.hpp`" "\
-`ls include/experiments/*.hpp`" "\
-`ls include/detectors/*.hpp`" "\
-`ls include/io/*.hpp`" "\
-`ls include/modules/*.hpp`" "\
-`ls include/programs/*.hpp.in`" "\
-`ls include/reader/*.hpp`" "\
-`ls include/test/*.hpp.in`" "\
-`ls source/analysis/*.cpp`" "\
-`ls source/detectors/*.cpp`" "\
-`ls source/io/*.cpp`" "\
-`ls source/modules/*.cpp`" "\
-`ls source/programs/*.cpp`" "\
-`ls source/reader/*.cpp`" "\
-`ls source/test/*.cpp`" "\
+include_directories(${CMAKE_SOURCE_DIR}/include/analysis)
+include_directories(${CMAKE_SOURCE_DIR}/include/detectors)
+include_directories(${CMAKE_SOURCE_DIR}/include/experiments)
+include_directories(${CMAKE_SOURCE_DIR}/include/io)
+include_directories(${CMAKE_SOURCE_DIR}/include/modules)
+include_directories(${CMAKE_SOURCE_DIR}/include/reader)
 
-for FILE in $FILES
-do
-    echo Formatting $FILE ...
-    clang-format -i -style="{IndentWidth: 4, TabWidth: 4}" $FILE
-done
+add_library(tree tree.cpp)
+target_include_directories(tree PUBLIC ${CMAKE_BINARY_DIR}/include/reader)
+target_link_libraries(tree ${ROOT_LIBRARIES})

@@ -31,7 +31,7 @@ using std::dynamic_pointer_cast;
 #include "command_line_parser.hpp"
 #include "counter_detector_channel.hpp"
 #include "energy_sensitive_detector_channel.hpp"
-#include "histograms_1d.hpp"
+#include "histograms_1d_raw.hpp"
 #include "progress_printer.hpp"
 #include "tfile_utilities.hpp"
 
@@ -42,18 +42,15 @@ int main(int argc, char **argv) {
     if (command_line_parser_status) {
         return 0;
     }
-    const po::variables_map vm = command_line_parser.get_variables_map();
+    po::variables_map vm = command_line_parser.get_variables_map();
 
-    long long first, last;
-    TChain *tree =
-        command_line_parser.set_up_tree(first, last, vm.count("list"));
-
-    ProgressPrinter progress_printer(first, last);
-
-    tree->SetBranchStatus("*", 0);
-    analysis.set_up_raw_counter_detector_branches_for_reading(tree, {true});
-    analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(
-        tree, {true, false, false, false});
+    Reader reader(vm.count("list") == 0
+                      ? vm["input"].as<vector<string>>()
+                      : read_log_file(vm["input"].as<vector<string>>()[0]),
+                  vm["first"].as<long long>(), vm["last"].as<long long>());
+    reader.initialize(analysis, vm["tree"].as<string>(), {true},
+                      {true, false, false, false});
+    ProgressPrinter progress_printer(reader.first, reader.last);
 
     vector<vector<TH1D *>> energy_sensitive_detector_histograms;
     vector<vector<TH1D *>> counter_detector_histograms;
@@ -97,9 +94,7 @@ int main(int argc, char **argv) {
 
     double amplitude;
 
-    for (long long i = first; i <= last; ++i) {
-        tree->GetEntry(i);
-
+    while (reader.read()) {
         for (size_t n_detector = 0;
              n_detector < analysis.energy_sensitive_detectors.size();
              ++n_detector) {
@@ -124,7 +119,7 @@ int main(int argc, char **argv) {
                     analysis.get_counts(n_detector, n_channel));
             }
         }
-        progress_printer(i);
+        progress_printer(reader.entry);
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");

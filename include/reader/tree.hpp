@@ -17,5 +17,20 @@
 
 #pragma once
 
-#include "@ANALYSIS@"
-#include "@READER@.hpp"
+#include "TChain.h"
+
+#include "reader.hpp"
+
+struct Reader : ReaderBase {
+    Reader(const vector<string> input_files, const long long first,
+           const long long last = -1)
+        : ReaderBase(input_files, first, last){};
+
+    void initialize(Analysis &analysis, const string tree_name,
+                    const vector<bool> counter_values = {false},
+                    const vector<bool> amp_t_tref_ts = {false, false, false,
+                                                        false}) override final;
+    bool read() override final;
+    TChain *tree;
+    long long n_entries;
+};
