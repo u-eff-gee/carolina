@@ -16,4 +16,4 @@
 
 #pragma once
 
-#include "@ANALYSIS@"
+#include "@ANALYSIS@.hpp"

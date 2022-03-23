@@ -23,7 +23,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(ROOT REQUIRED)
 include(${ROOT_USE_FILE})
 
-set(ANALYSIS "test.hpp" CACHE STRING "Set name of header file in ${CMAKE_SOURCE_DIR}/include/experiments/ that contains the analysis configuration. Default: 'test.hpp'.")
+set(ANALYSIS "test" CACHE STRING "Set name of header file (without the '.hpp' suffix) in ${CMAKE_SOURCE_DIR}/include/experiments/ that contains the analysis configuration. Default: 'test'.")
 set(READER "tree" CACHE STRING "Determine whether raw data should be read from a ROOT TTree object ('tree') or an MVLC listfile ('mvlclst', not implemented at the moment).")
 
 add_compile_options(-Wall -Wextra)
