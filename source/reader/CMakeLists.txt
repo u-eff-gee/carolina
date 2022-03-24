@@ -22,3 +22,6 @@ include_directories(${CMAKE_SOURCE_DIR}/include/reader)
 add_library(tree tree.cpp)
 target_include_directories(tree PUBLIC ${CMAKE_BINARY_DIR}/include/reader)
 target_link_libraries(tree ${ROOT_LIBRARIES})
+
+add_library(mvlclst mvlclst.cpp)
+target_include_directories(mvlclst PUBLIC ${CMAKE_BINARY_DIR}/include/reader)

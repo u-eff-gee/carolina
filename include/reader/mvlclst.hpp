@@ -17,7 +17,9 @@
 
 #pragma once
 
-#include "TChain.h"
+#include <fstream>
+
+using std::ifstream;
 
 #include "reader.hpp"
 
@@ -26,11 +28,15 @@ struct Reader : ReaderBase {
            const long long last = -1)
         : ReaderBase(input_files, first, last){};
 
-    void initialize(Analysis &analysis, const string tree_name,
+    void initialize(Analysis &analysis, const string option,
                     const vector<bool> counter_values = {false},
                     const vector<bool> amp_t_tref_ts = {false, false, false,
                                                         false}) override final;
     bool read(Analysis &analysis) override final;
-    TChain *tree;
-    long long n_entries;
+    bool module_found;
+    ifstream file;
+    long long n_words;
+    uint32_t channel_number, data_integer, data_length, module_id;
+    uint16_t amplitude_or_time;
+    size_t module_index;
 };

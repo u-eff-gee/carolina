@@ -17,20 +17,15 @@
 
 #pragma once
 
-#include "TChain.h"
+const u_int32_t header_mask = 0xC0000000;
+const u_int32_t header_found_flag = 0x40000000;
+const u_int32_t data_length_mask = 0x000003FF;
+const u_int32_t module_id_mask = 0x00FF0000;
+const u_int32_t module_id_offset = 0x10000;
+const u_int32_t data_mask = 0xF0000000;
+const u_int32_t data_found_flag = 0x10000000;
+const u_int32_t eoe_mask = 0xC0000000;
+const u_int32_t eoe_found_flag = eoe_mask;
 
-#include "reader.hpp"
-
-struct Reader : ReaderBase {
-    Reader(const vector<string> input_files, const long long first,
-           const long long last = -1)
-        : ReaderBase(input_files, first, last){};
-
-    void initialize(Analysis &analysis, const string tree_name,
-                    const vector<bool> counter_values = {false},
-                    const vector<bool> amp_t_tref_ts = {false, false, false,
-                                                        false}) override final;
-    bool read(Analysis &analysis) override final;
-    TChain *tree;
-    long long n_entries;
-};
+const u_int32_t channel_address_mask = 0x003F0000;
+const u_int32_t channel_address_offset = 0x0010000;

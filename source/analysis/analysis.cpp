@@ -62,6 +62,17 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
     }
 }
 
+bool Analysis::find_module_by_id(size_t &module_index,
+                                 const u_int32_t id) const {
+    for (size_t i = 0; i < modules.size(); ++i) {
+        if ((uint32_t)modules[i]->address == id) {
+            module_index = i;
+            return true;
+        }
+    }
+    return false;
+}
+
 size_t Analysis::get_n_energy_sensitive_detector_channels() const {
     size_t n_energy_sensitive_detector_channels = 0;
     for (auto detector : energy_sensitive_detectors) {

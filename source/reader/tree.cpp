@@ -46,7 +46,7 @@ void Reader::initialize(Analysis &analysis, const string tree_name,
         tree, amp_t_tref_ts);
 }
 
-bool Reader::read() {
+bool Reader::read([[maybe_unused]] Analysis &analysis) {
     ++entry;
     if (entry <= last) {
         tree->GetEntry(entry);

@@ -46,6 +46,7 @@ struct Analysis {
     vector<size_t> module_index;
 
     void calibrate(const long long n_entry);
+    bool find_module_by_id(size_t &module_index, const u_int32_t id) const;
     double get_amplitude(const size_t n_detector, const size_t n_channel) const;
     long long get_counts(const size_t n_detector, const size_t n_channel) const;
     size_t get_n_energy_sensitive_detector_channels() const;

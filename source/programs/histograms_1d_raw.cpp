@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 
     double amplitude;
 
-    while (reader.read()) {
+    while (reader.read(analysis)) {
         for (size_t n_detector = 0;
              n_detector < analysis.energy_sensitive_detectors.size();
              ++n_detector) {
@@ -120,6 +120,9 @@ int main(int argc, char **argv) {
             }
         }
         progress_printer(reader.entry);
+        analysis.reset_raw_counter_detector_leaves({true});
+        analysis.reset_raw_energy_sensitive_detector_leaves(
+            {true, false, false, false});
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");

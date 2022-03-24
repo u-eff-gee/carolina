@@ -33,6 +33,11 @@ struct MDPP16 : public DigitizerModule {
     Branch<double, 16> amplitude;
     Branch<double, 16> time;
 
+    const u_int32_t channel_address_mask = 0x003F0000;
+    const u_int32_t channel_address_offset = 0x0010000;
+    const u_int32_t data_mask = 0x0000FFFF;
+    u_int32_t channel_address, data_word;
+
     double get_amplitude(const size_t leaf) const override final {
         return amplitude.leaves[leaf];
     }
