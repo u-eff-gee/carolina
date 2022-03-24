@@ -29,8 +29,36 @@ struct Reader : ReaderBase {
     void initialize(Analysis &analysis, const string tree_name,
                     const vector<bool> counter_values = {false},
                     const vector<bool> amp_t_tref_ts = {false, false, false,
-                                                        false}) override final;
-    bool read(Analysis &analysis) override final;
+                                                        false}) override final {
+        tree = new TChain(find_tree_in_file(input_files[0], tree_name).c_str());
+        for (auto input_file : input_files) {
+            cout << "Adding '" << input_file.c_str() << "' to TChain." << endl;
+            tree->Add(input_file.c_str());
+        }
+
+        n_entries = tree->GetEntries();
+        if (n_entries == 0) {
+            cout << "TTree::GetEntries() returned 0." << endl;
+            abort();
+        }
+        entry = first - 1;
+        last = (last == -1) ? n_entries - 1 : last;
+
+        tree->SetBranchStatus("*", 0);
+        analysis.set_up_raw_counter_detector_branches_for_reading(
+            tree, counter_values);
+        analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(
+            tree, amp_t_tref_ts);
+    };
+
+    bool read([[maybe_unused]] Analysis &analysis) override final {
+        ++entry;
+        if (entry <= last) {
+            tree->GetEntry(entry);
+            return true;
+        }
+        return false;
+    };
     TChain *tree;
     long long n_entries;
 };
