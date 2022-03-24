@@ -59,6 +59,9 @@ struct Reader : ReaderBase {
         }
         return false;
     };
+
+    void finalize() override final {};
+
     TChain *tree;
     long long n_entries;
 };

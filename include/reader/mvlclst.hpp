@@ -34,10 +34,12 @@ struct Reader : ReaderBase {
            const long long last = -1)
         : ReaderBase(input_files, first, last){};
 
-    void initialize([[maybe_unused]] Analysis &analysis, [[maybe_unused]] const string option,
-                    [[maybe_unused]] const vector<bool> counter_values = {false},
-                    [[maybe_unused]] const vector<bool> amp_t_tref_ts = {false, false, false,
-                                                        false}) override final {
+    void
+    initialize([[maybe_unused]] Analysis &analysis,
+               [[maybe_unused]] const string option,
+               [[maybe_unused]] const vector<bool> counter_values = {false},
+               [[maybe_unused]] const vector<bool> amp_t_tref_ts = {
+                   false, false, false, false}) override final {
         if (input_files.size() > 1) {
             cout << "Warning: The 'mvlclst' reader can only process a single "
                     "file. "
@@ -76,6 +78,10 @@ struct Reader : ReaderBase {
             };
         }
         return false;
+    }
+
+    void finalize() override final {
+        file.close();
     }
 
     bool module_found;

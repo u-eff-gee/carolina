@@ -125,6 +125,8 @@ int main(int argc, char **argv) {
             {true, false, false, false});
     }
 
+    reader.finalize();
+
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");
 
     for (auto histogram_list : energy_sensitive_detector_histograms) {

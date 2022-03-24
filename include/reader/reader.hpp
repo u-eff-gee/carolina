@@ -34,6 +34,7 @@ struct ReaderBase {
         : input_files(input_files), first(first), last(last){};
     virtual void initialize(Analysis &analysis, const string option, const vector<bool> counter_values={false}, const vector<bool> amp_t_tref_ts={false, false, false, false}) = 0;
     virtual bool read(Analysis &analysis) = 0;
+    virtual void finalize() = 0;
 
     vector<string> input_files;
     long long entry;
