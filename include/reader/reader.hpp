@@ -30,9 +30,12 @@ using std::vector;
 
 struct ReaderBase {
     ReaderBase(const vector<string> input_files, const long long first = 0,
-                   const long long last = -1)
+               const long long last = -1)
         : input_files(input_files), first(first), last(last){};
-    virtual void initialize(Analysis &analysis, const string option, const vector<bool> counter_values={false}, const vector<bool> amp_t_tref_ts={false, false, false, false}) = 0;
+    virtual void initialize(Analysis &analysis, const string option,
+                            const vector<bool> counter_values = {false},
+                            const vector<bool> amp_t_tref_ts = {
+                                false, false, false, false}) = 0;
     virtual bool read(Analysis &analysis) = 0;
     virtual void finalize() = 0;
 

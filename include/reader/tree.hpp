@@ -60,7 +60,7 @@ struct Reader : ReaderBase {
         return false;
     };
 
-    void finalize() override final {};
+    void finalize() override final{};
 
     TChain *tree;
     long long n_entries;

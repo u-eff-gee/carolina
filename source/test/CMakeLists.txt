@@ -24,7 +24,7 @@ target_link_libraries(inverse_calibration ${ROOT_LIBRARIES})
 
 add_executable(sampler sampler.cpp)
 target_include_directories(sampler PUBLIC ${CMAKE_BINARY_DIR}/include/test)
-target_link_libraries(sampler analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel energy_sensitive_detector energy_sensitive_detector_channel inverse_calibration mdpp16 mdpp16_scp progress_printer ${ROOT_LIBRARIES} sis3316 v830)
+target_link_libraries(sampler analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel energy_sensitive_detector energy_sensitive_detector_channel inverse_calibration mdpp16 mdpp16_scp mdpp16_qdc progress_printer ${ROOT_LIBRARIES} sis3316 v830)
 
 add_executable(test_tfile_utilities test_tfile_utilities.cpp)
 target_link_libraries(test_tfile_utilities tfile_utilities)
@@ -34,8 +34,8 @@ target_link_libraries(test_polynomial polynomial)
 
 add_executable(test_histograms_1d_raw test_histograms_1d_raw.cpp)
 target_include_directories(test_histograms_1d_raw PUBLIC ${CMAKE_BINARY_DIR}/include/test)
-target_link_libraries(test_histograms_1d_raw analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel digitizer_module energy_sensitive_detector energy_sensitive_detector_channel mdpp16 mdpp16_scp ${ROOT_LIBRARIES} sis3316 v830)
+target_link_libraries(test_histograms_1d_raw analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel digitizer_module energy_sensitive_detector energy_sensitive_detector_channel mdpp16 mdpp16_scp mdpp16_qdc ${ROOT_LIBRARIES} sis3316 v830)
 
 add_executable(test_histograms_1d test_histograms_1d.cpp)
 target_include_directories(test_histograms_1d PUBLIC ${CMAKE_BINARY_DIR}/include/test)
-target_link_libraries(test_histograms_1d analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel digitizer_module energy_sensitive_detector energy_sensitive_detector_channel mdpp16 mdpp16_scp ${ROOT_LIBRARIES} scaler_module sis3316 v830)
+target_link_libraries(test_histograms_1d analysis ${Boost_LIBRARIES} counter_detector counter_detector_channel digitizer_module energy_sensitive_detector energy_sensitive_detector_channel mdpp16 mdpp16_scp mdpp16_qdc ${ROOT_LIBRARIES} scaler_module sis3316 v830)

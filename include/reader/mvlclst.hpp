@@ -80,9 +80,7 @@ struct Reader : ReaderBase {
         return false;
     }
 
-    void finalize() override final {
-        file.close();
-    }
+    void finalize() override final { file.close(); }
 
     bool module_found;
     ifstream file;

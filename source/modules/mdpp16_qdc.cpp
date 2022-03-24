@@ -17,4 +17,14 @@
 
 #include "mdpp16_qdc.hpp"
 
-void MDPP16_QDC::process_data_word(const u_int32_t word){};
+void MDPP16_QDC::process_data_word(const u_int32_t word) {
+    channel_address = (word & channel_address_mask) / channel_address_offset;
+    data_word = word & data_mask;
+    if (channel_address < 16) {
+        set_amplitude(channel_address, (double)data_word);
+    } else if (channel_address < 32) {
+        set_time(channel_address - 16, (double)data_word);
+    } else if (channel_address < 34) {
+        set_reference_time((double)data_word);
+    }
+};
