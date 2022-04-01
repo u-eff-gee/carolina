@@ -31,10 +31,10 @@ using std::vector;
 #include "TTree.h"
 
 struct Detector {
-    Detector(const string name, const shared_ptr<DetectorGroup> group);
+    Detector(const string name, const size_t group);
 
     const string name;
-    const shared_ptr<DetectorGroup> group;
+    const size_t group;
 
     virtual void reset_calibrated_leaves() = 0;
     virtual void set_up_calibrated_branches_for_reading(TTree *tree) = 0;

@@ -36,7 +36,7 @@ struct EnergySensitiveDetector final : public Detector {
     EnergySensitiveDetector(
         const string name,
         const vector<EnergySensitiveDetectorChannel> channels,
-        const shared_ptr<EnergySensitiveDetectorGroup> group,
+        const size_t group,
         const vector<vector<function<bool(const double)>>>
             addback_coincidence_gates = {});
 

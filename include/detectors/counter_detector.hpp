@@ -23,7 +23,7 @@
 struct CounterDetector final : public Detector {
     CounterDetector(const string name,
                     const vector<CounterDetectorChannel> channels,
-                    const shared_ptr<CounterDetectorGroup> group);
+                    const size_t group);
 
     vector<CounterDetectorChannel> channels;
 

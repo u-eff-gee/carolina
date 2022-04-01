@@ -62,7 +62,6 @@ endif(BUILD_TESTS)
 
 configure_file(include/io/split_tree.hpp.in include/io/split_tree.hpp)
 configure_file(include/programs/calibrate_tree.hpp.in include/programs/calibrate_tree.hpp)
-configure_file(include/programs/chapl.hpp.in include/programs/chapl.hpp)
 configure_file(include/programs/energy_vs_time.hpp.in include/programs/energy_vs_time.hpp)
 configure_file(include/programs/histograms_1d.hpp.in include/programs/histograms_1d.hpp)
 configure_file(include/programs/histograms_1d_raw.hpp.in include/programs/histograms_1d_raw.hpp)

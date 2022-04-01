@@ -17,5 +17,5 @@
 
 #include "detector.hpp"
 
-Detector::Detector(const string name, const shared_ptr<DetectorGroup> group)
+Detector::Detector(const string name, const size_t group)
     : name(name), group(group){};

@@ -76,22 +76,41 @@ int main(int argc, char **argv) {
                 channel.name;
             energy_vs_time_histograms[n_detector].push_back(new TH2D(
                 histogram_name.c_str(), histogram_name.c_str(),
-                analysis.energy_sensitive_detectors[n_detector]
-                        ->group->histogram_properties.n_bins /
+                analysis.energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector]
+                                  ->group]]
+                            ->histogram_properties.n_bins /
                     vm["rebin_energy"].as<unsigned int>(),
-                analysis.energy_sensitive_detectors[n_detector]
-                    ->group->histogram_properties.lower_edge_of_first_bin,
-                analysis.energy_sensitive_detectors[n_detector]
-                    ->group->histogram_properties.upper_edge_of_last_bin,
-                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                    analysis.energy_sensitive_detectors[n_detector]->group)
-                        ->time_histogram_properties.n_bins /
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector]
+                                  ->group]]
+                    ->histogram_properties.lower_edge_of_first_bin,
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector]
+                                  ->group]]
+                    ->histogram_properties.upper_edge_of_last_bin,
+                analysis.energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector]
+                                  ->group]]
+                            ->time_histogram_properties.n_bins /
                     vm["rebin_time"].as<unsigned int>(),
-                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                    analysis.energy_sensitive_detectors[n_detector]->group)
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector]
+                                  ->group]]
                     ->time_histogram_properties.n_bins,
-                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                    analysis.energy_sensitive_detectors[n_detector]->group)
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector]
+                                  ->group]]
                     ->time_histogram_properties.n_bins));
         }
     }

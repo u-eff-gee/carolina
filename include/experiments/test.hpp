@@ -23,25 +23,23 @@ using std::make_shared;
 
 #include "analysis_include.hpp"
 
-auto single = make_shared<EnergySensitiveDetectorGroup>(
-    "single", Histogram{65536, -0.125, 16384. - 0.125},
-    Histogram{65536, -0.5, 65536. - 0.5},
-    Histogram{2000, -1000. - 0.5, 1000. - 0.5},
-    Histogram{2000, -1000. - 0.5, 1000. - 0.5});
-auto segmented = make_shared<EnergySensitiveDetectorGroup>(
-    "segmented", Histogram{65536, -0.125, 16384. - 0.125},
-    Histogram{65536, -0.5, 65536. - 0.5},
-    Histogram{2000, -1000. - 0.5, 1000. - 0.5},
-    Histogram{2000, -1000. - 0.5, 1000. - 0.5});
-auto scaler = make_shared<CounterDetectorGroup>(
-    "counter", Histogram{100000, -5., 1e6 - 5.},
-    Histogram{65536, 0, numeric_limits<int>::max()});
-
 Analysis analysis(
     {make_shared<MDPP16_SCP>(0x0, "amplitude", "time", "reference_time",
                              "timestamp"),
      make_shared<SIS3316>(0x1), make_shared<V830>(0x2, 5.)},
-    {single, segmented, scaler},
+    {make_shared<EnergySensitiveDetectorGroup>(
+         "single", Histogram{65536, -0.125, 16384. - 0.125},
+         Histogram{65536, -0.5, 65536. - 0.5},
+         Histogram{2000, -1000. - 0.5, 1000. - 0.5},
+         Histogram{2000, -1000. - 0.5, 1000. - 0.5}),
+     make_shared<EnergySensitiveDetectorGroup>(
+         "segmented", Histogram{65536, -0.125, 16384. - 0.125},
+         Histogram{65536, -0.5, 65536. - 0.5},
+         Histogram{2000, -1000. - 0.5, 1000. - 0.5},
+         Histogram{2000, -1000. - 0.5, 1000. - 0.5}),
+     make_shared<CounterDetectorGroup>(
+         "counter", Histogram{100000, -5., 1e6 - 5.},
+         Histogram{65536, 0, numeric_limits<int>::max()})},
     {make_shared<EnergySensitiveDetector>(
          "sin",
          vector<EnergySensitiveDetectorChannel>{
@@ -51,7 +49,7 @@ Analysis analysis(
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
               Gate::gate(0., 20.)}},
-         single),
+         0),
      make_shared<EnergySensitiveDetector>(
          "seg",
          vector<EnergySensitiveDetectorChannel>{
@@ -81,7 +79,7 @@ Analysis analysis(
               calibration_function<const double, const double>(vector<double>{
                   0., 1.}),
               Gate::gate(0., 20.)}},
-         segmented,
+         1,
          vector<vector<function<bool(const double)>>>{
              {Gate::gate([](const double time_difference) {
                   return (time_difference > -2.5) && (time_difference < 2.5);
@@ -91,7 +89,7 @@ Analysis analysis(
              {Gate::gate(-2.5, 2.5)}}),
      make_shared<CounterDetector>("cou",
                                   vector<CounterDetectorChannel>{{"cts", 2, 0}},
-                                  scaler),
+                                  2),
      make_shared<EnergySensitiveDetector>(
          "seg2",
          vector<EnergySensitiveDetectorChannel>{
@@ -110,7 +108,7 @@ Analysis analysis(
                   return (time_vs_reference_time > 0.) &&
                          (time_vs_reference_time < 20.);
               }}},
-         segmented,
+         1,
          vector<vector<function<bool(const double)>>>{
              {Gate::gate(-2.5, 2.5)}})},
     {

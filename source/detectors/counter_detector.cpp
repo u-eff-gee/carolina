@@ -23,7 +23,7 @@ using std::dynamic_pointer_cast;
 
 CounterDetector::CounterDetector(const string name,
                                  const vector<CounterDetectorChannel> channels,
-                                 const shared_ptr<CounterDetectorGroup> group)
+                                 const size_t group)
     : Detector(name, group), channels(channels) {}
 
 void CounterDetector::set_up_calibrated_branches_for_reading(TTree *tree) {

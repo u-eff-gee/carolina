@@ -36,7 +36,7 @@ using std::to_string;
 
 EnergySensitiveDetector::EnergySensitiveDetector(
     const string name, const vector<EnergySensitiveDetectorChannel> channels,
-    const shared_ptr<EnergySensitiveDetectorGroup> group,
+    const size_t group,
     const vector<vector<function<bool(const double)>>> add_coi_win)
     : Detector(name, group), channels(channels),
       addback_energy(numeric_limits<double>::quiet_NaN()),

@@ -38,12 +38,16 @@ struct Analysis {
     vector<shared_ptr<Module>> modules;
     vector<shared_ptr<DigitizerModule>> digitizer_modules;
     const vector<shared_ptr<DetectorGroup>> detector_groups;
+    vector<shared_ptr<CounterDetectorGroup>> counter_detector_groups;
+    vector<shared_ptr<EnergySensitiveDetectorGroup>>
+        energy_sensitive_detector_groups;
     vector<shared_ptr<Detector>> detectors;
     vector<shared_ptr<CounterDetector>> counter_detectors;
     vector<shared_ptr<EnergySensitiveDetector>> energy_sensitive_detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
     vector<shared_ptr<ScalerModule>> scaler_modules;
     vector<size_t> module_index;
+    vector<size_t> group_index;
 
     void calibrate(const long long n_entry);
     bool find_module_by_id(size_t &module_index, const u_int32_t id) const;

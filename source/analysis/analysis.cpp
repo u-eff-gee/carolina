@@ -60,6 +60,23 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
             ++scaler_module_index;
         }
     }
+
+    size_t energy_sensitive_detector_group_index{0},
+        counter_detector_group_index{0};
+    for (auto group : detector_groups) {
+        if (dynamic_pointer_cast<EnergySensitiveDetectorGroup>(group)) {
+            energy_sensitive_detector_groups.push_back(
+                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(group));
+            group_index.push_back(energy_sensitive_detector_group_index);
+            ++energy_sensitive_detector_group_index;
+        }
+        if (dynamic_pointer_cast<CounterDetectorGroup>(group)) {
+            counter_detector_groups.push_back(
+                dynamic_pointer_cast<CounterDetectorGroup>(group));
+            group_index.push_back(counter_detector_group_index);
+            ++counter_detector_group_index;
+        }
+    }
 }
 
 bool Analysis::find_module_by_id(size_t &module_index,

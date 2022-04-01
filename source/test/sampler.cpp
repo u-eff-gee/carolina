@@ -61,11 +61,15 @@ TGraph invert_time_calibration(const size_t n_detector,
             .time_calibration;
     return invert_calibration<1000>(
         [&calibration](const double time) { return calibration(time, 0.); },
-        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.energy_sensitive_detectors[n_detector]->group)
+        analysis
+            .energy_sensitive_detector_groups
+                [analysis.group_index
+                     [analysis.energy_sensitive_detectors[n_detector]->group]]
             ->raw_histogram_properties.lower_edge_of_first_bin,
-        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-            analysis.energy_sensitive_detectors[n_detector]->group)
+        analysis
+            .energy_sensitive_detector_groups
+                [analysis.group_index
+                     [analysis.energy_sensitive_detectors[n_detector]->group]]
             ->raw_histogram_properties.upper_edge_of_last_bin);
 }
 

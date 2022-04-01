@@ -72,12 +72,27 @@ int main(int argc, char **argv) {
                 new TH2I(
                     histogram_name.c_str(), histogram_name.c_str(), 256, first,
                     last,
-                    analysis.energy_sensitive_detectors[n_detector]
-                        ->group->histogram_properties.n_bins,
-                    analysis.energy_sensitive_detectors[n_detector]
-                        ->group->histogram_properties.lower_edge_of_first_bin,
-                    analysis.energy_sensitive_detectors[n_detector]
-                        ->group->histogram_properties.upper_edge_of_last_bin));
+                    analysis
+                        .energy_sensitive_detector_groups
+                            [analysis.group_index
+                                 [analysis
+                                      .energy_sensitive_detectors[n_detector]
+                                      ->group]]
+                        ->histogram_properties.n_bins,
+                    analysis
+                        .energy_sensitive_detector_groups
+                            [analysis.group_index
+                                 [analysis
+                                      .energy_sensitive_detectors[n_detector]
+                                      ->group]]
+                        ->histogram_properties.lower_edge_of_first_bin,
+                    analysis
+                        .energy_sensitive_detector_groups
+                            [analysis.group_index
+                                 [analysis
+                                      .energy_sensitive_detectors[n_detector]
+                                      ->group]]
+                        ->histogram_properties.upper_edge_of_last_bin));
         }
     }
     for (size_t n_detector = 0; n_detector < analysis.counter_detectors.size();
@@ -89,12 +104,21 @@ int main(int argc, char **argv) {
             counter_detector_history_histograms[n_detector].push_back(new TH2I(
                 histogram_name.c_str(), histogram_name.c_str(), 256, first,
                 last,
-                analysis.counter_detectors[n_detector]
-                    ->group->histogram_properties.n_bins,
-                analysis.counter_detectors[n_detector]
-                    ->group->histogram_properties.lower_edge_of_first_bin,
-                analysis.counter_detectors[n_detector]
-                    ->group->histogram_properties.upper_edge_of_last_bin));
+                analysis
+                    .counter_detector_groups
+                        [analysis.group_index
+                             [analysis.counter_detectors[n_detector]->group]]
+                    ->histogram_properties.n_bins,
+                analysis
+                    .counter_detector_groups
+                        [analysis.group_index
+                             [analysis.counter_detectors[n_detector]->group]]
+                    ->histogram_properties.lower_edge_of_first_bin,
+                analysis
+                    .counter_detector_groups
+                        [analysis.group_index
+                             [analysis.counter_detectors[n_detector]->group]]
+                    ->histogram_properties.upper_edge_of_last_bin));
         }
     }
 

@@ -92,12 +92,24 @@ int main(int argc, char **argv) {
                 "_addback";
             addback_histograms.push_back(new TH1D(
                 histogram_name.c_str(), histogram_name.c_str(),
-                analysis.energy_sensitive_detectors[n_detector_1]
-                    ->group->histogram_properties.n_bins,
-                analysis.energy_sensitive_detectors[n_detector_1]
-                    ->group->histogram_properties.lower_edge_of_first_bin,
-                analysis.energy_sensitive_detectors[n_detector_1]
-                    ->group->histogram_properties.upper_edge_of_last_bin));
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector_1]
+                                  ->group]]
+                    ->histogram_properties.n_bins,
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector_1]
+                                  ->group]]
+                    ->histogram_properties.lower_edge_of_first_bin,
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector_1]
+                                  ->group]]
+                    ->histogram_properties.upper_edge_of_last_bin));
         } else {
             addback_histograms.push_back(nullptr);
         }
@@ -118,12 +130,27 @@ int main(int argc, char **argv) {
             energy_sensitive_detector_histograms[n_detector_1].push_back(
                 new TH1D(
                     histogram_name.c_str(), histogram_name.c_str(),
-                    analysis.energy_sensitive_detectors[n_detector_1]
-                        ->group->histogram_properties.n_bins,
-                    analysis.energy_sensitive_detectors[n_detector_1]
-                        ->group->histogram_properties.lower_edge_of_first_bin,
-                    analysis.energy_sensitive_detectors[n_detector_1]
-                        ->group->histogram_properties.upper_edge_of_last_bin));
+                    analysis
+                        .energy_sensitive_detector_groups
+                            [analysis.group_index
+                                 [analysis
+                                      .energy_sensitive_detectors[n_detector_1]
+                                      ->group]]
+                        ->histogram_properties.n_bins,
+                    analysis
+                        .energy_sensitive_detector_groups
+                            [analysis.group_index
+                                 [analysis
+                                      .energy_sensitive_detectors[n_detector_1]
+                                      ->group]]
+                        ->histogram_properties.lower_edge_of_first_bin,
+                    analysis
+                        .energy_sensitive_detector_groups
+                            [analysis.group_index
+                                 [analysis
+                                      .energy_sensitive_detectors[n_detector_1]
+                                      ->group]]
+                        ->histogram_properties.upper_edge_of_last_bin));
             histogram_name =
                 analysis.energy_sensitive_detectors[n_detector_1]->name + "_" +
                 analysis.energy_sensitive_detectors[n_detector_1]
@@ -132,14 +159,23 @@ int main(int argc, char **argv) {
                 "_t_vs_RF";
             time_vs_reference_time_histograms[n_detector_1].push_back(new TH1D(
                 histogram_name.c_str(), histogram_name.c_str(),
-                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                    analysis.energy_sensitive_detectors[n_detector_1]->group)
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector_1]
+                                  ->group]]
                     ->time_histogram_properties.n_bins,
-                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                    analysis.energy_sensitive_detectors[n_detector_1]->group)
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector_1]
+                                  ->group]]
                     ->time_histogram_properties.lower_edge_of_first_bin,
-                dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                    analysis.energy_sensitive_detectors[n_detector_1]->group)
+                analysis
+                    .energy_sensitive_detector_groups
+                        [analysis.group_index
+                             [analysis.energy_sensitive_detectors[n_detector_1]
+                                  ->group]]
                     ->time_histogram_properties.upper_edge_of_last_bin));
 
             time_difference_histograms[n_detector_1][n_channel_1].push_back(
@@ -165,17 +201,29 @@ int main(int argc, char **argv) {
                 time_difference_histograms[n_detector_1][n_channel_1][0]
                     .push_back(new TH1D(
                         histogram_name.c_str(), histogram_name.c_str(),
-                        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                            analysis.energy_sensitive_detectors[n_detector_1]
-                                ->group)
+                        analysis
+                            .energy_sensitive_detector_groups
+                                [analysis.group_index
+                                     [analysis
+                                          .energy_sensitive_detectors
+                                              [n_detector_1]
+                                          ->group]]
                             ->time_histogram_properties.n_bins,
-                        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                            analysis.energy_sensitive_detectors[n_detector_1]
-                                ->group)
+                        analysis
+                            .energy_sensitive_detector_groups
+                                [analysis.group_index
+                                     [analysis
+                                          .energy_sensitive_detectors
+                                              [n_detector_1]
+                                          ->group]]
                             ->time_histogram_properties.lower_edge_of_first_bin,
-                        dynamic_pointer_cast<EnergySensitiveDetectorGroup>(
-                            analysis.energy_sensitive_detectors[n_detector_1]
-                                ->group)
+                        analysis
+                            .energy_sensitive_detector_groups
+                                [analysis.group_index
+                                     [analysis
+                                          .energy_sensitive_detectors
+                                              [n_detector_1]
+                                          ->group]]
                             ->time_histogram_properties
                             .upper_edge_of_last_bin));
             }
@@ -209,50 +257,56 @@ int main(int argc, char **argv) {
                         [n_detector_1][n_channel_1][n_detector_2 - n_detector_1]
                             .push_back(new TH1D(
                                 histogram_name.c_str(), histogram_name.c_str(),
-                                max(dynamic_pointer_cast<
-                                        EnergySensitiveDetectorGroup>(
-                                        analysis
-                                            .energy_sensitive_detectors
-                                                [n_detector_1]
-                                            ->group)
+                                max(analysis
+                                        .energy_sensitive_detector_groups
+                                            [analysis.group_index
+                                                 [analysis
+                                                      .energy_sensitive_detectors
+                                                          [n_detector_1]
+                                                      ->group]]
                                         ->time_histogram_properties.n_bins,
-                                    dynamic_pointer_cast<
-                                        EnergySensitiveDetectorGroup>(
-                                        analysis
-                                            .energy_sensitive_detectors
-                                                [n_detector_2]
-                                            ->group)
+                                    analysis
+                                        .energy_sensitive_detector_groups
+                                            [analysis.group_index
+                                                 [analysis
+                                                      .energy_sensitive_detectors
+                                                          [n_detector_2]
+                                                      ->group]]
                                         ->time_histogram_properties.n_bins),
-                                min(dynamic_pointer_cast<
-                                        EnergySensitiveDetectorGroup>(
-                                        analysis
-                                            .energy_sensitive_detectors
-                                                [n_detector_1]
-                                            ->group)
+                                min(analysis
+                                        .energy_sensitive_detector_groups
+                                            [analysis.group_index
+                                                 [analysis
+                                                      .energy_sensitive_detectors
+                                                          [n_detector_1]
+                                                      ->group]]
                                         ->time_histogram_properties
                                         .lower_edge_of_first_bin,
-                                    dynamic_pointer_cast<
-                                        EnergySensitiveDetectorGroup>(
-                                        analysis
-                                            .energy_sensitive_detectors
-                                                [n_detector_2]
-                                            ->group)
+                                    analysis
+                                        .energy_sensitive_detector_groups
+                                            [analysis.group_index
+                                                 [analysis
+                                                      .energy_sensitive_detectors
+                                                          [n_detector_2]
+                                                      ->group]]
                                         ->time_histogram_properties
                                         .lower_edge_of_first_bin),
-                                max(dynamic_pointer_cast<
-                                        EnergySensitiveDetectorGroup>(
-                                        analysis
-                                            .energy_sensitive_detectors
-                                                [n_detector_1]
-                                            ->group)
+                                max(analysis
+                                        .energy_sensitive_detector_groups
+                                            [analysis.group_index
+                                                 [analysis
+                                                      .energy_sensitive_detectors
+                                                          [n_detector_1]
+                                                      ->group]]
                                         ->time_histogram_properties
                                         .upper_edge_of_last_bin,
-                                    dynamic_pointer_cast<
-                                        EnergySensitiveDetectorGroup>(
-                                        analysis
-                                            .energy_sensitive_detectors
-                                                [n_detector_2]
-                                            ->group)
+                                    analysis
+                                        .energy_sensitive_detector_groups
+                                            [analysis.group_index
+                                                 [analysis
+                                                      .energy_sensitive_detectors
+                                                          [n_detector_2]
+                                                      ->group]]
                                         ->time_histogram_properties
                                         .upper_edge_of_last_bin)));
                 }
@@ -265,17 +319,23 @@ int main(int argc, char **argv) {
         for (auto channel : analysis.counter_detectors[n_detector]->channels) {
             histogram_name = analysis.counter_detectors[n_detector]->name +
                              "_" + channel.name;
-            counter_detector_histograms[n_detector].push_back(
-                new TH1D(histogram_name.c_str(), histogram_name.c_str(),
-                         dynamic_pointer_cast<CounterDetectorGroup>(
-                             analysis.counter_detectors[n_detector]->group)
-                             ->histogram_properties.n_bins,
-                         dynamic_pointer_cast<CounterDetectorGroup>(
-                             analysis.counter_detectors[n_detector]->group)
-                             ->histogram_properties.lower_edge_of_first_bin,
-                         dynamic_pointer_cast<CounterDetectorGroup>(
-                             analysis.counter_detectors[n_detector]->group)
-                             ->histogram_properties.upper_edge_of_last_bin));
+            counter_detector_histograms[n_detector].push_back(new TH1D(
+                histogram_name.c_str(), histogram_name.c_str(),
+                analysis
+                    .counter_detector_groups
+                        [analysis.group_index
+                             [analysis.counter_detectors[n_detector]->group]]
+                    ->histogram_properties.n_bins,
+                analysis
+                    .counter_detector_groups
+                        [analysis.group_index
+                             [analysis.counter_detectors[n_detector]->group]]
+                    ->histogram_properties.lower_edge_of_first_bin,
+                analysis
+                    .counter_detector_groups
+                        [analysis.group_index
+                             [analysis.counter_detectors[n_detector]->group]]
+                    ->histogram_properties.upper_edge_of_last_bin));
         }
     }
 
