@@ -67,15 +67,17 @@ struct Reader : ReaderBase {
                entry < last) {
             if ((data_integer & header_mask) == header_found_flag) {
                 module_id = (data_integer & module_id_mask) / module_id_offset;
-                module_found =
-                    analysis.find_module_by_id(module_index, module_id);
-                if (module_found) {
-                    return true;
+                data_length = (data_integer & data_length_mask);
+                if(analysis.find_module_by_id(module_index, module_id)){
+                    for(u_int32_t n_data_word = 0; n_data_word < data_length; ++n_data_word){
+                        if(file.read(reinterpret_cast<char *>(&data_integer),
+                            sizeof(data_integer)) && ((data_integer & data_mask) == data_found_flag)){
+                                analysis.modules[module_index]->process_data_word(data_integer);
+                            }
+                    }
                 }
+                return true;
             }
-            if (module_found && (data_integer & data_mask) == data_found_flag) {
-                analysis.modules[module_index]->process_data_word(data_integer);
-            };
         }
         return false;
     }
