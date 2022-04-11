@@ -33,9 +33,6 @@ struct MDPP16 : public DigitizerModule {
     Branch<double, 16> amplitude;
     Branch<double, 16> time;
 
-    const u_int32_t channel_address_mask = 0x003F0000;
-    const u_int32_t channel_address_offset = 0x0010000;
-    const u_int32_t data_mask = 0x0000FFFF;
     u_int32_t channel_address, data_word;
 
     double get_amplitude(const size_t leaf) const override final {
@@ -53,6 +50,10 @@ struct MDPP16 : public DigitizerModule {
         time.leaves[leaf] = t;
     }
 
+    bool data_found(const u_int32_t word) override final;
+    u_int32_t get_data_length(const u_int32_t word) override final;
+    u_int32_t get_module_id(const u_int32_t word) override final;
+    bool header_found(const u_int32_t word) override final;
     void process_data_word(const u_int32_t word) = 0;
     void reset_raw_amplitude_leaves() override final;
     void reset_raw_time_leaves() override final;
@@ -70,4 +71,17 @@ struct MDPP16 : public DigitizerModule {
     void
     set_up_raw_reference_time_branches_for_writing(TTree *tree) override final;
     void set_up_raw_timestamp_branches_for_writing(TTree *tree) override final;
+
+    const u_int32_t channel_address_mask = 0x003F0000;
+    const u_int32_t channel_address_offset = 0x0010000;
+    const u_int32_t data_found_flag = 0x10000000;
+    const u_int32_t data_found_mask = 0xF0000000;
+    const u_int32_t data_length_mask = 0x000003FF;
+    const u_int32_t data_mask = 0x0000FFFF;
+    const u_int32_t eoe_mask = 0xC0000000;
+    const u_int32_t eoe_found_flag = eoe_mask;
+    const u_int32_t header_mask = 0xC0000000;
+    const u_int32_t header_found_flag = 0x40000000;
+    const u_int32_t module_id_mask = 0x00FF0000;
+    const u_int32_t module_id_offset = 0x10000;
 };

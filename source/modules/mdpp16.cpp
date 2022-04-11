@@ -25,6 +25,22 @@ using std::to_string;
 
 #include "mdpp16.hpp"
 
+bool MDPP16::data_found(const u_int32_t word) {
+    return (word & data_found_mask) == data_found_flag;
+}
+
+u_int32_t MDPP16::get_data_length(const u_int32_t word) {
+    return word & data_length_mask;
+}
+
+u_int32_t MDPP16::get_module_id(const u_int32_t word) {
+    return (word & module_id_mask) / module_id_offset;
+}
+
+bool MDPP16::header_found(const u_int32_t word) {
+    return (word & header_mask) == header_found_flag;
+}
+
 void MDPP16::reset_raw_amplitude_leaves() {
     for (size_t n_leaf = 0; n_leaf < 16; ++n_leaf) {
         amplitude.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();

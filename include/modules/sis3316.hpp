@@ -47,6 +47,20 @@ struct SIS3316 final : public DigitizerModule {
         time.leaves[leaf] = t;
     }
 
+    bool data_found([[maybe_unused]] const u_int32_t word) override final {
+        return false;
+    }
+    u_int32_t get_data_length([
+        [maybe_unused]] const u_int32_t word) override final {
+        return 0;
+    };
+    u_int32_t get_module_id([
+        [maybe_unused]] const u_int32_t word) override final {
+        return 0;
+    };
+    bool header_found([[maybe_unused]] const u_int32_t word) override final {
+        return false;
+    };
     void process_data_word([
         [maybe_unused]] const u_int32_t word) override final{};
     void reset_raw_amplitude_leaves() override final;

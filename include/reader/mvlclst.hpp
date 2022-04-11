@@ -26,7 +26,6 @@ using std::ifstream;
 using std::cout;
 using std::endl;
 
-#include "mvlclst_dictionary.hpp"
 #include "reader.hpp"
 
 struct Reader : ReaderBase {
@@ -65,18 +64,27 @@ struct Reader : ReaderBase {
         while (file.read(reinterpret_cast<char *>(&data_integer),
                          sizeof(data_integer)) &&
                entry < last) {
-            if ((data_integer & header_mask) == header_found_flag) {
-                module_id = (data_integer & module_id_mask) / module_id_offset;
-                data_length = (data_integer & data_length_mask);
-                if(analysis.find_module_by_id(module_index, module_id)){
-                    for(u_int32_t n_data_word = 0; n_data_word < data_length; ++n_data_word){
-                        if(file.read(reinterpret_cast<char *>(&data_integer),
-                            sizeof(data_integer)) && ((data_integer & data_mask) == data_found_flag)){
-                                analysis.modules[module_index]->process_data_word(data_integer);
+            for (auto module : analysis.modules) {
+                if (module->header_found(data_integer)) {
+                    module_id = module->get_module_id(data_integer);
+                    if (analysis.find_module_by_id(module_index, module_id)) {
+                        data_length =
+                            analysis.modules[module_index]->get_data_length(
+                                data_integer);
+                        for (u_int32_t n_data_word = 0;
+                             n_data_word < data_length; ++n_data_word) {
+                            if (file.read(
+                                    reinterpret_cast<char *>(&data_integer),
+                                    sizeof(data_integer)) &&
+                                analysis.modules[module_index]->data_found(
+                                    data_integer)) {
+                                analysis.modules[module_index]
+                                    ->process_data_word(data_integer);
                             }
+                        }
                     }
+                    return true;
                 }
-                return true;
             }
         }
         return false;
