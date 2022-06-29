@@ -34,14 +34,19 @@ Analysis::Analysis(vector<shared_ptr<Module>> modules,
                    const vector<CoincidenceMatrix> coincidence_matrices)
     : modules(modules), detector_groups(detector_groups), detectors(detectors),
       coincidence_matrices(coincidence_matrices) {
+    size_t energy_sensitive_detector_index{0}, counter_detector_index{0};
     for (auto detector : detectors) {
         if (dynamic_pointer_cast<EnergySensitiveDetector>(detector)) {
             energy_sensitive_detectors.push_back(
                 dynamic_pointer_cast<EnergySensitiveDetector>(detector));
+            detector_index.push_back(energy_sensitive_detector_index);
+            ++energy_sensitive_detector_index;
         }
         if (dynamic_pointer_cast<CounterDetector>(detector)) {
             counter_detectors.push_back(
                 dynamic_pointer_cast<CounterDetector>(detector));
+            detector_index.push_back(counter_detector_index);
+            ++counter_detector_index;
         }
     }
 

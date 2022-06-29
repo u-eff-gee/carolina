@@ -46,6 +46,7 @@ struct Analysis {
     vector<shared_ptr<EnergySensitiveDetector>> energy_sensitive_detectors;
     const vector<CoincidenceMatrix> coincidence_matrices;
     vector<shared_ptr<ScalerModule>> scaler_modules;
+    vector<size_t> detector_index;
     vector<size_t> module_index;
     vector<size_t> group_index;
 

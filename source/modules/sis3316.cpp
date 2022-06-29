@@ -27,19 +27,19 @@ using std::to_string;
 
 void SIS3316::reset_raw_amplitude_leaves() {
     for (size_t n_leaf = 0; n_leaf < 8; ++n_leaf) {
-        amplitude_e1.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
-        amplitude_e2.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
+        amplitude_e1.leaves[n_leaf] = numeric_limits<unsigned int>::quiet_NaN();
+        amplitude_e2.leaves[n_leaf] = numeric_limits<unsigned int>::quiet_NaN();
     }
 }
 
 void SIS3316::reset_raw_time_leaves() {
     for (size_t n_leaf = 0; n_leaf < 8; ++n_leaf) {
-        time.leaves[n_leaf] = numeric_limits<double>::quiet_NaN();
+        time.leaves[n_leaf] = numeric_limits<unsigned int>::quiet_NaN();
     }
 }
 
 void SIS3316::reset_raw_reference_time_leaves() {
-    reference_time.leaves[0] = numeric_limits<double>::quiet_NaN();
+    reference_time.leaves[0] = numeric_limits<unsigned int>::quiet_NaN();
 }
 
 void SIS3316::reset_raw_timestamp_leaves() {}

@@ -50,6 +50,11 @@ void fill(TH2I *histogram, const CoincidenceMatrix matrix,
 
 int main(int argc, char **argv) {
     CommandLineParser command_line_parser;
+    command_line_parser.desc.add_options()(
+        "calibrate", "Assume that the input file contains raw data that need "
+                     "to be calibrated by 'histograms_2d'."
+                     "The default assumption is that the input file is "
+                     "output of the 'calibrate_tree' script.");
     int command_line_parser_status;
     command_line_parser(argc, argv, command_line_parser_status);
     if (command_line_parser_status) {
@@ -64,9 +69,16 @@ int main(int argc, char **argv) {
     ProgressPrinter progress_printer(first, last);
 
     tree->SetBranchStatus("*", 0);
-    analysis.set_up_calibrated_counter_detector_branches_for_reading(tree);
-    analysis.set_up_calibrated_energy_sensitive_detector_branches_for_reading(
-        tree);
+    if (vm.count("calibrate")) {
+        analysis.set_up_raw_counter_detector_branches_for_reading(tree, {true});
+        analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(
+            tree, {true, true, true, true});
+    } else {
+        analysis.set_up_calibrated_counter_detector_branches_for_reading(tree);
+        analysis
+            .set_up_calibrated_energy_sensitive_detector_branches_for_reading(
+                tree);
+    }
 
     vector<vector<pair<size_t, size_t>>> coincidence_pairs;
     vector<TH2I *> coincidence_histograms;
@@ -84,28 +96,40 @@ int main(int argc, char **argv) {
 
     for (long long i = first; i <= last; ++i) {
         tree->GetEntry(i);
+        if (vm.count("calibrate")) {
+            analysis.calibrate(i);
+        }
 
         for (size_t n_matrix = 0;
              n_matrix < analysis.coincidence_matrices.size(); ++n_matrix) {
             for (auto detector_pair : coincidence_pairs[n_matrix]) {
-                if (!isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
-                               analysis.detectors[detector_pair.first])
-                               ->get_calibrated_and_RF_gated_energy()) &&
-                    !isnan(dynamic_pointer_cast<EnergySensitiveDetector>(
-                               analysis.detectors[detector_pair.second])
-                               ->get_calibrated_and_RF_gated_energy())) {
+                if (!isnan(
+                        analysis
+                            .energy_sensitive_detectors
+                                [analysis.detector_index[detector_pair.first]]
+                            ->get_calibrated_and_RF_gated_energy()) &&
+                    !isnan(
+                        analysis
+                            .energy_sensitive_detectors
+                                [analysis.detector_index[detector_pair.second]]
+                            ->get_calibrated_and_RF_gated_energy())) {
                     fill(coincidence_histograms[n_matrix],
                          analysis.coincidence_matrices[n_matrix],
-                         dynamic_pointer_cast<EnergySensitiveDetector>(
-                             analysis.detectors[detector_pair.first])
+                         analysis
+                             .energy_sensitive_detectors
+                                 [analysis.detector_index[detector_pair.first]]
                              ->get_calibrated_and_RF_gated_energy(),
-                         dynamic_pointer_cast<EnergySensitiveDetector>(
-                             analysis.detectors[detector_pair.second])
+                         analysis
+                             .energy_sensitive_detectors
+                                 [analysis.detector_index[detector_pair.second]]
                              ->get_calibrated_and_RF_gated_energy());
                 }
             }
         }
 
+        if (vm.count("calibrate")) {
+            analysis.reset_calibrated_leaves();
+        }
         progress_printer(i);
     }
 

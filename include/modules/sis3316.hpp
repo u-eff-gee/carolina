@@ -26,9 +26,9 @@ struct SIS3316 final : public DigitizerModule {
         : DigitizerModule(address, "reference_time", "timestamp"),
           amplitude_e1("e1"), amplitude_e2("e2"), time("time") {}
 
-    Branch<double, 8> amplitude_e1;
-    Branch<double, 8> amplitude_e2;
-    Branch<double, 8> time;
+    Branch<unsigned int, 8> amplitude_e1;
+    Branch<unsigned int, 8> amplitude_e2;
+    Branch<unsigned int, 8> time;
 
     double get_amplitude(const size_t leaf) const override final {
         return amplitude_conversion *
