@@ -17,6 +17,11 @@
 
 #pragma once
 
+#include <random>
+
+using std::mt19937;
+using std::uniform_real_distribution;
+
 #include <string>
 
 using std::string;
@@ -33,12 +38,17 @@ using std::vector;
 struct DigitizerModule : Module {
     DigitizerModule(const unsigned int address,
                     const string reference_time_branch_name,
-                    const string timestamp_branch_name)
-        : Module(address), reference_time(reference_time_branch_name),
-          timestamp(timestamp_branch_name) {}
+                    const string timestamp_branch_name,
+                    const bool add_pseudorandom_number_to_integers = false)
+        : Module(address, add_pseudorandom_number_to_integers),
+          reference_time(reference_time_branch_name),
+          timestamp(timestamp_branch_name), random_engine(0),
+          uniform_distribution(-0.5, 0.5) {}
 
     Branch<double, 1> reference_time;
     Branch<double, 1> timestamp;
+    mt19937 random_engine;
+    uniform_real_distribution<double> uniform_distribution;
 
     void process_data_word(const u_int32_t word) = 0;
     void reset_raw_leaves(const vector<bool> amp_t_tref_ts = {
@@ -67,7 +77,8 @@ struct DigitizerModule : Module {
     set_up_raw_reference_time_branches_for_writing(TTree *tree) = 0;
     virtual void set_up_raw_timestamp_branches_for_writing(TTree *tree) = 0;
 
-    virtual double get_amplitude(const size_t leaf) const = 0;
+    double get_amplitude(const size_t leaf);
+    virtual double get_raw_amplitude(const size_t leaf) = 0;
     virtual double get_time(const size_t leaf) const = 0;
     double get_reference_time() const { return reference_time.leaves[0]; };
     virtual double get_timestamp() { return timestamp.leaves[0]; };

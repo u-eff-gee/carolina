@@ -17,6 +17,13 @@
 
 #include "digitizer_module.hpp"
 
+double DigitizerModule::get_amplitude(const size_t leaf) {
+    if (add_pseudorandom_number_to_integers) {
+        return get_raw_amplitude(leaf) + uniform_distribution(random_engine);
+    }
+    return get_raw_amplitude(leaf);
+}
+
 void DigitizerModule::reset_raw_leaves(const vector<bool> amp_t_tref_ts) {
     if (amp_t_tref_ts[0]) {
         reset_raw_amplitude_leaves();

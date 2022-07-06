@@ -23,14 +23,14 @@
 
 struct SIS3316 final : public DigitizerModule {
     SIS3316(const unsigned int address)
-        : DigitizerModule(address, "reference_time", "timestamp"),
+        : DigitizerModule(address, "reference_time", "timestamp", true),
           amplitude_e1("e1"), amplitude_e2("e2"), time("time") {}
 
     Branch<unsigned int, 8> amplitude_e1;
     Branch<unsigned int, 8> amplitude_e2;
     Branch<unsigned int, 8> time;
 
-    double get_amplitude(const size_t leaf) const override final {
+    double get_raw_amplitude(const size_t leaf) override final {
         return amplitude_conversion *
                (amplitude_e2.leaves[leaf] - amplitude_e1.leaves[leaf]);
     }

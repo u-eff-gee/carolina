@@ -35,7 +35,7 @@ struct MDPP16 : public DigitizerModule {
 
     u_int32_t channel_address, data_word;
 
-    double get_amplitude(const size_t leaf) const override final {
+    double get_raw_amplitude(const size_t leaf) override final {
         return amplitude.leaves[leaf];
     }
     double get_time(const size_t leaf) const override final {

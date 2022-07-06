@@ -20,8 +20,12 @@
 #include "TTree.h"
 
 struct Module {
-    Module(const unsigned int address) : address(address) {}
+    Module(const unsigned int address,
+           const bool add_pseudorandom_number_to_integers = false)
+        : address(address), add_pseudorandom_number_to_integers(
+                                add_pseudorandom_number_to_integers) {}
     const unsigned int address;
+    const bool add_pseudorandom_number_to_integers;
     virtual bool data_found(const u_int32_t word) = 0;
     virtual u_int32_t get_data_length(const u_int32_t word) = 0;
     virtual u_int32_t get_module_id(const u_int32_t word) = 0;
