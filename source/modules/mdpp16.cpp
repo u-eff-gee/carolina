@@ -29,8 +29,24 @@ bool MDPP16::data_found(const u_int32_t word) {
     return (word & data_found_mask) == data_found_flag;
 }
 
+bool MDPP16::eoe_found(const u_int32_t word) {
+    return (word & eoe_mask) == eoe_found_flag;
+}
+
+bool MDPP16::extended_ts_found(const u_int32_t word) {
+    return (word & extended_ts_mask) == extended_ts_flag;
+}
+
 u_int32_t MDPP16::get_data_length(const u_int32_t word) {
     return word & data_length_mask;
+}
+
+u_int32_t MDPP16::get_high_stamp(const u_int32_t word) {
+    return word & high_stamp_mask;
+}
+
+u_int32_t MDPP16::get_low_stamp(const u_int32_t word) {
+    return word & low_stamp_mask;
 }
 
 u_int32_t MDPP16::get_module_id(const u_int32_t word) {

@@ -27,7 +27,7 @@ struct MDPP16 : public DigitizerModule {
            const string reference_time_branch_name,
            const string timestamp_branch_name)
         : DigitizerModule(address, reference_time_branch_name,
-                          timestamp_branch_name),
+                          timestamp_branch_name, false),
           amplitude(amplitude_branch_name), time(time_branch_name) {}
 
     Branch<double, 16> amplitude;
@@ -51,10 +51,20 @@ struct MDPP16 : public DigitizerModule {
     }
 
     bool data_found(const u_int32_t word) override final;
+    bool eoe_found(const u_int32_t word) override final;
+    bool extended_ts_found(const u_int32_t word);
     u_int32_t get_data_length(const u_int32_t word) override final;
+    u_int32_t get_high_stamp(const u_int32_t word) override final;
+    u_int32_t get_low_stamp(const u_int32_t word) override final;
     u_int32_t get_module_id(const u_int32_t word) override final;
     bool header_found(const u_int32_t word) override final;
     void process_data_word(const u_int32_t word) = 0;
+    void process_high_stamp(const uint32_t word) override final {
+        timestamp.leaves[0] += ((u_int64_t) (word & 0x0000FFFF)) * 0xFFFFFFFF;
+    };
+    void process_low_stamp(const uint32_t word) override final {
+        timestamp.leaves[0] += word & 0x0000FFFF;
+    };
     void reset_raw_amplitude_leaves() override final;
     void reset_raw_time_leaves() override final;
     void reset_raw_reference_time_leaves() override final;
@@ -80,8 +90,12 @@ struct MDPP16 : public DigitizerModule {
     const u_int32_t data_mask = 0x0000FFFF;
     const u_int32_t eoe_mask = 0xC0000000;
     const u_int32_t eoe_found_flag = eoe_mask;
+    const u_int32_t extended_ts_flag = 0x04800000;
+    const u_int32_t extended_ts_mask = 0xFF800000;
+    const u_int32_t high_stamp_mask = 0x0000FFFF;
     const u_int32_t header_mask = 0xC0000000;
     const u_int32_t header_found_flag = 0x40000000;
+    const u_int32_t low_stamp_mask = 0x3FFFFFFF;
     const u_int32_t module_id_mask = 0x00FF0000;
     const u_int32_t module_id_offset = 0x10000;
 };

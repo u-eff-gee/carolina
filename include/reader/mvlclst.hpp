@@ -81,6 +81,16 @@ struct Reader : ReaderBase {
                                 analysis.modules[module_index]
                                     ->process_data_word(data_integer);
                             }
+                            else if (analysis.modules[module_index]->extended_ts_found(
+                                    data_integer)) {
+                                analysis.modules[module_index]
+                                    ->process_high_stamp(data_integer);
+                            }
+                            else if (analysis.modules[module_index]->eoe_found(
+                                    data_integer)) {
+                                analysis.modules[module_index]
+                                    ->process_low_stamp(data_integer);
+                            }
                         }
                     }
                     return true;

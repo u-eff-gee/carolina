@@ -46,7 +46,7 @@ struct DigitizerModule : Module {
           uniform_distribution(-0.5, 0.5) {}
 
     Branch<double, 1> reference_time;
-    Branch<double, 1> timestamp;
+    Branch<uint64_t, 1> timestamp;
     mt19937 random_engine;
     uniform_real_distribution<double> uniform_distribution;
 
