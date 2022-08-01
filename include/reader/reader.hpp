@@ -36,7 +36,7 @@ struct ReaderBase {
                             const vector<bool> counter_values = {false},
                             const vector<bool> amp_t_tref_ts = {
                                 false, false, false, false}) = 0;
-    virtual bool read(Analysis &analysis) = 0;
+    virtual bool read(unsigned int &status, Analysis &analysis) = 0;
     virtual void finalize() = 0;
 
     vector<string> input_files;

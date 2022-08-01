@@ -59,7 +59,7 @@ struct Reader : ReaderBase {
         file.seekg(std::ios::beg);
     };
 
-    bool read(Analysis &analysis) override final {
+    bool read(unsigned int &status, Analysis &analysis) override final {
         entry = file.tellg() / 4;
         while (file.read(reinterpret_cast<char *>(&data_integer),
                          sizeof(data_integer)) &&

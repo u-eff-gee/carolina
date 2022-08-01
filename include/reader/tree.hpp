@@ -51,7 +51,7 @@ struct Reader : ReaderBase {
             tree, amp_t_tref_ts);
     };
 
-    bool read([[maybe_unused]] Analysis &analysis) override final {
+    bool read(unsigned int &status, [[maybe_unused]] Analysis &analysis) override final {
         ++entry;
         if (entry <= last) {
             tree->GetEntry(entry);

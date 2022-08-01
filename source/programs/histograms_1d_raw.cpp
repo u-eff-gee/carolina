@@ -20,10 +20,6 @@
 using std::cout;
 using std::endl;
 
-#include <memory>
-
-using std::dynamic_pointer_cast;
-
 #include "TChain.h"
 #include "TFile.h"
 #include "TH1D.h"
@@ -114,8 +110,9 @@ int main(int argc, char **argv) {
     }
 
     double amplitude;
+    unsigned int status;
 
-    while (reader.read(analysis)) {
+    while (reader.read(status, analysis)) {
         for (size_t n_detector = 0;
              n_detector < analysis.energy_sensitive_detectors.size();
              ++n_detector) {
