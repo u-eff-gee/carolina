@@ -61,6 +61,7 @@ struct Reader : ReaderBase {
 
     bool read(unsigned int &status, Analysis &analysis) override final {
         entry = file.tellg() / 4;
+        status = 0;
         while (file.read(reinterpret_cast<char *>(&data_integer),
                          sizeof(data_integer)) &&
                entry < last) {
@@ -90,6 +91,7 @@ struct Reader : ReaderBase {
                                     data_integer)) {
                                 analysis.modules[module_index]
                                     ->process_low_stamp(data_integer);
+                                status = 1;
                             }
                         }
                     }

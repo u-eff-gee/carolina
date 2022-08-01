@@ -71,7 +71,9 @@ void MDPP16::reset_raw_reference_time_leaves() {
     reference_time.leaves[0] = numeric_limits<double>::quiet_NaN();
 }
 
-void MDPP16::reset_raw_timestamp_leaves() {}
+void MDPP16::reset_raw_timestamp_leaves() {
+    timestamp.leaves[0] = 0;
+}
 
 void MDPP16::set_up_raw_amplitude_branches_for_reading(TTree *tree) {
     tree->SetBranchStatus(amplitude.name.c_str(), 1);
@@ -110,5 +112,5 @@ void MDPP16::set_up_raw_reference_time_branches_for_writing(TTree *tree) {
 
 void MDPP16::set_up_raw_timestamp_branches_for_writing(TTree *tree) {
     tree->Branch(timestamp.name.c_str(), timestamp.leaves,
-                 (timestamp.name + "[1]/D").c_str());
+                 (timestamp.name + "[1]/l").c_str());
 }

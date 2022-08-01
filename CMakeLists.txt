@@ -67,6 +67,7 @@ configure_file(include/programs/histograms_1d.hpp.in include/programs/histograms
 configure_file(include/programs/histograms_1d_raw.hpp.in include/programs/histograms_1d_raw.hpp)
 configure_file(include/programs/histograms_2d.hpp.in include/programs/histograms_2d.hpp)
 configure_file(include/programs/history.hpp.in include/programs/history.hpp)
+configure_file(include/programs/mvlclst_to_root.hpp.in include/programs/mvlclst_to_root.hpp)
 configure_file(include/test/sampler.hpp.in include/test/sampler.hpp)
 configure_file(include/test/test_histograms_1d_raw.hpp.in include/test/test_histograms_1d_raw.hpp)
 configure_file(include/test/test_histograms_1d.hpp.in include/test/test_histograms_1d.hpp)
