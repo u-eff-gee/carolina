@@ -56,23 +56,13 @@ int main(int argc, char **argv) {
     }
     po::variables_map vm = command_line_parser.get_variables_map();
 
-    long long first, last;
-    TChain *tree =
-        command_line_parser.set_up_tree(first, last, vm.count("list"));
-
-    ProgressPrinter progress_printer(first, last);
-
-    tree->SetBranchStatus("*", 0);
-    if (vm.count("calibrate")) {
-        analysis.set_up_raw_counter_detector_branches_for_reading(tree, {true});
-        analysis.set_up_raw_energy_sensitive_detector_branches_for_reading(
-            tree, {true, true, true, true});
-    } else {
-        analysis.set_up_calibrated_counter_detector_branches_for_reading(tree);
-        analysis
-            .set_up_calibrated_energy_sensitive_detector_branches_for_reading(
-                tree);
-    }
+    Reader reader(vm.count("list") == 0
+                      ? vm["input"].as<vector<string>>()
+                      : read_log_file(vm["input"].as<vector<string>>()[0]),
+                  vm["first"].as<long long>(), vm["last"].as<long long>());
+    reader.initialize(analysis, vm["tree"].as<string>(), {true},
+                      {true, false, false, false});
+    ProgressPrinter progress_printer(reader.first, reader.last);
 
     vector<TH1D *> addback_histograms;
     vector<vector<TH1D *>> energy_sensitive_detector_histograms;
@@ -339,144 +329,148 @@ int main(int argc, char **argv) {
         }
     }
 
-    for (long long i = first; i <= last; ++i) {
-        tree->GetEntry(i);
+    unsigned int status;
+    while(reader.read(status, analysis)) {
         if (vm.count("calibrate")) {
-            analysis.calibrate(i);
+            analysis.calibrate(reader.entry);
         }
 
-        for (size_t n_detector_1 = 0;
-             n_detector_1 < analysis.energy_sensitive_detectors.size();
-             ++n_detector_1) {
-            for (size_t n_channel_1 = 0;
-                 n_channel_1 <
-                 analysis.energy_sensitive_detectors[n_detector_1]
-                     ->channels.size();
-                 ++n_channel_1) {
-                if (!isnan(analysis.energy_sensitive_detectors[n_detector_1]
-                               ->channels[n_channel_1]
-                               .energy_calibrated) &&
+        if(status == 1){
+            for (size_t n_detector_1 = 0;
+                n_detector_1 < analysis.energy_sensitive_detectors.size();
+                ++n_detector_1) {
+                for (size_t n_channel_1 = 0;
+                    n_channel_1 <
                     analysis.energy_sensitive_detectors[n_detector_1]
-                        ->channels[n_channel_1]
-                        .time_vs_reference_time_gate(
-                            analysis.energy_sensitive_detectors[n_detector_1]
+                        ->channels.size();
+                    ++n_channel_1) {
+                    if (!isnan(analysis.energy_sensitive_detectors[n_detector_1]
                                 ->channels[n_channel_1]
-                                .time_vs_reference_time_calibrated)) {
-                    energy_sensitive_detector_histograms
-                        [n_detector_1][n_channel_1]
-                            ->Fill(analysis
-                                       .energy_sensitive_detectors[n_detector_1]
-                                       ->channels[n_channel_1]
-                                       .energy_calibrated);
-                    time_vs_reference_time_histograms[n_detector_1][n_channel_1]
-                        ->Fill(
-                            analysis.energy_sensitive_detectors[n_detector_1]
-                                ->channels[n_channel_1]
-                                .time_vs_reference_time_calibrated);
+                                .energy_calibrated) &&
+                        analysis.energy_sensitive_detectors[n_detector_1]
+                            ->channels[n_channel_1]
+                            .time_vs_reference_time_gate(
+                                analysis.energy_sensitive_detectors[n_detector_1]
+                                    ->channels[n_channel_1]
+                                    .time_vs_reference_time_calibrated)) {
+                        energy_sensitive_detector_histograms
+                            [n_detector_1][n_channel_1]
+                                ->Fill(analysis
+                                        .energy_sensitive_detectors[n_detector_1]
+                                        ->channels[n_channel_1]
+                                        .energy_calibrated);
+                        time_vs_reference_time_histograms[n_detector_1][n_channel_1]
+                            ->Fill(
+                                analysis.energy_sensitive_detectors[n_detector_1]
+                                    ->channels[n_channel_1]
+                                    .time_vs_reference_time_calibrated);
 
-                    for (size_t n_channel_2 = n_channel_1 + 1;
-                         n_channel_2 <
-                         analysis.energy_sensitive_detectors[n_detector_1]
-                             ->channels.size();
-                         ++n_channel_2) {
-                        if (!isnan(analysis
-                                       .energy_sensitive_detectors[n_detector_1]
-                                       ->channels[n_channel_2]
-                                       .energy_calibrated) &&
+                        for (size_t n_channel_2 = n_channel_1 + 1;
+                            n_channel_2 <
                             analysis.energy_sensitive_detectors[n_detector_1]
-                                ->channels[n_channel_2]
-                                .time_vs_reference_time_gate(
-                                    analysis
-                                        .energy_sensitive_detectors
-                                            [n_detector_1]
-                                        ->channels[n_channel_2]
-                                        .time_vs_reference_time_calibrated)) {
-                            time_difference_histograms
-                                [n_detector_1][n_channel_1][0]
-                                [n_channel_2 - n_channel_1 - 1]
-                                    ->Fill(analysis
-                                               .energy_sensitive_detectors
-                                                   [n_detector_1]
-                                               ->channels[n_channel_1]
-                                               .time_calibrated -
-                                           analysis
-                                               .energy_sensitive_detectors
-                                                   [n_detector_1]
-                                               ->channels[n_channel_2]
-                                               .time_calibrated);
-                        }
-                    }
-
-                    for (size_t n_detector_2 = n_detector_1 + 1;
-                         n_detector_2 <
-                         analysis.energy_sensitive_detectors.size();
-                         ++n_detector_2) {
-                        for (size_t n_channel_2 = 0;
-                             n_channel_2 <
-                             analysis.energy_sensitive_detectors[n_detector_2]
-                                 ->channels.size();
-                             ++n_channel_2) {
+                                ->channels.size();
+                            ++n_channel_2) {
                             if (!isnan(analysis
-                                           .energy_sensitive_detectors
-                                               [n_detector_2]
-                                           ->channels[n_channel_2]
-                                           .energy_calibrated) &&
-                                analysis
-                                    .energy_sensitive_detectors[n_detector_2]
+                                        .energy_sensitive_detectors[n_detector_1]
+                                        ->channels[n_channel_2]
+                                        .energy_calibrated) &&
+                                analysis.energy_sensitive_detectors[n_detector_1]
                                     ->channels[n_channel_2]
                                     .time_vs_reference_time_gate(
                                         analysis
                                             .energy_sensitive_detectors
-                                                [n_detector_2]
+                                                [n_detector_1]
                                             ->channels[n_channel_2]
                                             .time_vs_reference_time_calibrated)) {
                                 time_difference_histograms
-                                    [n_detector_1][n_channel_1]
-                                    [n_detector_2 - n_detector_1][n_channel_2]
+                                    [n_detector_1][n_channel_1][0]
+                                    [n_channel_2 - n_channel_1 - 1]
                                         ->Fill(analysis
-                                                   .energy_sensitive_detectors
-                                                       [n_detector_1]
-                                                   ->channels[n_channel_1]
-                                                   .time_calibrated -
-                                               analysis
-                                                   .energy_sensitive_detectors
-                                                       [n_detector_2]
-                                                   ->channels[n_channel_2]
-                                                   .time_calibrated);
+                                                .energy_sensitive_detectors
+                                                    [n_detector_1]
+                                                ->channels[n_channel_1]
+                                                .time_calibrated -
+                                            analysis
+                                                .energy_sensitive_detectors
+                                                    [n_detector_1]
+                                                ->channels[n_channel_2]
+                                                .time_calibrated);
+                            }
+                        }
+
+                        for (size_t n_detector_2 = n_detector_1 + 1;
+                            n_detector_2 <
+                            analysis.energy_sensitive_detectors.size();
+                            ++n_detector_2) {
+                            for (size_t n_channel_2 = 0;
+                                n_channel_2 <
+                                analysis.energy_sensitive_detectors[n_detector_2]
+                                    ->channels.size();
+                                ++n_channel_2) {
+                                if (!isnan(analysis
+                                            .energy_sensitive_detectors
+                                                [n_detector_2]
+                                            ->channels[n_channel_2]
+                                            .energy_calibrated) &&
+                                    analysis
+                                        .energy_sensitive_detectors[n_detector_2]
+                                        ->channels[n_channel_2]
+                                        .time_vs_reference_time_gate(
+                                            analysis
+                                                .energy_sensitive_detectors
+                                                    [n_detector_2]
+                                                ->channels[n_channel_2]
+                                                .time_vs_reference_time_calibrated)) {
+                                    time_difference_histograms
+                                        [n_detector_1][n_channel_1]
+                                        [n_detector_2 - n_detector_1][n_channel_2]
+                                            ->Fill(analysis
+                                                    .energy_sensitive_detectors
+                                                        [n_detector_1]
+                                                    ->channels[n_channel_1]
+                                                    .time_calibrated -
+                                                analysis
+                                                    .energy_sensitive_detectors
+                                                        [n_detector_2]
+                                                    ->channels[n_channel_2]
+                                                    .time_calibrated);
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (analysis.energy_sensitive_detectors[n_detector_1]
-                        ->channels.size() > 1 &&
-                !isnan(analysis.energy_sensitive_detectors[n_detector_1]
-                           ->addback_energy)) {
-                addback_histograms[n_detector_1]->Fill(
-                    analysis.energy_sensitive_detectors[n_detector_1]
-                        ->addback_energy);
-            }
-        }
-        for (size_t n_detector = 0;
-             n_detector < analysis.counter_detectors.size(); ++n_detector) {
-            for (size_t n_channel = 0;
-                 n_channel <
-                 analysis.counter_detectors[n_detector]->channels.size();
-                 ++n_channel) {
-                if (!isnan(analysis.counter_detectors[n_detector]
-                               ->channels[n_channel]
-                               .count_rate)) {
-                    counter_detector_histograms[n_detector][n_channel]->Fill(
-                        analysis.counter_detectors[n_detector]
-                            ->channels[n_channel]
-                            .count_rate);
+                if (analysis.energy_sensitive_detectors[n_detector_1]
+                            ->channels.size() > 1 &&
+                    !isnan(analysis.energy_sensitive_detectors[n_detector_1]
+                            ->addback_energy)) {
+                    addback_histograms[n_detector_1]->Fill(
+                        analysis.energy_sensitive_detectors[n_detector_1]
+                            ->addback_energy);
                 }
             }
+            for (size_t n_detector = 0;
+                n_detector < analysis.counter_detectors.size(); ++n_detector) {
+                for (size_t n_channel = 0;
+                    n_channel <
+                    analysis.counter_detectors[n_detector]->channels.size();
+                    ++n_channel) {
+                    if (!isnan(analysis.counter_detectors[n_detector]
+                                ->channels[n_channel]
+                                .count_rate)) {
+                        counter_detector_histograms[n_detector][n_channel]->Fill(
+                            analysis.counter_detectors[n_detector]
+                                ->channels[n_channel]
+                                .count_rate);
+                    }
+                }
+            }
+            if (vm.count("calibrate")) {
+                analysis.reset_raw_energy_sensitive_detector_leaves({true, true, true, false});
+                analysis.reset_calibrated_leaves();
+            }
         }
-        if (vm.count("calibrate")) {
-            analysis.reset_calibrated_leaves();
-        }
-        progress_printer(i);
+        progress_printer(reader.entry);
+        status = 0;
     }
 
     TFile output_file(vm["output"].as<string>().c_str(), "RECREATE");

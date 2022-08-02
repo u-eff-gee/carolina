@@ -60,7 +60,7 @@ struct MDPP16 : public DigitizerModule {
     bool header_found(const u_int32_t word) override final;
     void process_data_word(const u_int32_t word) = 0;
     void process_high_stamp(const uint32_t word) override final {
-        timestamp.leaves[0] += ((u_int64_t) (word & 0x0000FFFF)) * 0x40000000;
+        timestamp.leaves[0] += ((u_int64_t) (word & high_stamp_mask)) * high_stamp_offset;
     };
     void process_low_stamp(const uint32_t word) override final {
         timestamp.leaves[0] += word & low_stamp_mask;
@@ -93,6 +93,7 @@ struct MDPP16 : public DigitizerModule {
     const u_int32_t extended_ts_flag = 0x04800000;
     const u_int32_t extended_ts_mask = 0xFF800000;
     const u_int32_t high_stamp_mask = 0x0000FFFF;
+    const u_int32_t high_stamp_offset = 0x40000000;
     const u_int32_t header_mask = 0xC0000000;
     const u_int32_t header_found_flag = 0x40000000;
     const u_int32_t low_stamp_mask = 0x3FFFFFFF;

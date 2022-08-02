@@ -18,3 +18,4 @@
 #pragma once
 
 #include "@ANALYSIS@.hpp"
+#include "@READER@.hpp"
