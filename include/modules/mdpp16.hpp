@@ -27,7 +27,7 @@ struct MDPP16 : public DigitizerModule {
            const string reference_time_branch_name,
            const string timestamp_branch_name)
         : DigitizerModule(address, reference_time_branch_name,
-                          timestamp_branch_name, false),
+                          timestamp_branch_name, true),
           amplitude(amplitude_branch_name), time(time_branch_name) {}
 
     Branch<double, 16> amplitude;
